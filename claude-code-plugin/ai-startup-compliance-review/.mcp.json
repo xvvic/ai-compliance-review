@@ -1,0 +1,54 @@
+{
+  "mcpServers": {
+    "pkulaw-law-search": {
+      "type": "http",
+      "url": "${PKULAW_LAW_SEARCH_URL}",
+      "headers": {
+        "Authorization": "Bearer ${PKULAW_ACCESS_TOKEN}"
+      },
+      "title": "PKULAW Law Search",
+      "description": "Semantic regulation search for statutes, administrative measures, and regulatory materials."
+    },
+    "pkulaw-law-keyword": {
+      "type": "http",
+      "url": "${PKULAW_LAW_KEYWORD_URL}",
+      "headers": {
+        "Authorization": "Bearer ${PKULAW_ACCESS_TOKEN}"
+      },
+      "title": "PKULAW Law Keyword",
+      "description": "Keyword-based regulation retrieval when semantic search needs cross-checking."
+    },
+    "pkulaw-case-semantic-search": {
+      "type": "http",
+      "url": "${PKULAW_CASE_SEMANTIC_URL}",
+      "headers": {
+        "Authorization": "Bearer ${PKULAW_ACCESS_TOKEN}"
+      },
+      "title": "PKULAW Case Semantic Search",
+      "description": "Case and enforcement semantic retrieval for compliance examples and precedent support."
+    },
+    "pkulaw-law-item-keyword": {
+      "type": "http",
+      "url": "${PKULAW_LAW_ITEM_URL}",
+      "headers": {
+        "Authorization": "Bearer ${PKULAW_ACCESS_TOKEN}"
+      },
+      "title": "PKULAW Law Item Keyword",
+      "description": "Exact article lookup for citation-precise statutory text."
+    },
+    "pkulaw-citation-validator": {
+      "type": "http",
+      "url": "${PKULAW_CITATION_VALIDATOR_URL}",
+      "headers": {
+        "Authorization": "Bearer ${PKULAW_ACCESS_TOKEN}"
+      },
+      "title": "PKULAW Citation Validator",
+      "description": "Cross-check article references before finalizing a report."
+    }
+  },
+  "recommendedCategories": [
+    "legal-research",
+    "regulatory-intelligence",
+    "documents"
+  ]
+}

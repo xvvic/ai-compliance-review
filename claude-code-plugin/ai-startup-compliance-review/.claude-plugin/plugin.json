@@ -1,0 +1,8 @@
+{
+  "name": "ai-startup-compliance-review",
+  "version": "0.1.0",
+  "description": "AI startup compliance review workflows for Chinese AI company scenarios, packaged for Claude Code with local corpus retrieval and optional PKULAW MCP connectors.",
+  "author": {
+    "name": "witt"
+  }
+}
