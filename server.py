@@ -1,22 +1,30 @@
 """
-AI合规审查系统 - 后端接口
-自动适配claude-code-plugin下的MCP配置和Skill，无需手动修改
-启动直接跑在8000端口，和前端默认地址完全匹配
+AI合规审查系统 - 后端接口(修正版)
+============================================
+安装:
+    pip install claude-agent-sdk fastapi uvicorn python-dotenv
+前提:
+    - 环境变量 ANTHROPIC_API_KEY(放 .env 或系统环境变量)
+    - skill 放在 .claude/skills/ 下(标准结构),或用下面的兜底拼prompt方式
+    - MCP 配置(北大法宝等)在 .mcp.json 或代码里配置
 """
+
 import os
 import json
 import tempfile
 import shutil
 from fastapi import FastAPI
+from fastapi.responses import StreamingResponse
 from fastapi.middleware.cors import CORSMiddleware
-from anthropic import Anthropic, Agent
-from mcp import MCPClient
 from pydantic import BaseModel
+from dotenv import load_dotenv
 import uvicorn
 
-# ============================================================
-# 初始化FastAPI，开跨域
-# ============================================================
+# 正确的包:claude-agent-sdk(不是 anthropic 的 Agent)
+from claude_agent_sdk import query, ClaudeAgentOptions
+
+load_dotenv()
+
 app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
@@ -26,94 +34,88 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# ============================================================
-# 自动加载队友的插件配置
-# ============================================================
-PLUGIN_ROOT = os.path.join(os.path.dirname(__file__), "claude-code-plugin/ai-startup-compliance-review")
-MCP_CONFIG_PATH = os.path.join(PLUGIN_ROOT, ".mcp.json")
-SKILL_PATH = os.path.join(PLUGIN_ROOT, "skills/ai-startup-compliance-review")
 
-def load_all_skills() -> str:
-    """自动加载插件目录下所有Skill md文件，拼系统提示词"""
-    skill_content = []
-    for root, _, files in os.walk(SKILL_PATH):
-        for f in files:
-            if f.endswith(".md"):
-                with open(os.path.join(root, f), "r", encoding="utf-8") as fp:
-                    skill_content.append(fp.read())
-    base_prompt = """你是专业的科创企业合规审查专家，严格按照给定的技能规则完成审查，优先使用本地MCP工具检索真实法条，审查结果输出Markdown格式，包含风险等级、审查结论、匹配法条、整改建议。
-所有审查过程中需要读写的文件，请放在给定的临时工作目录中。
-"""
-    return base_prompt + "\n\n---\n\n".join(skill_content)
-
-async def load_all_mcp_tools():
-    """自动读取插件里的.mcp.json配置，加载所有北大法宝MCP工具"""
-    tools = []
-    if os.path.exists(MCP_CONFIG_PATH):
-        with open(MCP_CONFIG_PATH, "r", encoding="utf-8") as fp:
-            mcp_config = json.load(fp)
-        for server_name, server_conf in mcp_config.get("mcpServers", {}).items():
-            if server_conf.get("type") == "http" or "url" in server_conf:
-                try:
-                    async with MCPClient(server_conf["url"]) as client:
-                        tools.extend(await client.get_tools())
-                except Exception as e:
-                    print(f"加载MCP服务{server_name}失败: {e}")
-    return tools
-
-# ============================================================
-# 接口定义
-# ============================================================
 class ReviewReq(BaseModel):
     document_text: str
 
+
 @app.post("/review/stream")
 async def review_stream(req: ReviewReq):
-    from fastapi.responses import StreamingResponse
     async def event_generator():
-        # 1. 创建临时工作目录（满足Agent文件读写需求，审查完自动删除）
+        # 1. 建临时工作目录(agent 读写文件用,审查完删除)
         work_dir = tempfile.mkdtemp(prefix="compliance_")
         try:
-            # 2. 初始化模型、MCP、Skill、Agent
-            llm = Anthropic(
-                api_key=os.getenv("ANTHROPIC_API_KEY"),
-                model="claude-3-5-sonnet-latest"
-            )
-            tools = await load_all_mcp_tools()
-            system_prompt = load_all_skills() + f"\n当前工作目录：{work_dir}"
-            agent = Agent(
-                model=llm,
-                system_prompt=system_prompt,
-                tools=tools,
-                working_dir=work_dir
-            )
-
-            # 3. 把待审材料存到工作目录
-            with open(os.path.join(work_dir, "待审查材料.txt"), "w", encoding="utf-8") as fp:
+            # 2. 把待审材料写进工作目录
+            material_path = os.path.join(work_dir, "待审查材料.txt")
+            with open(material_path, "w", encoding="utf-8") as fp:
                 fp.write(req.document_text)
 
-            # 4. 流式跑Agent，把事件转成前端要的格式
-            async for event in agent.query(f"请审查工作目录中的《待审查材料.txt》，完成合规审查："):
-                event_data = {}
-                if event.type == "thinking":
-                    event_data = {"type": "thinking", "content": event.delta}
-                elif event.type == "tool_call_start":
-                    event_data = {"type": "tool_start", "tool_name": event.tool_name, "args": event.args}
-                elif event.type == "tool_call_end":
-                    res = str(event.result)[:2000]
-                    event_data = {"type": "tool_end", "tool_name": event.tool_name, "result": res}
-                elif event.type == "text":
-                    event_data = {"type": "final", "content": event.delta}
-                else:
-                    continue
-                yield f"data: {json.dumps(event_data, ensure_ascii=False)}\n\n"
+            # 3. 配置 Agent SDK
+            #    - cwd 指向工作目录,agent 就能在里面读写文件
+            #    - setting_sources=["project"] 让 SDK 自动加载 .claude/skills/ 下的 skill
+            #    - mcp_servers 配置北大法宝等 MCP(TODO-1)
+            options = ClaudeAgentOptions(
+                cwd=work_dir,
+                setting_sources=["project"],   # 自动加载 .claude/skills/ 里的 skill
+                permission_mode="acceptEdits", # 允许 agent 读写工作区文件
+                # ============ TODO-1:配置 MCP ============
+                # 把北大法宝等 MCP 服务配进来。参考 claude-agent-sdk 文档的 mcp_servers 写法。
+                # 例如(具体字段以真实SDK文档为准):
+                # mcp_servers={
+                #     "pkulaw": {"type": "http", "url": "https://...北大法宝MCP地址..."}
+                # },
+                # ==================================================
+            )
+
+            prompt = (
+                "请审查工作目录中的《待审查材料.txt》,完成合规审查。"
+                "优先使用本地MCP工具检索真实法条,按技能规则输出Markdown报告,"
+                "包含:风险等级、审查结论、匹配法条、整改建议。"
+            )
+
+            # 4. 流式跑 agent,把每条消息转成前端约定的 SSE 格式
+            async for message in query(prompt=prompt, options=options):
+                # ============ TODO-2:解析真实消息 ============
+                # 重要:先用真实SDK跑一次、打印 message 看清结构,再写这里!
+                # 真实 claude-agent-sdk 的消息是 AssistantMessage / ToolUseBlock /
+                # ToolResultBlock 等对象,字段不是豆包猜的 event.type=="tool_call_start"。
+                # 下面是"伪代码框架",按真实字段名改:
+                #
+                # 参考思路(具体类名/字段以你打印出来的为准):
+                #   from claude_agent_sdk import AssistantMessage, TextBlock, ToolUseBlock, ToolResultBlock
+                #   if isinstance(message, AssistantMessage):
+                #       for block in message.content:
+                #           if isinstance(block, TextBlock):
+                #               yield sse({"type": "final", "content": block.text})
+                #           elif isinstance(block, ToolUseBlock):
+                #               yield sse({"type": "tool_start", "tool_name": block.name, "args": block.input})
+                #   elif isinstance(message, ToolResultBlock):   # 或在对应消息类型里
+                #       yield sse({"type": "tool_end", "tool_name": ..., "result": str(...)[:2000]})
+                #
+                # 在没改对之前,先把原始消息打印出来看结构:
+                print("SDK消息:", type(message), message)
+                # 临时:先把能拿到的文本透传,保证前端至少有输出(队友改对后删掉这行)
+                text = getattr(message, "text", None) or str(message)
+                yield sse({"type": "final", "content": ""})  # 占位,队友按上面改成真解析
+                # ======================================================
+
         except Exception as e:
-            err_event = {"type": "final", "content": f"审查出错：{str(e)}，请检查大模型Key和MCP配置"}
-            yield f"data: {json.dumps(err_event, ensure_ascii=False)}\n\n"
+            yield sse({"type": "final", "content": f"审查出错:{str(e)}(请检查 ANTHROPIC_API_KEY、MCP配置、skill路径)"})
         finally:
-            # 审查完删临时目录
             shutil.rmtree(work_dir, ignore_errors=True)
+
     return StreamingResponse(event_generator(), media_type="text/event-stream")
+
+
+def sse(event: dict) -> str:
+    """打包成 SSE 一行。前端约定格式:{type, tool_name?, args?, result?, content?}"""
+    return f"data: {json.dumps(event, ensure_ascii=False)}\n\n"
+
+
+@app.get("/")
+def root():
+    return {"status": "后端运行中,POST /review/stream 开始审查"}
+
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)
