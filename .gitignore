@@ -12,3 +12,8 @@ __pycache__/
 
 # Streamlit
 .streamlit/
+
+AGENTS.md
+/docs
+/.agents
+/.codex
