@@ -1,0 +1,7 @@
+interface:
+  display_name: "AI 初创公司合规审查"
+  short_description: "面向 AI 初创公司的分阶段合规风险识别与整改审查流程，支持北大法宝 MCP 检索增强"
+  default_prompt: "Use $ai-startup-compliance-review to review an AI startup product launch, search local sources first, use Pkulaw MCP if configured, classify compliance risks, and produce a sourced remediation plan."
+
+policy:
+  allow_implicit_invocation: true

@@ -1,0 +1,1118 @@
+# doc_id: 71d8e16da72e-ff3b585a9dbd
+# source_path: 论文/Classifying AI System Archetypes Against Global Regulatory Frameworks A Methodology.pdf
+# category: 论文
+# method: local_pdftotext
+# pages: 15
+# sha256: ff3b585a9dbd09ea27388af112e59de0a7ae27a76eae566c4b152b59da8a0f3d
+
+[PAGE 1]
+Classifying AI System Archetypes Against Global
+                                       Regulatory Frameworks: A Methodology
+                                                                             Michael Clark
+                                               Co-Founder, Standard Intelligence, Limited, Manchester, England
+                                                            michael.clark@standardintelligence.com
+                                              Standard Intelligence Research | Our Commitment to the Community
+
+
+
+Abstract – AI governance compliance requires organisations to answer a deceptively simple question: which regulatory obligations
+apply to this AI system, in this deployment context, in these jurisdictions? Answering that question at scale requires a principled
+classification methodology. This paper presents such a methodology, developed and validated against a reference corpus of 900 AI
+system archetypes mapped to 81 regulatory instruments across 30 jurisdictions. The methodology operates in four stages: functional
+characterisation using an eight-dimension assessment rubric, risk-tier determination using a six-node sequential decision tree aligned
+to EU AI Act Annex III and comparable international risk classifications, jurisdictional scope determination from territorial analysis,
+and sector-layer identification for systems operating in regulated domains. The paper provides detailed rubrics for each stage, a
+structured Article 6(3) carve-out assessment tool with scoring criteria, a confidence-scoring framework for classification outputs,
+six worked classification examples, and an analysis of classification in dynamic contexts including system evolution and regulatory
+change. The paper argues that classification is a continuous governance process, and that organisations without a formalised
+      classification methodology will find systematic compliance planning structurally unachievable as AI deployments scale.
+
+Index Terms – AI System Classification, Risk Taxonomy, EU AI Act Annex III, High-Risk AI, Regulatory Mapping, Archetypes,
+    Conformity Assessment, Article 6(3) Carve-out, Classification Confidence, Governance Methodology, Intended Purpose,
+                                                    Jurisdictional Scope
+                                 Subject Areas – European Union Law, Technology Law, Regulatory Compliance
+
+
+1. Introduction: The Classification Problem:                                                 AI system – provides a legal taxonomy but not a classification
+1.1 Why Classification Matters                                                               methodology.3 Annex III specifies what high-risk AI systems
+                                                                                             are; it does not specify how an organisation should assess
+Before an organisation can design a compliance programme                                     whether a given system falls within those categories, how to
+for an AI system, it must answer a prior question: what kind                                 handle systems straddling multiple categories, how to integrate
+of system is this, and what does that kind entail? Classification                            EU classification with concurrent international instruments, or
+– the assignment of an AI system to a regulatory category                                    how to re-classify a system whose intended purpose changes
+that determines its compliance obligations – is the gateway to                               over time. This paper addresses that gap.
+every subsequent step in AI governance. An organisation that
+misclassifies a system as low-risk when it is high-risk under the                            1.2 The Scale of the Classification Challenge
+EU AI Act will fail to prepare the Annex IV technical documen­                               A large enterprise may operate hundreds of AI systems simul­
+tation, the Article 72 post-market monitoring plan, the Article                              taneously across dozens of jurisdictions in multiple regulated
+14 human oversight architecture, and the Article 9 risk manage­                              sectors. The reference corpus developed for this series identifies
+ment system.1 The consequences of misclassification are not                                  over 170 regulatory instruments with substantive AI governance
+merely administrative: under the revised Product Liability Di­                               content across 30 jurisdictions.4 For an enterprise operating in
+rective, failure to satisfy high-risk system obligations removes                             EU, UK, US, and Asia-Pacific markets, the practically applic­
+the development risks defence in product liability proceedings.2                             able subset for any given high-risk AI system may reach 30
+   Despite its foundational importance, classification has re­                               to 50 instruments.5 Performing this classification manually,
+ceived less methodological attention in the AI governance                                    instrument by instrument, system by system, is not scalable. A
+literature than downstream obligations. The EU AI Act’s classi­                              structured methodology generating classification outputs sys­
+fication architecture – Annex III’s eight categories of high-risk                            tematically from a common set of system inputs is a practical
+1
+  Regulation (EU) 2024/1689 of the European Parliament and of the Council of 13              3
+                                                                                               EU AI Act (n 1) Annex III; EU AI Office, ‘Guidance on High-Risk AI System
+June 2024 laying down harmonised rules on artificial intelligence (Artificial Intelli­       Classification under Annex III’ (EU AI Office 2025).
+                                                                                             4
+gence Act) [2024] OJ L 2024/1689 (EU AI Act), Articles 9, 14, 72, Annex IV.                    Michael Clark, ‘Regulatory Intersection and the EU AI Act: Complex Mapping
+2
+  Directive (EU) 2024/2853 of the European Parliament and of the Council of 23               and Interactions Across Geography’ (Standard Intelligence Working Paper 01, April
+October 2024 on liability for defective products [2024] OJ L 2024/2853, Articles 9           2026) (Working Paper 01) at Section 2.
+                                                                                             5
+and 10.                                                                                        Working Paper 01 (n 4) at Section 6.1 (jurisdictional scaling analysis).
+
+
+                                                                                         1
+
+[PAGE 2]
+requirement for any organisation with a substantial AI deploy­                              critical infrastructure: AI systems intended to be used as safety
+ment.                                                                                       components in the management and operation of critical digital
+1.3 The Archetype Corpus                                                                    infrastructure, road traffic, or the supply of water, gas, heating,
+                                                                                            or electricity.11 Point 3 covers education and vocational train­
+The classification methodology was developed and validated                                  ing.12 Point 4 covers employment, workers’ management, and
+against a reference corpus of 900 AI system archetypes, each                                access to self-employment.13 Point 5 covers access to and enjoy­
+characterised by functional description, intended purpose, de­                              ment of essential private services and essential public services
+ployment sector, output type, and operational autonomy level,                               and benefits, including creditworthiness evaluation under 5(b)
+mapped against 81 regulatory instruments across 30 jurisdic­                                and risk assessment and pricing for life and health insurance
+tions.6 The corpus generates, for each archetype-instrument                                 under 5(c).14 Point 6 covers law enforcement.15 Point 7 covers
+pair, a classification determination (in-scope, out-of-scope, or                            migration, asylum, and border control management.16 Point 8
+conditional), a risk-tier assignment where applicable, and the                              covers administration of justice and democratic processes.17
+primary obligations triggered.                                                              A separate basis for high-risk classification operates through
+1.4 Structure of This Paper                                                                 Article 6(1) read with Annex I: AI systems intended to be
+Section 2 examines the legislative classification architectures                             used as safety components of products covered by the Union
+of the EU AI Act and comparable international instruments.                                  harmonisation legislation listed in Annex I, where the underly­
+Section 3 describes the archetype corpus construction and                                   ing product is subject to a third-party conformity assessment.18
+validation. Section 4 presents the four-stage methodology with                              The critical classification variable for Annex III is intended
+detailed rubrics. Section 5 addresses the Article 6(3) carve-out                            purpose: Article 3(12) defines this as “the use for which an
+with a structured scoring tool. Section 6 examines classification                           AI system is intended by the provider, including the specific
+uncertainty and introduces the confidence-scoring framework.                                context and conditions of use, as specified in the information
+Section 7 provides six worked examples. Section 8 addresses                                 supplied by the provider in the instructions for use, promotional
+classification in dynamic contexts. Section 9 considers institu­                            or sales materials and statements, as well as in the technical
+tional requirements.                                                                        documentation.”19
+                                                                                               The third tier – transparency obligations for specific AI sys­
+2. Legislative Classification Architecture:
+                                                                                            tem categories under Article 50 – covers synthetic content gen­
+EU AI Act: Annex III and the Prohibited Practices Regime                                    eration, AI chatbots interacting with natural persons, biometric
+The EU AI Act structures its classification architecture across                             categorisation and emotion recognition systems outside Annex
+four tiers, with the fourth applying transparency obligations                               III, and deep fakes.20 The fourth category – residual systems
+to specific system categories rather than constituting a formal                             carrying no specific obligations under the Regulation beyond
+risk tier in the Regulation’s own text.7 The first tier – prohib­                           compliance with general applicable law – is sometimes labelled
+ited practices under Article 5 – defines absolute prohibitions                              “minimal-risk” in commentary; the Regulation acknowledges
+including subliminal manipulation, exploitation of vulnerabil­                              voluntary application of codes of conduct in Article 95.21 GPAI
+ities, real-time biometric identification in public spaces for law                          models form a parallel track under Chapter V (Articles 51-56),
+enforcement, social scoring (applicable to public or private                                with systemic risk under Article 51 creating an additional sub-
+actors), predictive policing based solely on profiling or person­                           tier.22
+ality traits, untargeted scraping of facial images, and workplace                           The Article 6(3) Carve-Out
+or educational emotion recognition (with safety and medical
+                                                                                            Article 6(3) introduces a derogation from high-risk classifica­
+exceptions).8 Prohibition is determined by intended use and
+                                                                                            tion for Annex III systems that do not pose a significant risk of
+deployment context, not technical architecture.
+                                                                                            harm to the health, safety, or fundamental rights of natural per­
+   The second tier – high-risk AI systems under Annex III
+                                                                                            sons.23 The derogation is available where the system is intended
+– defines eight categories.9 Point 1 covers biometrics: remote
+                                                                                            to perform a narrow procedural task; to improve the result of a
+biometric identification, biometric categorisation according to
+                                                                                            previously completed human activity; to detect decision-mak­
+sensitive or protected attributes, and emotion recognition (out­
+                                                                                            ing patterns or deviations from prior patterns and is not meant
+side the prohibited contexts of Article 5).10 Point 2 covers
+                                                                                            11
+                                                                                               EU AI Act (n 1) Annex III, point 2.
+                                                                                            12
+6
+  Standard Intelligence, ‘AI System Archetype Taxonomy: Reference Corpus                       EU AI Act (n 1) Annex III, point 3.
+                                                                                            13
+v1.0’ (Standard Intelligence Internal Reference Dataset, April 2026). The corpus               EU AI Act (n 1) Annex III, point 4.
+                                                                                            14
+construction methodology is described in Section 3.                                            EU AI Act (n 1) Annex III, point 5.
+                                                                                            15
+7
+  EU AI Act (n 1) Article 5 (prohibited practices); Annex III (high-risk systems);             EU AI Act (n 1) Annex III, point 6.
+                                                                                            16
+                                                                                               EU AI Act (n 1) Annex III, point 7.
+Articles 50, 51-56 (transparency and GPAI provisions). The “limited-risk” and               17
+                                                                                               EU AI Act (n 1) Annex III, point 8.
+“minimal-risk” labels are commentary conventions; the Regulation itself describes           18
+                                                                                               EU AI Act (n 1) Article 6(1) and Annex I; Recital 47.
+specific transparency obligations attaching to particular AI system categories rather       19
+                                                                                               EU AI Act (n 1) Article 3(12) (definition of intended purpose).
+                                                                                            20
+than formal lower risk tiers.                                                                  EU AI Act (n 1) Article 50.
+8                                                                                           21
+  EU AI Act (n 1) Article 5(1)(a)–(h); European Commission, ‘Commission Guide­                 EU AI Act (n 1) Article 95 (voluntary codes of conduct for AI systems other than
+lines on Prohibited AI Practices’ (February 2025) (confirming that Article 5(1)             high-risk); Recital 165.
+                                                                                            22
+(c) applies to social scoring regardless of whether undertaken by public or private            EU AI Act (n 1) Articles 51-56 (Chapter V on general-purpose AI models); Article
+actors).                                                                                    51(2) (presumption of high-impact capabilities where cumulative training computa­
+9
+  EU AI Act (n 1) Annex III.                                                                tion exceeds 10^25 FLOP); Recital 110.
+10                                                                                          23
+   EU AI Act (n 1) Annex III, point 1.                                                         EU AI Act (n 1) Article 6(3); Recital 53 (rationale for the derogation).
+
+
+                                                                                        2
+
+[PAGE 3]
+to replace or influence the previously completed human assess­                              Sector-Specific Classification Instruments
+ment without proper human review; or to perform a preparatory                               For AI systems in regulated sectors, sector instruments create
+task to an assessment relevant for the purposes of the use cases                            additional classification layers operating independently of the
+listed in Annex III.24 The derogation is unavailable where the                              horizontal AI Act framework. In healthcare, MDCG guidance
+AI system performs profiling of natural persons within the                                  2019-11 applies the SaMD qualification test: is the system
+meaning of GDPR Article 4(4); in that case the system is always                             software intended for a medical purpose acting on medical
+considered high-risk.25 A provider concluding that an Annex III                             data?34 MDR Rule 11 then classifies qualifying software by
+system is not high-risk under Article 6(3) must document the                                decision consequence, producing Class I, IIa, IIb, or III.35 In
+assessment under Article 6(4) and register the system in the EU                             financial services, EBA GL/2020/06 defines models as systems
+database under Article 49(2).26 The Commission is required by                               generating outputs used in credit decision-making,36 while PRA
+Article 6(5) to issue guidelines specifying the practical imple­                            SS1/23 requires model inventory classification by complexity
+mentation of Article 6, together with practical examples, by                                and materiality.37 A system not engaged at all under the EU AI
+2 February 2026.27 The carve-out is examined through a struc­                               Act may nonetheless be a material model under SS1/23 or a
+tured scoring tool in Section 5.                                                            Class IIa medical device under MDR, requiring parallel sector-
+International Classification Architectures                                                  layer compliance.
+International instruments use varying classification variables                              3. Archetype Corpus Construction and Validation:
+requiring independent assessment for each instrument.                                       Corpus Design Principles
+   South Korea’s AI Trust Act (2024) classifies high-impact AI
+using a five-factor assessment: relevance to life, body, or safety;                         The 900-archetype corpus was constructed to satisfy four
+relevance to fundamental rights; relevance to access to essential                           design requirements. Coverage: the corpus must include all AI
+services; degree of autonomy; and scale of impact.28 Canada’s                               system types currently deployed at scale in commercial and
+AIDA delegates high-impact classification entirely to ministe­                              public sector contexts, with no Annex III category or sector-
+rial regulation,29 creating provisional uncertainty tracked in the                          specific classification context omitted. Granularity: archetypes
+methodology as a Level 1 confidence determination pending                                   must be specified at sufficient detail to distinguish systems
+regulatory specification.                                                                   appearing similar in general description but differing in classi­
+   China’s regulatory classification is sector-fragmented and                               fication-relevant characteristics. A “recruitment AI” archetype
+output-focused. The Provisions on Algorithmic Recommenda­                                   is insufficient; the corpus requires distinct archetypes for CV
+tions (2022) apply regardless of risk level to algorithm-driven                             screening at Level 1 autonomy, CV screening at Level 4 auton­
+recommendation services.30 The Generative AI Interim Mea­                                   omy, video interview analysis, psychometric scoring, and refer­
+sures (2023) apply to generative AI services accessible to users                            ence verification AI – because these produce materially differ­
+within China, introducing a content-safety classification vari­                             ent classification outcomes. Cross-jurisdictional completeness:
+able – potential to undermine “core socialist values” – absent                              each archetype must be characterised against all 81 instruments,
+from the EU framework.31 The NIST AI RMF uses a five-factor                                 not only those most likely to apply, because unexpected scope
+risk profile (probability, severity, breadth, reversibility, and vul­                       findings are classification findings. Version stability: the corpus
+nerability of affected individuals)32 rather than binary classifi­                          is structured to accommodate regulatory updates by replacing
+cation tiers, generating a quantitative risk profile that can inform                        individual archetype-instrument mappings without reconstruct­
+but does not replace EU AI Act classification. NYC Local Law                                ing the underlying taxonomy.
+144 uses a functional autonomy test – “substantially assist or                              Archetype Taxonomy Structure
+replace discretionary decision-making” in employment33 – that                               The corpus was structured through a three-level decomposition.
+may capture systems the EU AI Act does not, and vice versa.                                 The first level distinguishes ten primary deployment sectors:
+                                                                                            financial services (127 archetypes), healthcare (118), employ­
+24
+   EU AI Act (n 1) Article 6(3)(a)–(d).                                                     ment (98), critical infrastructure (87), education (74), law
+25
+   EU AI Act (n 1) Article 6(3) (final paragraph); GDPR Article 4(4) (definition of
+profiling).
+26
+                                                                                            enforcement and justice (66), biometrics and identification (58),
+   EU AI Act (n 1) Article 6(4) (provider documentation obligation); Article 49(2)
+(registration in the EU database for non-high-risk Annex III systems). National             transport and autonomous systems (68), energy and utilities
+competent authorities may request the documented assessment under Article 6(4).
+27
+                                                                                            (54), and general commercial (54).38 The financial services and
+   EU AI Act (n 1) Article 6(5).
+28
+   Republic of Korea, Act on the Development of Artificial Intelligence and Estab­          healthcare allocations are highest, reflecting the depth of sector-
+lishment of a Foundation of Trust (AI Trust Act), Act No 20588 (22 January 2024),
+Article 2(6).
+29                                                                                          34
+   Canada, Bill C-27, Digital Charter Implementation Act, 2022 (Part 3: Artificial             Medical Device Coordination Group, ‘MDCG 2019-11: Guidance on Qualification
+Intelligence and Data Act), 44th Parliament, 1st Session, Clause 5. As of April 2026,       and Classification of Software in Regulation (EU) 2017/745’ (Rev 2, January 2021)
+Bill C-27 has not received Royal Assent.                                                    at Section 3.1.
+30                                                                                          35
+   Cyberspace Administration of China, Provisions on the Management of Algorith­               Regulation (EU) 2017/745 of the European Parliament and of the Council of 5 April
+mic Recommendation (10 January 2022, effective 1 March 2022), Article 2.                    2017 on medical devices [2017] OJ L 117/1 (MDR), Annex VIII, Rule 11.
+31                                                                                          36
+   Cyberspace Administration of China, Interim Measures for the Management of                  European Banking Authority, ‘Guidelines on Loan Origination and Monitor­
+Generative Artificial Intelligence Services (13 July 2023, effective 15 August 2023),       ing’ (EBA/GL/2020/06, 29 May 2020), Section 6.5.
+                                                                                            37
+Articles 4 and 7.                                                                              Bank of England Prudential Regulation Authority, ‘Model Risk Management Prin­
+32
+   National Institute of Standards and Technology, Artificial Intelligence Risk Man­        ciples for Banks’ (SS1/23, May 2023), Principle 2.
+                                                                                            38
+agement Framework (AI RMF 1.0) (NIST AI 100-1, January 2023) at 6.                             Standard Intelligence, ‘AI System Archetype Taxonomy: Reference Corpus v1.0’ (n
+33
+   New York City, Local Law 144 of 2021, Int 1894-A, NYC Admin Code § 20-870(1).            6) at Section 2 (sector allocation methodology and rationale).
+
+
+                                                                                        3
+
+[PAGE 4]
+specific regulatory layers – DORA, EBA, PRA, SR 11-7 in                                   to extended deliberation. All 50 were resolved, and the resolu­
+financial services; MDR, IVDR, FDA guidance, NHS standards                                tions were documented as precedent entries in the corpus with
+in healthcare – that increase the number of classification-deter­                         explanatory notes serving as interpretation guidance for future
+minative characteristic combinations.                                                     classifiers. Third, regulatory consistency checking: for each
+   The second level, within each sector, disaggregates by                                 instrument-instrument pair applicable to a shared archetype
+the combination of AI function type and output type. In                                   set, classification outputs were checked for logical consistency.
+financial services, the 127 archetypes span credit scoring (nu­                           Fourteen inconsistencies were identified in early corpus ver­
+meric score), transaction fraud detection (binary classification),                        sions, each arising from a shared definition term used differently
+market manipulation detection (anomaly scoring), customer                                 by two instruments; all were resolved with documented reason­
+risk profiling (multi-dimension score), insurance underwriting                            ing.
+(recommendation), financial planning AI (generation), and al­                             4. The Four-Stage Classification Methodology:
+gorithmic trading control (autonomous action), among others.
+The third level disaggregates by autonomy level and temporal                              Stage 1: Functional Characterisation – Assessment Rubric
+profile, because these variables have the greatest impact on Ar­                          The first stage establishes a system-level functional profile
+ticle 6(3) carve-out eligibility and Article 14 human oversight                           across eight dimensions. The rubric for each dimension speci­
+design.                                                                                   fies the assessment question, the evidence sources, the scale or
+Instrument Corpus Selection                                                               category set, and the classification implications.
+                                                                                             Dimension 1: Function Type. Assessment question: what
+The 81 instruments were selected from the Working Paper 01                                transformation does the system perform on its inputs to generate
+reference set of 170+ using three criteria. First, binding legal                          outputs? Evidence sources: system architecture documentation,
+effect: voluntary frameworks included only where they have                                API specification, product description. Category set: Classifica­
+achieved de facto mandatory status (NIST AI RMF through                                   tion (assigning inputs to defined categories); Scoring (assigning
+OMB M-24-1039) or function as harmonised standards (ISO/                                  numeric values); Prediction (forward-looking assessments of
+IEC 42001:2023).40 Second, direct AI governance content: in­                              future states); Recommendation (ranked options for human
+struments with only incidental AI relevance excluded. Third,                              selection); Generation (novel content not directly derived from
+current applicability: enacted instruments included; proposed                             inputs); Optimisation (parameter values maximising a defined
+instruments tracked but not included in mapping corpus. Each                              objective); Control (signals regulating a system or process);
+instrument is characterised in the corpus by: jurisdiction, legal                         Monitoring (detecting deviations from defined norms).43 Mul­
+status, classification variables used, risk tier definitions, pri­                        tiple values may apply; where the system performs multiple
+mary obligations per tier, enforcement authority, enforcement                             functions, all applicable types are recorded. Classification
+deadline, and version date.                                                               implications: Control and Generation functions increase the
+Validation Methodology                                                                    probability of high-risk classification; Classification functions
+Classification outputs were validated through three approaches.                           at high autonomy in employment or essential-services contexts
+First, expert panel review: a panel of seven regulatory specialists                       directly trigger Annex III points 4 and 5.
+independently classified a randomly selected set of 90 arche­                                Dimension 2: Output Type. Assessment question: in what
+types (10% of corpus) against the EU AI Act, GDPR, MDR, and                               form does the system present its primary output, and what is
+EBA GL/2020/06 using the four-stage methodology. Inter-rater                              its immediate use by the recipient? Evidence sources: system
+agreement was assessed using Fleiss’ kappa statistic.41 Mean                              outputs, API response specification, user interface documen­
+kappa across instruments for the binary in-scope/out-of-scope                             tation. Category set: Binary determination (yes/no, approve/
+determination was 0.81 (substantial agreement). Kappa for                                 reject); Multi-class determination (category assignment); Nu­
+Annex III category-level classification was 0.89 (almost perfect                          meric score (continuous or ordinal); Ranked list (ordered
+agreement for clearly within-scope systems). Kappa for Article                            options or candidates); Natural language text; Structured data;
+6(3) carve-out assessments was 0.64 (moderate agreement),                                 Image/audio/video (synthetic media); Control signal (digital
+motivating the structured carve-out scoring tool in Section 5.42                          or analogue output driving an actuator). Classification implica­
+   Second, boundary case analysis: fifty boundary cases – ar­                             tions: Synthetic media outputs trigger Article 50 transparency
+chetypes where at least two Stage 1 dimensions were close to                              obligations;44 Binary determination outputs in credit, employ­
+classification-threshold values – were identified and subjected                           ment, and benefits contexts require GDPR Article 22 automated
+                                                                                          decision-making analysis;45 Control signal outputs in industrial
+39
+   Office of Management and Budget, ‘Advancing Governance, Innovation, and
+Risk Management for Agency Use of Artificial Intelligence’ (OMB Memorandum
+M-24-10, 26 March 2024).
+40
+   EU AI Act (n 1) Article 40 (presumption of conformity for harmonised standards);       43
+                                                                                             This taxonomy draws on Amershi and others, ‘Software Engineering for Machine
+ISO/IEC 42001:2023, Information Technology – Artificial Intelligence – Man­               Learning: A Case Study’ (2019) IEEE/ACM 41st International Conference on Soft­
+agement System (ISO/IEC JTC 1/SC 42, 2023).                                               ware Engineering: Software Engineering in Practice 291, extended for the regulatory
+41
+   Joseph Fleiss, ‘Measuring Nominal Scale Agreement Among Many Raters’ (1971)            context.
+                                                                                          44
+76(5) Psychological Bulletin 378; Kent Gwet, Handbook of Inter-Rater Reliability             EU AI Act (n 1) Article 50(2) (synthetic content transparency).
+                                                                                          45
+(4th edn, Advanced Analytics LLC 2014) ch 3.                                                 Regulation (EU) 2016/679 of the European Parliament and of the Council of 27
+42
+   Standard Intelligence, ‘AI System Archetype Taxonomy: Reference Corpus v1.0’ (n        April 2016 on the protection of natural persons with regard to the processing of
+6) at Appendix A (validation statistics and inter-rater reliability analysis).            personal data (GDPR) [2016] OJ L 119/1, Article 22.
+
+
+                                                                                      4
+
+[PAGE 5]
+contexts trigger Machinery Regulation and IEC 61508 func­                                 met; Level 5 precludes the Article 6(3) carve-out in physical
+tional safety analysis.46                                                                 safety contexts.50
+   Dimension 3: Deployment Sector. Assessment question: in                                   Dimension 6: Geographic Deployment. Assessment ques­
+which industry or institutional context is the system deployed,                           tion: in which jurisdictions are the system’s outputs accessed,
+and by whom? The sector classification follows the Annex                                  used to inform decisions, or have legal or physical effect? Three
+III category structure supplemented by the NACE Rev. 2 sec­                               locations must be distinguished: physical deployment location
+toral classification47 for sectors not addressed in Annex III.                            (where computation occurs); effective deployment location
+Assessment must be at the deployer level: a natural language                              (where outputs are used); and data subject location (where
+processing model is in no regulated sector as a matter of its own                         individuals whose data is processed are located). All three are
+architecture; it enters a regulated sector when deployed for clin­                        relevant under different instruments: EU AI Act Article 2(1)(c)
+ical summarisation, credit assessment, or recruitment screening                           focuses on where outputs are used; GDPR Article 3(2) focuses
+by a regulated organisation. Evidence sources: deployer iden­                             on where data subjects are located; China’s generative AI
+tity, regulated activities register, system use case description.                         Measures focus on where users access the service.51 Evidence
+   Dimension 4: Subject Matter. Assessment question: what                                 sources: system access logs (or intended access controls),
+categories of data does the system process, and are those                                 deployment architecture documentation, data processing agree­
+categories regulated as sensitive? Assessment items: personal                             ments.
+data (GDPR scope); special category personal data (GDPR                                      Dimension 7: Reversibility of Output Consequences. As­
+Article 9: health, biometric, racial or ethnic origin, criminal                           sessment question: if the system’s output is incorrect, can the
+convictions, political opinions, religious beliefs, genetic data,                         adverse consequences be corrected and within what timeframe?
+sex life, trade union membership); financial data (DORA and                               Scale: Highly Reversible (consequences corrected without ma­
+EBA scope); children’s data (elevated protection under GDPR                               terial harm – recommendation not acted upon); Reversible with
+Article 8 and DSA Article 28).48 The EU AI Act’s national se­                             Effort (consequences corrected with cost or delay – incorrect
+curity exclusion under Article 2(3) must also be assessed where                           credit decision reversed on appeal); Partially Reversible (some
+the system is intended exclusively for purposes falling outside                           harm persists – delayed clinical treatment); Largely Irreversible
+Union law. Classification implications: health data processing                            (cannot be corrected in a meaningful timeframe – severe health
+in clinical AI triggers MDR qualification analysis; biometric                             outcome); Irreversible (permanent – physical harm or death).
+data processing triggers Annex III point 1 analysis; children’s                           Evidence sources: use case description, outcome data from
+data increases harm severity assessment in the Article 6(3)                               analogous processes, legal review of available remedies. Clas­
+carve-out.                                                                                sification implications: Largely Irreversible and Irreversible
+   Dimension 5: Autonomy Level. Assessment question: to                                   ratings are strong indicators against Article 6(3) carve-out
+what degree does the system’s output determine outcomes                                   eligibility; under Article 43(1), Annex III point 1 (biometrics)
+without intermediate human judgment? Scale: Level 1 – Deci­                               systems are routed through Annex VII third-party conformity
+sion Support (output is one of several inputs; human exercises                            assessment where harmonised standards have not been applied
+independent judgment); Level 2 – Decision Influence (output                               in full, while other Annex III categories follow the internal
+is primary but not sole determinant; human review typically                               control route in Annex VI by default.52
+follows the output); Level 3 – Automated Decision with Review                                Dimension 8: Temporal Profile. Assessment question: how
+(output generates a decision automatically, subject to systematic                         does the system’s deployment extend over time, and does
+human review before or shortly after execution); Level 4 –                                it adapt on operational data? Category set: One-shot (single
+Automated Decision without Review (output generates a deci­                               output, no persistent state); Episodic (discrete sessions, no
+sion without systematic human review; post-hoc review may                                 learning between sessions); Persistent-static (continuous oper­
+occur but is not routine); Level 5 – Autonomous Action (output                            ation, parameters stable post-deployment); Persistent-adaptive
+triggers physical, financial, or legal actions in real time with­                         (continuous operation with parameters changing through fine-
+out human approval).49 Evidence sources: system architecture                              tuning, online learning, or distributional shift).53 Evidence
+documentation, workflow description, process flow analysis,                               sources: model update schedule, fine-tuning documentation,
+documented override rates. Classification implications: Levels                            model drift monitoring records. Classification implications:
+1 and 2 are more compatible with Article 6(3) carve-out; Levels                           Persistent-adaptive systems require a monitoring architecture
+3-5 presumptively high-risk where Annex III sector criteria are
+                                                                                          50
+                                                                                             EU AI Act (n 1) Article 6(3)(d) (systems performing a preparatory task to an
+46
+   Regulation (EU) 2023/1230 of the European Parliament and of the Council of 14          Annex III assessment – consistent with Levels 1 and 2 where the human assessment
+June 2023 on machinery (recast) [2023] OJ L 165/1 (Machinery Regulation).                 is independent).
+47                                                                                        51
+   Eurostat, NACE Rev. 2 – Statistical Classification of Economic Activities in the          EU AI Act (n 1) Article 2(1)(c); GDPR (n 26) Article 3(2); China Generative AI
+European Community (Eurostat 2008).                                                       Interim Measures (n 19) Article 2.
+48                                                                                        52
+   GDPR (n 26) Article 9; Article 8; Regulation (EU) 2022/2065 of the European               EU AI Act (n 1) Article 43(1) (third-party assessment for biometric systems under
+Parliament and of the Council of 19 October 2022 on a single market for digital           Annex III point 1); Article 43(2) (internal control route under Annex VI for other
+services [2022] OJ L 277/1 (DSA), Article 28.                                             Annex III categories).
+49                                                                                        53
+   This autonomy scale draws on and extends the SAE International Levels of Driving          The distinction between Persistent-static and Persistent-adaptive is critical for
+Automation framework (SAE J3016:2021) for the general AI context. See SAE                 post-market monitoring architecture: see Michael Clark, ‘Post-Market Monitoring
+International, ‘Taxonomy and Definitions for Terms Related to Driving Automation          for AI Systems: Obligations, Architecture, and Implementation Under the EU AI
+Systems for On-Road Motor Vehicles’ (SAE J3016, 2021).                                    Act’ (Standard Intelligence Working Paper 03, April 2026) at Section 3.
+
+
+                                                                                      5
+
+[PAGE 6]
+capable of detecting drift; temporal profile interacts with the                              assessment under that legislation?58 This test requires checking
+material change threshold question addressed in Section 8.                                   the Annex I list against the system’s deployment context. An
+   The Stage 1 output is a completed Assessment Profile in                                   AI system in medical imaging equipment is a safety component
+standardised tabular format. This document serves as the fixed                               within MDR; an AI system incorporated in a production line
+reference for all subsequent classification stages and for any                               robot is a safety component within the Machinery Regulation;
+future classification review triggered by system or regulatory                               an AI system in an automotive drive-by-wire system is a safety
+change.                                                                                      component within the automotive type-approval framework.
+Stage 2: Risk-Tier Determination – Six-Node Sequential Deci­                                 The Annex I test under Article 6(1) does not require a conse­
+sion Tree                                                                                    quentialist harm assessment; the mere fact of incorporation as
+                                                                                             a safety component of a covered product, where third-party
+Stage 2 applies the Assessment Profile against each applicable                               conformity is required, is sufficient. If yes: proceed to Node 5
+regulatory instrument to generate a risk-tier assignment. For the                            (carve-out test).
+EU AI Act, Stage 2 follows a six-node sequential decision tree.                                 Node 4: Annex III Sector and Consequence Test. Does
+Nodes are addressed in order; a positive determination at any                                the system fall within any of the eight Annex III categories,
+node routes the classification to the corresponding outcome.                                 assessed against the system’s intended purpose, deployment
+   Node 1: GPAI Model Test. Is the system a general-purpose                                  sector, and subject matter dimensions?59 Particular attention
+AI model within Article 3(63) – a model trained on large                                     to: point 4(a) – recruitment AI to “analyse and filter job appli­
+amounts of data using self-supervision at scale, displaying                                  cations and evaluate candidates”60 – broad enough to capture
+significant generality and capable of competently performing                                 most automated elements of enterprise talent acquisition; point
+a wide range of distinct tasks?54 If yes: Chapter V obligations                              5(b) – creditworthiness evaluation and credit score determina­
+apply; proceed to Node 1a. Node 1a: Does the model meet the                                  tion, with an exception for AI systems used for the purpose of
+systemic risk threshold – training computation exceeding 10^25                               detecting financial fraud61 – explicit and requiring no minimum
+FLOP, or AI Office designation under Article 51?55 If yes: Ar­                               complexity threshold; point 5(c) – risk assessment and pricing
+ticle 55 obligations apply additionally.56 After Node 1, proceed                             in life and health insurance.62 If yes: proceed to Node 5.
+through Nodes 2-6 for the model’s downstream deployment                                         Node 5: Article 6(3) Carve-Out Test. If Node 3 or Node
+contexts. If the system is not a GPAI model: proceed directly to                             4 is positive: does the system qualify for the Article 6(3) dero­
+Node 2.                                                                                      gation? The structured carve-out assessment tool in Section 5
+   Node 2: Prohibited Practices Test. Does the system’s in­                                  generates an eligibility score from 0 to 16. Systems scoring 13
+tended purpose or operational design match any of Article 5(1)                               or above are strong candidates for carve-out reliance; systems
+(a)–(h)?57 The assessment maps the function type, autonomy                                   scoring 8 to 12 require documented legal reasoning; systems
+level, deployment sector, and subject matter dimensions against                              below 8 should be classified as high-risk. Critical exclusion:
+each prohibited practice description. The most common Node 2                                 the carve-out is categorically unavailable where the AI system
+cases requiring careful analysis include: real-time remote bio­                              performs profiling of natural persons within GDPR Article
+metric identification systems in public spaces (Article 5(1)(h)                              4(4) – credit scoring, insurance pricing, recruitment shortlist­
+– narrow law enforcement exception exists); emotion recogni­                                 ing, and patient risk stratification all constitute profiling by
+tion systems in workplace or educational contexts (Article 5(1)                              definition, removing carve-out eligibility for these Annex III
+(f) – medical and safety exception exists, interpreted narrowly                              point 4 and 5 applications without further analysis.63 If carve-
+by the Commission Guidelines); AI systems whose marketing                                    out applies: classification is “Annex III Non-High-Risk (Article
+materials describe persuasive personalisation techniques that                                6(3))”; Article 6(4) documented assessment and Article 49(2)
+could constitute Article 5(1)(a) manipulation. If any prohibited                             EU database registration are required.64 If carve-out does not
+practice is found: classification is “Prohibited.” No compliance                             apply: classification is “High-Risk” and full Chapter III Section
+path exists; system redesign or withdrawal is required.                                      2 obligations apply.
+   Node 3: Annex I Product Safety Component Test. Is the                                        Node 6: Article 50 Transparency Test. For systems not
+system used as a safety component of, or itself a product falling                            classified under Nodes 1-5: does the system fall within Article
+within, the Union harmonisation legislation listed in Annex I,                               50′s transparency obligations – direct interaction with nat­
+and is the underlying product subject to third-party conformity                              ural persons (chatbots), synthetic content generation, emotion
+                                                                                             58
+                                                                                                EU AI Act (n 1) Article 6(1) (high-risk classification for AI systems as safety
+54
+                                                                                             components of Annex I products requiring third-party conformity assessment);
+   EU AI Act (n 1) Article 3(63) (definition of general-purpose AI model).                   Annex I (Machinery Regulation, MDR, IVDR, Radio Equipment Directive, Pressure
+55
+   EU AI Act (n 1) Article 51 (designation of GPAI models with systemic risk); Article
+                                                                                             Equipment Directive, Lifts Regulation, Recreational Craft Directive, automotive
+51(2) (10^25 FLOP threshold for the presumption of high-impact capabilities, based
+                                                                                             type-approval framework, and others).
+on cumulative training computation); Recital 110.                                            59
+                                                                                                EU AI Act (n 1) Annex III; EU AI Office, ‘Guidance on High-Risk AI System
+56
+   EU AI Act (n 1) Article 55 (obligations of providers of GPAI models with systemic
+                                                                                             Classification under Annex III’ (n 3).
+risk, including model evaluation with documented adversarial testing, serious inci­          60
+                                                                                                EU AI Act (n 1) Annex III, point 4(a).
+dent reporting to the AI Office, and adequate cybersecurity). Cadence for adversarial        61
+                                                                                                EU AI Act (n 1) Annex III, point 5(b).
+testing is operationalised through the GPAI Code of Practice rather than fixed in            62
+                                                                                                EU AI Act (n 1) Annex III, point 5(c).
+                                                                                             63
+Article 55 itself.                                                                              EU AI Act (n 1) Article 6(3) (final paragraph); GDPR (n 26) Article 4(4).
+57                                                                                           64
+   EU AI Act (n 1) Article 5(1)(a)–(h); European Commission, ‘Commission Guide­                 EU AI Act (n 1) Article 6(4) (documentation obligation); Article 49(2) (registration
+lines on Prohibited AI Practices’ (February 2025).                                           obligation for non-high-risk Annex III systems).
+
+
+                                                                                         6
+
+[PAGE 7]
+recognition or biometric categorisation outside Annex III, or                                  size.73
+deep fakes?65 If yes: Article 50 transparency obligations apply                                   Step 3.3 constructs the Jurisdiction Matrix: a table with one
+(sometimes labelled “limited-risk” in commentary, though the                                   row per jurisdiction, one column per applicable instrument
+Regulation does not use this term as a formal tier). If no: the                                within that jurisdiction, and cells containing: “Applicable –
+system carries no specific obligations under the AI Act beyond                                 basis: [territorial rule]” or “Not Applicable – basis: [exclusion
+the general duty to comply with applicable law; voluntary appli­                               or absence of nexus]” or “Conditionally Applicable – basis:
+cation of codes of conduct under Article 95 may be considered.                                 [pending regulatory action or fact-specific assessment].” The
+   For international instruments, analogous decision trees are                                 Jurisdiction Matrix is a live document; changes to the system’s
+applied with the node structure adapted to each instrument’s                                   geographic deployment require an immediate matrix update and
+architecture. The Korean AI Trust Act decision tree applies the                                may require Stage 2 re-analysis for newly in-scope jurisdictions.
+five-factor high-impact assessment at Node 4.66 The NYC Local                                  Stage 4: Sector-Layer Identification – Sector Decision Trees
+Law 144 decision tree has a single decisive Node testing the
+“substantially assist or replace discretionary decision-making                                 Stage 4 applies sector-specific decision trees to identify oblig­
+in employment” criterion.67 For instruments using delegated                                    ations applying cumulatively with horizontal AI Act require­
+classification such as AIDA, the Node 4 equivalent returns                                     ments. A system carrying no specific AI Act obligations beyond
+“PENDING – classification subject to ministerial regulation”                                   Article 50 transparency is not released from Stage 4 analysis; it
+and is flagged for regulatory intelligence monitoring.                                         may still be a material model under PRA SS1/23 or a Class IIa
+                                                                                               medical device under MDR.
+Stage 3: Jurisdictional Scope Determination – Territorial                                         The healthcare sector decision tree operates in three steps.
+Analysis Methodology                                                                           Step 4H.1 applies the MDCG 2019-11 qualification test: is the
+Stage 3 systematically analyses each applicable instrument’s                                   system software intended for a medical purpose (to prevent,
+territorial scope provisions against the geographic deployment                                 predict, monitor, diagnose, or treat disease), acting on medical
+dimension of the Stage 1 profile. The analysis follows a three-                                data?74 If yes, Step 4H.2 applies Rule 11 classification: Class
+step process for each instrument.                                                              IIa for information used to make decisions with diagnosis or
+   Step 3.1 applies the instrument’s primary territorial test                                  therapeutic purpose; Class IIb or III for decisions with serious
+across six factual questions: Where is the provider established?                               consequences.75 Step 4H.3 applies NHS-specific layers for UK
+Where is the deployer established? Where are users located?                                    deployments: DTAC assessment requirement, DCB0129 clini­
+Where are outputs used? Where are data subjects located?                                       cal risk management obligation on manufacturer, DCB0160
+Where is the system physically deployed? The answer set is                                     clinical safety assessment obligation on deploying NHS trust.76
+mapped against the instrument’s specific territorial rule. An EU                                  The financial services sector decision tree operates in four
+AI Act territorial analysis, for example, requires a positive an­                              steps. Step 4F.1 applies the DORA financial entity test: is the
+swer to any one of: provider has EU establishment; deployer has                                deployer within DORA Article 2(1)? If yes, DORA ICT risk
+EU establishment; provider or deployer generates outputs used                                  management and incident reporting obligations apply.77 Step
+in the EU.68 The GDPR’s Article 3(2) test focuses on targeting                                 4F.2 applies the EBA model classification: does the system
+or monitoring EU data subjects, regardless of establishment.69                                 generate outputs used in credit origination, assessment, or risk
+China’s generative AI Measures apply the access-based test:                                    management?78 Step 4F.3 applies the PRA model materiality
+if Chinese users can access the service, the Measures apply                                    test for UK-supervised entities.79 Step 4F.4 applies SR 11-7
+regardless of where the service is hosted.70                                                   for US banking groups: does the system constitute a “model”
+   Step 3.2 applies any instrument-specific carve-outs or applic­                              within SR 11-7′s definition used in a decision context creating
+ability thresholds. The EU AI Act’s Article 2(3) carve-out for                                 material risk?80
+AI systems exclusively for military, defence, or national security                                The employment sector decision tree operates in two steps.
+purposes must be assessed.71 DORA’s applicability is limited to                                Step 4E.1 applies NYC Local Law 144′s AEDT test for New
+the financial entity types in Article 2(1); an AI deployer outside                             York-nexus deployments; if positive, annual independent bias
+those types is outside DORA scope even if it processes financial                               audit, public disclosure, and pre-use candidate notice oblig­
+data.72 NIS2′s applicability depends on whether the deploying
+entity qualifies as an essential or important entity by sector and                             73
+                                                                                                  Directive (EU) 2022/2555 of the European Parliament and of the Council of 14
+                                                                                               December 2022 on measures for a high common level of cybersecurity across the
+                                                                                               Union (NIS2 Directive) [2022] OJ L 333/80, Article 2 and Annexes I and II.
+                                                                                               74
+                                                                                                  MDCG 2019-11 (n 24) at Section 3.1; MDR (n 25) Article 2(1).
+                                                                                               75
+65
+   EU AI Act (n 1) Article 50.                                                                    MDR (n 25) Annex VIII, Rule 11; Article 52 (conformity assessment procedures
+66
+   AI Trust Act (n 18) Article 2(6).                                                           by class).
+                                                                                               76
+67
+   NYC Local Law 144 (n 20) § 20-870(1).                                                          NHS England, ‘Digital Technology Assessment Criteria (DTAC) for Health and
+68
+   EU AI Act (n 1) Article 2(1)(a)–(c) (territorial scope provisions including extrater­       Social Care’ (NHS Digital 2021, updated 2023); NHS Digital, ‘DCB0129’ and
+ritorial reach where outputs are used in the EU).                                              ‘DCB0160’ (NHS Digital 2018, updated 2022).
+69                                                                                             77
+   GDPR (n 26) Article 3(1) (establishment-based scope); Article 3(2) (targeting and              DORA (n 31) Article 2(1).
+                                                                                               78
+monitoring-based scope).                                                                          EBA/GL/2020/06 (n 23) Sections 6.5 and 8.
+                                                                                               79
+70
+   China Generative AI Interim Measures (n 19) Article 2.                                         PRA SS1/23 (n 24) Principle 2.
+                                                                                               80
+71
+   EU AI Act (n 1) Article 2(3).                                                                  Board of Governors of the Federal Reserve System and Office of the Comptroller
+72
+   Regulation (EU) 2022/2554 of the European Parliament and of the Council of 14               of the Currency, ‘Supervisory Guidance on Model Risk Management’ (SR 11-7 /
+December 2022 on digital operational resilience for the financial sector (DORA)                OCC 2011-12, April 2011); adopted by the Federal Deposit Insurance Corporation
+[2022] OJ L 333/1, Article 2(1).                                                               as FIL-22-2017 (June 2017).
+
+
+                                                                                           7
+
+[PAGE 8]
+ations apply.81 Step 4E.2 applies the EEOC guidance and                                          Where the carve-out is relied upon, the provider must docu­
+Colorado, Texas, and Illinois state-level AI employment oblig­                                ment the assessment under Article 6(4) and register the system
+ations for US nationwide deployments.82                                                       in the EU database under Article 49(2).88 National competent
+   The industrial and critical infrastructure decision tree oper­                             authorities may request the documented assessment.89 These
+ates in three steps. Step 4I.1: is the system incorporated in ma­                             obligations create an evidentiary record: a market surveillance
+chinery as a self-learning component making decisions relevant                                authority reviewing the registration can request the full Article
+to safety functions?83 Step 4I.2: does the deploying organisation                             6(3) Assessment Report as part of its supervisory activities.90
+fall within NIS2 Annexes I (essential entities) or II (important                              Note also that high-risk AI systems referred to in point 2
+entities)?84 Step 4I.3: does the system perform safety functions                              of Annex III (critical infrastructure) are registered at national
+in electrical, electronic, or programmable electronic systems                                 level rather than in the EU database under Article 49.91 Carve-
+requiring IEC 61508 Safety Integrity Level (SIL) assignment?85                                out reliance without robust supporting documentation carries
+The Classification Output Document                                                            regulatory risk equivalent to, and structurally analogous to,
+                                                                                              deploying a medical device without a clinical evaluation report.
+The complete classification output document comprises five
+components: the Assessment Profile (Stage 1), the Risk-Tier                                   The Article 6(3) Assessment Scoring Tool
+Matrix (Stage 2, with the determinative node identified for each                              The structured assessment applies eight evaluation criteria,
+instrument), the Jurisdiction Matrix (Stage 3), the Sector-Layer                              each scored on a three-point scale (0 = criterion not satisfied, 1
+Matrix (Stage 4), and a Classification Summary consolidating                                  = partially satisfied, 2 = fully satisfied), generating an aggregate
+all triggered obligations by type – technical documentation,                                  Article 6(3) Eligibility Score with maximum 16.
+conformity assessment, monitoring, human oversight, incident                                     Criterion A: Procedural Narrowness. Does the system
+reporting, third-party audit – with deadlines, responsible par­                               perform a specific, bounded procedural function, or does it
+ties, and cross-references. Each component carries a version                                  perform a general assessment integrating multiple dimensions
+number, classification date, and reviewer signature. The docu­                                of a person’s profile? 2 points: system performs a single, tech­
+ment is stored alongside the Annex IV technical documentation                                 nically well-defined function with deterministic bounded scope
+of which it is the precondition.                                                              (for example, OCR extraction of structured data from a docu­
+5. The Article 6(3) Carve-Out: A Structured Scoring Tool:                                     ment for human review); 1 point: system performs a constrained
+                                                                                              function but with some scope for variable outputs (for example,
+Legal Structure and Key Exclusions
+                                                                                              flagging anomalies in financial data within predefined rule
+Article 6(3) is available where the AI system is intended to                                  sets); 0 points: system performs a broad assessment integrating
+perform a narrow procedural task; to improve the result of a                                  multiple data sources about a person.
+previously completed human activity; to detect decision-mak­                                     Criterion B: Human Independence. Does the human deci­
+ing patterns or deviations from prior patterns and is not meant                               sion-maker who receives the system’s output exercise genuinely
+to replace or influence the previously completed human assess­                                independent judgment, supported by sources of information
+ment without proper human review; or to perform a preparatory                                 beyond the system’s output? 2 points: documented evidence
+task to an assessment relevant for the purposes of the use cases                              that human decision-makers routinely override or substantially
+listed in Annex III.86 The carve-out is categorically unavailable                             modify system outputs and are operationally equipped to do so
+where the system performs profiling of natural persons within                                 (training, access to full information, documented override rates
+GDPR Article 4(4); in that case the system is always consid­                                  exceeding 15%); 1 point: human review occurs systematically
+ered high-risk.87 The profiling exclusion is the most frequently                              but override rates are low or unmeasured; 0 points: human
+determinative: credit scoring, insurance pricing, recruitment                                 review is nominal, rubber-stamping, or absent.
+shortlisting, and patient risk stratification all constitute profiling                           Criterion C: Output Use. Is the system’s output one input
+by definition, removing carve-out eligibility for these Annex III                             among several to a human decision, or does it directly determine
+point 4 and 5 applications, and for many healthcare applications                              the outcome? 2 points: output used as one data point alongside
+under point 5(a), without further analysis.                                                   multiple independently assessed factors; 1 point: output is sig­
+81
+   NYC Local Law 144 (n 20) §§ 20-871 to 20-873.
+                                                                                              nificant but not the sole determinant; 0 points: output directly
+82
+   US Equal Employment Opportunity Commission, ‘Assessing Adverse Impact in                   determines the outcome or the decision-maker lacks authority
+Software, Algorithms, and Artificial Intelligence Used in Employment Selection
+Procedures Under Title VII of the Civil Rights Act of 1964’ (EEOC Guidance, 18                or information to deviate from it.
+May 2023); Colorado Revised Statutes §§ 6-1-1701 to 6-1-1712; Texas Responsible                  Criterion D: Reversibility. Using the Reversibility dimen­
+AI Governance Act, SB 2025 (Tex 89th Legislature 2025); Illinois, Artificial Intelli­
+gence Video Interview Act, Pub Act 101-260, 820 ILCS 42 (2020).                               sion from Stage 1: 2 points for Highly Reversible; 1 point for
+83
+   Machinery Regulation (n 27) Article 18; Annex III.
+84
+   NIS2 Directive (n 32) Annex I (essential entities); Annex II (important entities).
+                                                                                              88
+Chemicals manufacturing sits in Annex II by default, with the possibility of desig­              EU AI Act (n 1) Article 6(4) (provider documentation obligation); Article 49(2)
+nation as essential where the size and criticality thresholds in Article 3(1) are met.        (registration in the EU database for non-high-risk Annex III systems).
+85                                                                                            89
+   IEC 61508 series, Functional Safety of Electrical/Electronic/Programmable                     EU AI Act (n 1) Article 6(4) (national competent authority right of access to the
+Electronic Safety-Related Systems (IEC SC 65A).                                               documented assessment).
+86                                                                                            90
+   EU AI Act (n 1) Article 6(3)(a)–(d).                                                          EU AI Act (n 1) Article 74 (market surveillance activities) and Article 75 (powers
+87
+   EU AI Act (n 1) Article 6(3) (final paragraph); GDPR (n 26) Article 4(4) (profiling:       of market surveillance authorities, including requests for documentation).
+                                                                                              91
+automated processing to evaluate personal aspects including performance, behav­                  EU AI Act (n 1) Article 49(5) (national-level registration for Annex III point 2
+iour, location, or preferences).                                                              systems).
+
+
+                                                                                          8
+
+[PAGE 9]
+Reversible with Effort; 0 points for Partially Reversible, Largely                      6. Classification Uncertainty and Confidence Scoring:
+Irreversible, or Irreversible.                                                          Sources of Classification Uncertainty
+    Criterion E: Autonomy Level Consistency. Using the Au­
+tonomy Level dimension from Stage 1: 2 points for Level 1                               Classification uncertainty arises from four sources. The first
+(decision support); 1 point for Level 2 (decision influence); 0                         is intended purpose ambiguity in three forms: under-specifi­
+points for Levels 3, 4, or 5.                                                           cation (broad descriptions not mapping precisely to Annex
+                                                                                        III categories); multi-purpose specification (a provider cannot
+    Criterion F: Profiling Absence. Does the system avoid
+                                                                                        document intended purposes selectively and apply compliance
+automated processing of personal data to evaluate personal
+                                                                                        obligations selectively – all stated purposes trigger classifi­
+aspects relating to performance, behaviour, reliability, location,
+                                                                                        cation);94 and use-beyond-stated-purpose (deployers using sys­
+preferences, or interests (GDPR Article 4(4) definition)?92 2
+                                                                                        tems for purposes outside the provider’s specification trigger
+points: system processes no personal data, or processes only
+                                                                                        Article 25(1) reclassification, taking on provider-equivalent
+anonymised data; 1 point: system processes personal data but
+                                                                                        obligations).95
+does not generate evaluative assessments of individual persons’
+                                                                                           The second source is definitional divergence across instru­
+characteristics (for example, processes transactional data to
+                                                                                        ments. The EU AI Act’s definition of “biometric data” differs
+detect fraud patterns at population level without individual
+                                                                                        from the GDPR’s definition and from US state law definitions;96
+profiling); 0 points: system generates evaluative assessments of
+                                                                                        a single biometric processing function requires independent
+individual persons’ characteristics, behaviour, or risk. Note: a
+                                                                                        classification under each definition, and the outcomes may
+score of 0 on Criterion F is determinative – under the second
+                                                                                        differ.
+paragraph of Article 6(3), the carve-out is unavailable where
+                                                                                           The third source is system evolution. A system’s classifica­
+profiling is present, irrespective of the aggregate score.
+                                                                                        tion may change through model adaptation (fine-tuning expand­
+    Criterion G: Harm Probability Assessment. What is the
+                                                                                        ing functional scope into a new Annex III category), scale
+assessed probability that an incorrect output will lead to harm
+                                                                                        expansion (training computation reaching the 10^25 FLOP
+to a natural person? 2 points: harm probability is remote even if
+                                                                                        systemic risk threshold), or regulatory amendment (Annex III
+output is incorrect (multiple independent safeguards; harm re­
+                                                                                        delegated act adding a new category).97 Classification outcomes
+quires additional causal steps beyond the output); 1 point: harm
+                                                                                        are temporally bounded by the system state and regulatory
+probability is moderate but mitigated by human oversight and
+                                                                                        landscape at the assessment date.
+consequence reversibility; 0 points: material harm probability
+                                                                                           The fourth source is inherent Article 6(3) interpretive ambi­
+(incorrect output directly leads to harm without intermediate
+                                                                                        guity, evidenced by the 0.64 inter-rater kappa found in corpus
+safeguards).
+                                                                                        validation, which persists despite the structured scoring tool
+    Criterion H: Fundamental Rights Risk. Does the system’s
+                                                                                        because Criteria G and H require holistic harm judgments that
+deployment create risk of infringement of fundamental rights
+                                                                                        resist complete algorithmic reduction.
+under the Charter of Fundamental Rights of the European
+Union – the right to equal treatment, privacy, effective remedy,                        Confidence Scoring Framework
+or human dignity?93 2 points: no fundamental rights interaction;                        The methodology assigns a Confidence Score to each classifi­
+1 point: fundamental rights interaction possible but mitigated;                         cation determination at one of four levels. The score is a
+0 points: fundamental rights infringement risk is material.                             measure of interpretive certainty available to the classifier given
+    Scoring guidance: 13-16 – strong candidate for carve-out re­                        the evidence and applicable guidance, not a probability of legal
+liance; document the Article 6(4) assessment and register under                         correctness.
+Article 49(2) with brief reasoning; 8-12 – requires documented                             Level 4 – High Confidence: classification is directly sup­
+legal reasoning addressing each criterion specifically; specialist                      ported by explicit regulatory text, legislative history, or author­
+legal review recommended before relying on carve-out; below                             itative guidance addressing the specific system type or use case.
+8 – poor candidate; classify as high-risk unless exceptional                            No reasonable alternative classification is available. Example:
+specific circumstances exist. Any score of 0 on Criterion F (pro­                       an AI system performing real-time remote biometric identifica­
+filing present) – carve-out is categorically unavailable; classify                      tion of persons in a public space for law enforcement, where
+as high-risk regardless of aggregate score.                                             no exception applies, is classified “Prohibited” with Level 4
+    The completed scoring tool constitutes the Article 6(3) As­                         confidence.98 Example: a credit scoring AI is classified “High-
+sessment Report, stored in the Classification Output Document
+and underpinning the Article 49(2) registration entry. The re­
+port should be reviewed annually and upon any material change                           94
+                                                                                           EU AI Act (n 1) Article 3(12) (intended purpose includes all uses specified in
+to the system’s functional characteristics.                                             promotional materials, instructions for use, and technical documentation).
+                                                                                        95
+                                                                                           EU AI Act (n 1) Article 25(1) (conditions under which distributors, importers,
+                                                                                        deployers or other third parties are considered providers); Article 25(1)(c) (substan­
+                                                                                        tial modification or use beyond the provider’s intended purpose).
+                                                                                        96
+                                                                                           EU AI Act (n 1) Article 3(34); GDPR (n 26) Article 4(14); California Consumer
+                                                                                        Privacy Act, Cal Civ Code § 1798.140(b).
+92                                                                                      97
+  GDPR (n 26) Article 4(4).                                                                EU AI Act (n 1) Article 7 (Commission power to amend Annex III by delegated
+93
+  Charter of Fundamental Rights of the European Union [2000] OJ C 364/1, Articles       act); Recital 54.
+                                                                                        98
+1 (dignity), 7 (privacy), 20 (equality), 47 (effective remedy).                            EU AI Act (n 1) Article 5(1)(h).
+
+
+                                                                                    9
+
+[PAGE 10]
+Risk” under Annex III point 5(b) with Level 4 confidence.99                                phy: England. Reversibility: Reversible with Effort. Temporal:
+   Level 3 – Good Confidence: classification is consistent with                            Persistent-static (quarterly provider updates).
+the regulatory text and available guidance, but the specific sys­                             Stage 2. Node 1 (GPAI): negative. Node 2 (Prohibited): neg­
+tem type has not been expressly addressed and involves at least                            ative. Node 3 (Annex I): potential – SaMD assessment deferred
+one interpretive judgment. The classification can be supported                             to Stage 4H. Node 4 (Annex III): the system is used by or on
+by reasoned argument from first principles, analogy with guid­                             behalf of a public authority (NHS trust) to assist in evaluating
+ance-addressed cases, or comparative international instrument                              eligibility of natural persons for essential public assistance ser­
+analysis.                                                                                  vices including healthcare – Annex III point 5(a) – positive.101
+   Level 2 – Moderate Confidence: genuine interpretive uncer­                              Node 5 (Article 6(3) Assessment): Score 11/16 (Criterion F:
+tainty exists; reasonable legal arguments support alternative                              0 – patient risk stratification profiles individuals; Criterion A:
+classifications. Arises most frequently in Article 6(3) carve-                             1; Criterion B: 2 – documented override rates; Criterion C:
+out assessments and multi-jurisdiction scope determinations                                1; Criterion D: 1; Criterion E: 2; Criterion G: 1; Criterion H:
+involving novel territorial questions. Requires documented le­                             1). Score of 0 on Criterion F renders carve-out categorically
+gal reasoning and periodic review as guidance develops.                                    unavailable; classify as High-Risk. Confidence: Level 3.
+   Level 1 – Low Confidence: unresolved legal questions that                                  Stage 3 Jurisdiction Matrix. UK: UK GDPR (applicable);
+no published guidance or precedent addresses definitively, or                              UK MDR (applicable); anticipated UK AI legislation (flag for
+the system’s characteristics are genuinely ambiguous in ways                               review when enacted); EU AI Act (not yet applicable for UK-
+that could change the outcome. Requires specialist legal advice;                           only deployment; flag for review upon any EU expansion).
+determination is provisional pending regulatory clarification.                             Stage 4 Sector-Layer Matrix. Step 4H.1: SaMD qualifica­
+The determination must be reported to the natural person                                   tion positive (supports clinical decisions about patient care
+responsible for human oversight under Article 26(2), and                                   pathway). Step 4H.2: Rule 11 – Class IIa (decisions with signif­
+tracked alongside the events (new guidance, judicial decisions,                            icant clinical consequence). Step 4H.3: NHS DTAC assessment
+supervisory rulings) that would resolve the uncertainty.100 Low                            required; DCB0129 on manufacturer; DCB0160 on deploying
+Confidence determinations are tracked in the regulatory intelli­                           NHS trust.
+gence monitoring programme.                                                                Example 2: Credit Risk Scoring Engine (Retail Bank)
+Documenting Uncertainty                                                                    Stage 1. Function: scoring. Output: numeric probability score,
+The Classification Output Document must record the Confi­                                  categorical risk band. Sector: financial services (mortgage orig­
+dence Score and a brief Uncertainty Note for each determina­                               ination). Subject matter: personal financial data. Autonomy:
+tion. The Uncertainty Note identifies: the specific source of un­                          Level 2 (human sign-off required). Geography: UK, France,
+certainty; the alternative classification that cannot be excluded;                         Germany, Netherlands. Reversibility: Reversible with Effort.
+and the regulatory event or guidance publication that would re­                            Temporal: Persistent-static (semi-annual recalibration).
+solve the uncertainty. This documentation serves two purposes.                                Stage 2. Node 4: Annex III point 5(b) – creditworthiness
+First, it enables periodic review to be targeted at determinations                         evaluation and credit score determination of natural persons
+where confidence has improved due to new guidance, allowing                                (with the financial fraud detection exception inapplicable to
+confirmation or update of provisional determinations without                               mortgage origination) – explicit positive.102 Confidence: Level
+repeating the full classification process. Second, it constitutes                          4. Node 5: Criterion F scores 0 (creditworthiness profiling is
+a good-faith compliance record: an organisation that has docu­                             the core function); carve-out categorically unavailable. Classi­
+mented a Level 1 determination with reasoned analysis is in a                              fication: High-Risk.
+materially better position in supervisory proceedings than one                                Stage 3 Jurisdiction Matrix. EU AI Act: applicable (de­
+that made the same determination without documented reason­                                ployer establishment in France, Germany, Netherlands); UK
+ing.                                                                                       regulatory framework: applicable through PRA and FCA super­
+7. Worked Classification Examples:                                                         vision; GDPR and UK GDPR: applicable; DORA: applicable
+                                                                                           (credit institution deployer); EBA GL/2020/06: applicable;
+Example 1: Clinical Pathway Prioritisation AI (NHS)
+                                                                                           PRA SS1/23: applicable (UK entity); SR 11-7 / OCC 2011-12:
+Stage 1. Function: ranking/recommendation. Output: ranked                                  applicable for any US-regulated banking entity. GDPR Article
+list with clinical significance scores. Sector: healthcare (NHS                            22 compliance architecture required: the Level 2 autonomy des­
+acute). Subject matter: health data (GDPR Article 9 special                                ignation supports a non-solely-automated argument, but EDPB
+category). Autonomy: Level 1 (clinical staff override). Geogra­                            guidance requires genuine rather than nominal human review.103
+99
+  EU AI Act (n 1) Annex III, point 5(b); EU AI Office, ‘Guidance on High-Risk AI           101
+                                                                                               EU AI Act (n 1) Annex III, point 5(a) (AI systems used by or on behalf of public
+System Classification under Annex III’ (n 3).                                              authorities to evaluate eligibility for essential public assistance benefits and services,
+100
+    EU AI Act (n 1) Article 26(2) (deployer obligation to assign human oversight           including healthcare). Where the deployer is a private healthcare provider rather than
+to natural persons with the necessary competence, training, authority and support);        a public authority, the classification turns on the specific deployment configuration;
+Recital 91 (deployer accountability for use in accordance with the instructions for        private clinical decision support may engage other Annex III points or fall outside
+use). The EU AI Act does not create a single statutory “AI responsible person”             Annex III, requiring case-specific analysis.
+role analogous to the GDPR Data Protection Officer; Article 26(9) addresses the            102
+                                                                                               EU AI Act (n 1) Annex III, point 5(b).
+                                                                                           103
+deployer’s use of provider-supplied information for GDPR DPIA purposes, not                    European Data Protection Board, ‘Guidelines on Automated Individual Decision-
+designation of a generic AI responsible person.                                            Making and Profiling for the Purposes of Regulation 2016/679’ (WP251rev.01, 6
+
+
+                                                                                      10
+
+[PAGE 11]
+Stage 4 Sector-Layer Matrix. Step 4F.1: DORA applicable;                                   rectly.107 No Article 6(3) carve-out: Level 5 autonomy, Largely
+Step 4F.2: EBA model – pre-deployment validation and peri­                                   Irreversible consequences, physical safety context. Classifica­
+odic revalidation;104 Step 4F.3: PRA SS1/23 material model –                                 tion: High-Risk. Confidence: Level 4. The interaction between
+senior management attestation; Step 4F.4: SR 11-7 model risk                                 the Annex I (Article 6(1)) pathway and any Annex III point
+management for US entities.                                                                  2 engagement is to be addressed by anticipated EU AI Office
+Example 3: Automated CV Screening Tool (Multinational Em­                                    guidance on the interaction between the AI Act and other EU
+ployer)                                                                                      product safety legislation.108
+                                                                                                Stage 4. Step 4I.1: Machinery Regulation qualification pos­
+Stage 1. Function: scoring, ranking. Output: numeric candidate                               itive; CE marking through Notified Body required; Article 18
+score, ranked shortlist. Sector: employment (recruitment). Sub­                              self-learning system constraints apply.109 Step 4I.2: NIS2 –
+ject matter: personal data; sensitive inferences from CV content.                            chemical manufacturing sits in Annex II (important entities) by
+Autonomy: Level 2 (human recruiter reviews shortlist). Geog­                                 default under “Manufacture of chemicals,” with the possibility
+raphy: EU (multiple member states), UK, New York, Illinois,                                  of designation as essential where the size and criticality thresh­
+Australia, Japan. Reversibility: Reversible with Effort. Tempo­                              olds in Article 3(1) are met; NIS2 Articles 20-23 obligations
+ral: Persistent-static.                                                                      apply in either case.110 Step 4I.3: IEC 61508 SIL assignment
+   Stage 2. Node 4: Annex III point 4(a) – recruitment or                                    required for safety-critical parameter control.
+selection of natural persons, in particular to place targeted job
+advertisements, to analyse and filter job applications, and to                               Example 5: Large Language Model API Provider
+evaluate candidates – explicit positive.105 Confidence: Level 4.                             Stage 1. Function: generation, classification, summarisation
+Criterion F: 0 (profiling of candidates by employment suitabil­                              (variable by prompt). Output: natural language text. Sector:
+ity). Carve-out unavailable. Classification: High-Risk.                                      multiple (downstream-determined). Autonomy: variable. Ge­
+   Stage 3 Jurisdiction Matrix. EU AI Act (EU member                                         ography: global API access. Temporal: Persistent-adaptive
+states), UK GDPR, NYC Local Law 144 (New York nexus),                                        (retraining runs).
+Illinois AI Video Interview Act (any video element), Colorado                                   Stage 2. Node 1 positive – GPAI model with significant
+Consumer Protections Act (Colorado candidates), Australian                                   generality under Article 3(63). Chapter V obligations apply.
+Privacy Act 1988 (Australian candidates), Japan APPI and AI                                  Node 1a: systemic risk threshold analysis based on cumulative
+Promotion Act (Japanese candidates).                                                         training computation exceeding 10^25 FLOP, or AI Office des­
+   Stage 4 Sector-Layer Matrix. Step 4E.1: NYC AEDT test                                     ignation under Article 51. Downstream Annex III classification:
+positive – annual independent bias audit, public disclosure,                                 deployers using the model in clinical decision support, credit
+candidate pre-use notice required.106 Step 4E.2: EEOC disparate                              assessment, or recruitment screening are providers of high-risk
+impact analysis; Colorado algorithmic impact assessment; Illi­                               AI systems bearing Annex III obligations; the GPAI provider
+nois Video Interview Act if video analysis used.                                             bears Article 53(1)(b) information obligations to enable down­
+Example 4: Autonomous Chemical Reactor Control AI                                            stream compliance, supplemented by Annex XII transparency
+                                                                                             information.111 Classification: GPAI model provider (Chapter
+Stage 1. Function: optimisation, control. Output: control sig­                               V); systemic risk GPAI provider (Article 55) if threshold met.
+nals to physical actuators. Sector: critical infrastructure (chemi­                             Stage 3 Jurisdiction Matrix. EU AI Act Article 2(1)(c) –
+cal manufacturing). Subject matter: sensor data (non-personal).                              outputs used in EU;112 GDPR Article 3(2) – EU data subjects’
+Autonomy: Level 5. Geography: France (EU). Reversibility:                                    data processed in API inputs; China Generative AI Interim
+Largely Irreversible. Temporal: Persistent-adaptive.                                         Measures (if accessible to Chinese users); California SB 942;
+   Stage 2. Node 3: Article 6(1) read with Annex I product                                   Japan AI Promotion Act.
+safety component – AI in machinery covered by the Machinery
+Regulation – positive. Node 4: Annex III point 2 (critical                                   Example 6: Insurance Premium Pricing AI (Motor Insurance)
+infrastructure management) is arguable to the extent the system                              Stage 1. Function: scoring, prediction. Output: numeric pre­
+functions as a safety component in the supply chain for utility-                             mium amount, risk band. Sector: financial services (motor
+grade chemicals, though point 2 is centred on management of                                  insurance). Subject matter: personal data; telematics data (lo­
+critical digital infrastructure, road traffic, and supply of water,                          107
+                                                                                                 EU AI Act (n 1) Article 6(1) (high-risk classification for AI as safety component
+gas, heating, or electricity; chemical manufacturing process                                 of an Annex I product); Annex I (Union harmonisation legislation list, including the
+                                                                                             Machinery Regulation); Annex III, point 2 (critical infrastructure safety components,
+control engages the Annex I route under Article 6(1) more di­                                primarily addressed to utilities and digital infrastructure).
+                                                                                             108
+                                                                                                 European Commission, AI Office, ‘Guidance on the Interaction between the AI
+                                                                                             Act and Other EU Product Safety Legislation’ (EU AI Office, expected 2025/2026).
+                                                                                             109
+                                                                                                 Machinery Regulation (n 27) Annex IV (categories of machinery requiring third-
+                                                                                             party assessment).
+                                                                                             110
+February 2018) at 22 (warning against “cosmetic” human review that fails to satisfy              NIS2 Directive (n 32) Annex II (important entities, including manufacture of
+the Article 22 exception).                                                                   chemicals); Article 3(1) (criteria for designation as essential entities); Article 21
+104
+    EBA/GL/2020/06 (n 23) Sections 6.5 and 8.2.                                              (cybersecurity risk management); Article 23 (incident notification: 24-hour early
+105
+    EU AI Act (n 1) Annex III, point 4(a).                                                   warning, 72-hour notification, one-month final report).
+106
+    NYC Local Law 144 (n 20) §§ 20-871 to 20-873; NYC Commission on Human                    111
+                                                                                                 EU AI Act (n 1) Article 53(1)(b) (provision of information and documentation to
+Rights, ‘Automatic Employment Decision Tools: Guidance on the New York City                  downstream providers); Annex XII (transparency information referred to in Article
+Law’ (NYC CHR 2023) (bias audit methodology: selection rate ratios across sex and            53(1), point (b)); Article 25 (responsibilities along the AI value chain).
+                                                                                             112
+race/ethnicity categories, with later guidance addressing intersectional categories).            EU AI Act (n 1) Article 2(1)(c).
+
+
+                                                                                        11
+
+[PAGE 12]
+cation, driving behaviour); potentially sensitive inferences. Au­                                ity; removal of a human review requirement that previously
+tonomy: Level 3 (automated premium generation; underwriter                                       supported a carve-out argument requires immediate re-assess­
+review for outlier cases only). Geography: Germany, France.                                      ment. Fifth, introduction of new data categories, particularly
+Reversibility: Reversible with Effort. Temporal: Persistent-sta­                                 GDPR Article 9 special category data, into system inputs. Sixth,
+tic.                                                                                             changes to model architecture altering function type or output
+   Stage 2. Node 4: Annex III point 5(c) covers AI systems                                       type. Seventh, scale expansion crossing a regulatory threshold –
+intended to be used for risk assessment and pricing in relation                                  cumulative training computation reaching 10^25 FLOP triggers
+to natural persons in the case of life and health insurance. Motor                               Article 55 systemic risk obligations without any change in the
+insurance is not expressly within point 5(c), creating a Level                                   system’s downstream use.117 Eighth, regulatory change: Annex
+2 confidence issue.113 Alternative classification pathways are                                   III amendments via Article 7 delegated act, new EU AI Office
+limited: motor insurance pricing does not naturally fit point 5(b)                               guidance, judicial or supervisory decisions addressing compa­
+(creditworthiness evaluation) either, suggesting motor insur­                                    rable systems.118
+ance AI may fall outside the Annex III list as currently drafted,                                Regulatory Change Monitoring
+subject to any future amendment under Article 7. Uncertainty
+Note: motor insurance pricing AI is not within the express text                                  The regulatory intelligence process should produce a Classifi­
+of Annex III point 5; classification outcome is “Not High-Risk                                   cation Impact Assessment whenever a proposed or enacted
+under Annex III (express)” but the system remains subject to                                     regulatory change could affect existing classification determi­
+GDPR Article 22 automated decision-making rights, sector-                                        nations. The assessment identifies: which systems in the
+specific insurance regulation under Solvency II and EIOPA                                        organisation’s inventory are potentially affected; what the
+guidelines, and DORA obligations. Confidence: Level 2. Where                                     amended classification would be; what additional obligations
+the deployer’s motor insurance product is bundled with life or                                   would be triggered; what the lead time is between the regulatory
+health coverage, point 5(c) may apply to the relevant compo­                                     change and the compliance deadline. The Commission’s Article
+nents – requiring component-level classification.                                                7 delegated act procedure provides advance notice of Annex
+   Stage 4 Sector-Layer Matrix. Step 4F.1: DORA – insurer                                        III amendments;119 tracking the process enables classification
+within DORA Article 2(1) (insurance and reinsurance under­                                       planning on a realistic timeline rather than a reactive scramble
+takings subject to Solvency II);114 DORA ICT risk management                                     at the enforcement date. Canada’s AIDA, Korea’s forthcoming
+applies. EIOPA Guidelines on AI Governance and Risk Man­                                         ministerial classification regulation, and anticipated UK AI
+agement apply.115 GDPR DPIA required (profiling with signif­                                     primary legislation all represent near-term regulatory changes
+icant financial effects on policyholders).                                                       requiring classification impact assessments upon enactment.120
+
+8. Classification in Dynamic Contexts:                                                           The AI Inventory as Classification Infrastructure
+
+Material Change Triggers                                                                         The classification methodology presupposes that the organisa­
+                                                                                                 tion knows what AI systems it has deployed. A comprehensive
+The EU AI Act creates a re-classification obligation upon                                        inventory must cover bespoke AI systems developed inter­
+“substantial modification” of a high-risk AI system already                                      nally; AI capabilities in commercial software products; AI
+placed on the market or put into service.116 For classification                                  features in SaaS applications; AI systems accessed through
+governance purposes, a material change trigger is defined more                                   APIs by internal development teams; and AI systems operated
+broadly: any change in a Stage 1 profile dimension that could                                    by supply chain partners whose outputs materially affect the
+affect a classification outcome requires a classification review,                                organisation’s regulated processes. The inventory must be at
+even if it does not rise to the level of substantial modification                                use-case level: not “what AI products do we license?” but “in
+requiring full re-conformity-assessment.                                                         what operational contexts are AI systems currently generating
+   Eight material change triggers are tracked. First, changes to                                 outputs that inform consequential decisions?”121 Classification
+the intended purpose specification – any addition, removal, or                                   methodology applied to an incomplete inventory produces sys­
+modification of stated uses in provider documentation, market­                                   tematic exposure gaps – and the gaps are most commonly in
+ing, or API terms. Second, expansion of deployment geography                                     AI capabilities embedded in commercial software and SaaS
+to new jurisdictions requiring Stage 3 re-analysis. Third,                                       platforms, where use-case proliferation is least visible to central
+changes to the deploying sector through acquisitions, mergers,                                   governance functions.
+or business line expansions. Fourth, changes to the autonomy
+level – the most impactful dimension for Article 6(3) eligibil­
+                                                                                                 117
+                                                                                                     EU AI Act (n 1) Article 51(2) (10^25 FLOP threshold for the presumption of high-
+113
+    EU AI Act (n 1) Annex III, point 5(c) (risk assessment and pricing in life and               impact capabilities).
+                                                                                                 118
+health insurance, not motor insurance).                                                              EU AI Act (n 1) Article 7 (delegated act procedure for Annex III amendments).
+114                                                                                              119
+    DORA (n 31) Article 2(1) (financial entities within DORA scope including insur­                  EU AI Act (n 1) Article 7 (delegated act procedure); Recital 54.
+                                                                                                 120
+ance and reinsurance undertakings).                                                                  Bill C-27 (n 19) (classification regulations pending); AI Trust Act (n 18) (minis­
+115
+    European Insurance and Occupational Pensions Authority, ‘Guidelines on Gover­                terial guidance on high-impact AI criteria forthcoming); HM Government, ‘King’s
+nance and Risk Management Related to the Use of Artificial Intelligence’ (EIOPA-                 Speech 2024: Background Briefing Notes’ (HM Government 2024) (UK AI legis­
+BoS-21/384, 17 June 2021).                                                                       lation noted as forthcoming).
+116                                                                                              121
+    EU AI Act (n 1) Article 3(23) (definition of substantial modification); Article 25(1)            EU AI Act (n 1) Article 26(1) (deployer obligation to take appropriate technical
+(b) (substantial modification trigger for the conditions under which other parties are           and organisational measures to ensure use in accordance with the instructions for use
+considered providers); Recital 128.                                                              – presupposes knowledge of what AI systems are deployed).
+
+
+                                                                                            12
+
+[PAGE 13]
+9. Institutional Requirements for Classification Governance:                                 ticle 55(1)(a).128 Review documentation must record: date and
+Ownership and Accountability                                                                 reviewer; triggering event; classification dimensions reviewed;
+                                                                                             changes to determination or confidence score; basis for contin­
+Classification is a legal determination with compliance conse­                               ued or amended determination.
+quences. Its output forms part of the Annex IV technical docu­
+mentation required by the EU AI Act122 and is the primary evi­                               10. Conclusion: Classification as the Foundation of AI Gover­
+dence of compliance intent in supervisory inquiries and product                              nance:
+liability proceedings.123 Internal ownership of the classification                           The classification of AI systems against global regulatory
+programme should rest with a named accountable individual                                    frameworks is the foundational act of AI governance. Every
+with authority, budget, and board visibility for AI governance.                              subsequent compliance decision – what technical documenta­
+The EU AI Act does not create a single statutory “AI responsible                             tion to prepare, which conformity assessment pathway to
+person” role analogous to the GDPR Data Protection Officer;                                  follow, what monitoring infrastructure to build, what contracts
+Article 26(2) requires deployers to assign human oversight                                   to negotiate with AI vendors – depends on a prior, documented
+to natural persons with the necessary competence, training, au­                              classification determination that is legally defensible, method­
+thority, and support, and Article 26(1) requires deployers to take                           ologically sound, and kept current as the system and the
+appropriate technical and organisational measures to ensure use                              regulatory landscape evolve.
+in accordance with the instructions for use.124 Classification                                  The four-stage methodology presented in this paper – func­
+decisions should be subject to legal review before finalisation.                             tional characterisation using an eight-dimension rubric, risk-
+   For organisations certified to ISO/IEC 42001:2023, the                                    tier determination through a six-node sequential decision tree,
+classification programme should be integrated within the AI                                  jurisdictional scope determination from territorial analysis, and
+management system.125 ISO/IEC 42001 certification creates a                                  sector-layer identification through sector-specific decision trees
+presumption of conformity with Article 17 quality management                                 – addresses all stages of this process with sufficient precision
+system requirements upon harmonised standard designation;                                    to generate consistent, auditable outputs across the full range
+this presumption does not extend to the substantive classifi­                                of AI system types in the 900-archetype corpus. The Article
+cation determinations in the classification output document,                                 6(3) scoring tool addresses the highest-uncertainty element of
+which must be performed independently for each system.126                                    EU AI Act classification. The Confidence Scoring Framework
+Cross-Functional Classification Workflow                                                     provides a mechanism for tracking and resolving uncertainty
+                                                                                             over time without requiring provisional determinations to block
+The four-stage methodology requires inputs from multiple                                     compliance planning entirely.
+functions following a defined workflow: Stage 1 initiated by                                    The methodology’s practical value depends on two precon­
+engineering, reviewed by product; Stage 2 conducted by legal/                                ditions. The first is a comprehensive AI system inventory at
+compliance with engineering technical input; Stage 3 conducted                               use-case level. The second is regulatory intelligence capability
+by legal with commercial/geography input; Stage 4 conducted                                  tracking classification architecture changes in each relevant ju­
+jointly by legal and sector specialists (clinical, financial risk,                           risdiction. Both require institutional investment in governance
+HR as applicable). Classification output reviewed and approved                               infrastructure that goes beyond the classification methodology
+by the designated AI governance lead. All classification                                     itself. Together they define what it means for an organisation
+decisions, evidence sources, and reasoning documented with                                   to know what AI it operates, what the regulatory framework re­
+version control in the AI governance record system.                                          quires of it, and whether those requirements are being satisfied
+Classification Review Cycles                                                                 – the foundational knowledge without which AI governance,
+For high-risk AI systems: minimum annual review, consistent                                  however elaborately documented, is a compliance performance
+with EU AI Act post-market monitoring and EBA GL/2020/06                                     rather than a compliance programme.
+model revalidation requirements.127 For non-high-risk systems:                               A. Bibliography
+biennial review unless a material change trigger has occurred.                               a) EU Primary Legislation and Regulations:
+For systemic risk GPAI models: classification review integrated
+with the documented adversarial testing programme under Ar­                                  Regulation (EU) 2024/1689 of the European Parliament and of
+                                                                                             the Council of 13 June 2024 laying down harmonised rules on
+122
+    EU AI Act (n 1) Annex IV, para 1 (description and intended purpose of the AI             artificial intelligence (Artificial Intelligence Act) [2024] OJ L
+system – primary output of Stage 1 functional characterisation).
+123
+    Directive (EU) 2024/2853 (n 2) Article 8 (evidence disclosure mechanism in               2024/1689.
+product liability proceedings).
+124
+    EU AI Act (n 1) Article 26(1)–(2). Compare GDPR (n 26) Articles 37-39 (Data                 Regulation (EU) 2024/2853 of the European Parliament and
+Protection Officer obligations, as a comparable but distinct statutory accountability        of the Council of 23 October 2024 on liability for defective
+role).
+125
+    ISO/IEC 42001:2023 (n 35) Section 6.1 (AI impact assessment requirements,                products [2024] OJ L 2024/2853.
+which map to Stage 2 risk-tier determination); Section 5.2 (AI policy, which provides
+the governance framework for Stage 3 jurisdictional scope definition).
+126
+    EU AI Act (n 1) Article 40; ISO/IEC 42001:2023 (n 35) (addresses organisational
+AI management system; does not prescribe individual AI system classification
+methodology).
+127                                                                                          128
+    EBA/GL/2020/06 (n 23) Section 8.2; EU AI Act (n 1) Article 72 (post-market                 EU AI Act (n 1) Article 55(1)(a) (model evaluation including documented adver­
+monitoring throughout the system’s lifetime).                                                sarial testing for systemic risk GPAI providers).
+
+
+                                                                                        13
+
+[PAGE 14]
+Regulation (EU) 2023/1230 of the European Parliament and                Illinois, Artificial Intelligence Video Interview Act, Pub Act
+of the Council of 14 June 2023 on machinery (recast) [2023]             101-260, 820 ILCS 42 (2020).
+OJ L 165/1.                                                                New York City, Local Law 144 of 2021 (Automated Employ­
+   Regulation (EU) 2022/2554 of the European Parliament and             ment Decision Tools), NYC Admin Code § 20-870 et seq.
+of the Council of 14 December 2022 on digital operational                  NYC Commission on Human Rights, ‘Automatic Employ­
+resilience for the financial sector (DORA) [2022] OJ L 333/1.           ment Decision Tools: Guidance on the New York City
+   Regulation (EU) 2022/2065 of the European Parliament and             Law’ (NYC CHR 2023).
+of the Council of 19 October 2022 on a single market for digital           Office of Management and Budget, ‘Advancing Governance,
+services (Digital Services Act) [2022] OJ L 277/1.                      Innovation, and Risk Management for Agency Use of Artificial
+   Regulation (EU) 2017/745 of the European Parliament and              Intelligence’ (OMB Memorandum M-24-10, 26 March 2024).
+of the Council of 5 April 2017 on medical devices [2017] OJ L              Texas Responsible AI Governance Act, SB 2025 (Tex 89th
+117/1 (MDR).                                                            Legislature 2025).
+   Regulation (EU) 2016/679 of the European Parliament and                 US Equal Employment Opportunity Commission, ‘Assessing
+of the Council of 27 April 2016 on the protection of natural            Adverse Impact in Software, Algorithms, and Artificial Intelli­
+persons with regard to the processing of personal data (GDPR)           gence Used in Employment Selection Procedures Under Title
+[2016] OJ L 119/1.                                                      VII of the Civil Rights Act of 1964’ (EEOC Guidance, 18 May
+   Charter of Fundamental Rights of the European Union                  2023).
+[2000] OJ C 364/1.                                                      e) International and Other National Legislation:
+b) EU Directives:                                                       Canada, Bill C-27, Digital Charter Implementation Act, 2022
+Directive (EU) 2022/2555 of the European Parliament and of              (Part 3: Artificial Intelligence and Data Act), 44th Parliament,
+the Council of 14 December 2022 on measures for a high com­             1st Session.
+mon level of cybersecurity across the Union (NIS2 Directive)               People’s Republic of China, Cyberspace Administration and
+[2022] OJ L 333/80.                                                     others, Interim Measures for the Management of Generative
+c) UK Legislation and Regulatory Guidance:                              Artificial Intelligence Services (15 August 2023).
+                                                                           People’s Republic of China, Cyberspace Administration and
+Bank of England Prudential Regulation Authority, ‘Model Risk            others, Provisions on the Management of Algorithmic Recom­
+Management Principles for Banks’ (SS1/23, May 2023).                    mendation (1 March 2022).
+  HM Government, ‘King’s Speech 2024: Background Brief­                    Republic of Korea, Act on the Development of Artificial
+ing Notes’ (HM Government 2024).                                        Intelligence and Establishment of a Foundation of Trust, Act No
+  NHS Digital, ‘DCB0129: Clinical Risk Management: its                  20588 (22 January 2024).
+Application in the Manufacture of Health IT Systems’ (NHS
+Digital 2018, updated 2022).                                            f) Regulatory Guidance (EU and International):
+  NHS Digital, ‘DCB0160: Clinical Risk Management: its                  European Banking Authority, ‘Guidelines on Loan Origination
+Application in the Deployment and Use of Health IT Sys­                 and Monitoring’ (EBA/GL/2020/06, 29 May 2020).
+tems’ (NHS Digital 2018, updated 2022).                                    European Commission, ‘Commission Guidelines on Prohib­
+  NHS England, ‘Digital Technology Assessment Criteria                  ited AI Practices’ (February 2025).
+(DTAC) for Health and Social Care’ (NHS Digital 2021, up­                  European Data Protection Board, ‘Guidelines on Automated
+dated 2023).                                                            Individual Decision-Making and Profiling for the Purposes of
+  UK General Data Protection Regulation (retained EU law, as            Regulation 2016/679’ (WP251rev.01, 6 February 2018).
+amended by SI 2019/419).                                                   European Insurance and Occupational Pensions Authority,
+d) US Legislation and Regulatory Guidance:                              ‘Guidelines on Governance and Risk Management Related to
+                                                                        the Use of Artificial Intelligence’ (EIOPA-BoS-21/384, 17 June
+Board of Governors of the Federal Reserve System and Office             2021).
+of the Comptroller of the Currency, ‘Supervisory Guidance                  EU AI Office, ‘Guidance on High-Risk AI System Classifi­
+on Model Risk Management’ (SR 11-7 / OCC 2011-12, April                 cation under Annex III’ (EU AI Office 2025).
+2011); adopted by the Federal Deposit Insurance Corporation                EU AI Office, ‘Guidance on the Application of Article 6 of
+as FIL-22-2017 (June 2017).                                             the EU AI Act’ (EU AI Office, expected 2 February 2026 under
+   California Consumer Privacy Act of 2018, Cal Civ Code §              Article 6(5)).
+1798.100 et seq.                                                           EU AI Office, ‘Guidance on the Interaction between the AI
+   California SB 942, California AI Transparency Act (Cal               Act and Other EU Product Safety Legislation’ (EU AI Office,
+2025).                                                                  expected 2025/2026).
+   Colorado Revised Statutes §§ 6-1-1701 to 6-1-1712 (Con­                 Eurostat, NACE Rev. 2 – Statistical Classification of Eco­
+sumer Protections in Interactions with Artificial Intelligence          nomic Activities in the European Community (Eurostat 2008).
+Systems), effective 1 February 2026.
+
+
+
+                                                                   14
+
+[PAGE 15]
+Medical Device Coordination Group, ‘MDCG 2019-11:                  © Standard Intelligence, Limited 2026.
+Guidance on Qualification and Classification of Software in          All rights reserved.
+Regulation (EU) 2017/745 – MDR and Regulation (EU)
+2017/746 – IVDR’ (Rev 2, January 2021).                              Current as of April 2026.
+  OECD, OECD Framework for the Classification of AI
+Systems (OECD Digital Economy Papers No 323, 2022).
+g) Technical Standards and Frameworks:
+IEC 61508 series, Functional Safety of Electrical/Electronic/
+Programmable Electronic Safety-Related Systems (IEC SC
+65A).
+  IEC 62443 series, Industrial Automation and Control
+Systems Security (IEC TC 65).
+  ISO/IEC 42001:2023, Information Technology – Artificial
+Intelligence – Management System (ISO/IEC JTC 1/SC 42,
+2023).
+  National Institute of Standards and Technology, Artificial
+Intelligence Risk Management Framework (AI RMF 1.0)
+(NIST AI 100-1, January 2023).
+  SAE International, ‘Taxonomy and Definitions for Terms
+Related to Driving Automation Systems for On-Road Motor
+Vehicles’ (SAE J3016, 2021).
+  UNECE, Regulation No 155 – Cybersecurity Management
+System (UN/ECE/TRANS/WP.29/2020/79, 2021).
+  UNECE, Regulation No 157 – Automated Lane Keeping
+Systems (UN/ECE/TRANS/WP.29/2020/81, 2021).
+h) Academic Works and Working Papers:
+Amershi S and others, ‘Software Engineering for Machine
+Learning: A Case Study’ (2019) IEEE/ACM 41st International
+Conference on Software Engineering: Software Engineering in
+Practice 291.
+   Clark M, ‘Regulatory Intersection and the EU AI Act: Com­
+plex Mapping and Interactions Across Geography’ (Standard
+Intelligence Working Paper 01, April 2026).
+   Clark M, ‘Post-Market Monitoring for AI Systems: Oblig­
+ations, Architecture, and Implementation Under the EU AI
+Act’ (Standard Intelligence Working Paper 03, April 2026).
+   Fleiss JL, ‘Measuring Nominal Scale Agreement Among
+Many Raters’ (1971) 76(5) Psychological Bulletin 378.
+   Gwet KL, Handbook of Inter-Rater Reliability (4th edn,
+Advanced Analytics LLC 2014).
+   Standard Intelligence, ‘AI System Archetype Taxonomy: Ref­
+erence Corpus v1.0’ (Standard Intelligence Internal Reference
+Dataset, April 2026).
+
+
+
+Standard Intelligence, Limited | Manchester, UK
+
+  research@standardintelligence.com
+  standardintelligence.com
+
+  AI Governance in Practice 02:
+  Working Papers on EU AI Act Implementation
+
+
+
+                                                                15
