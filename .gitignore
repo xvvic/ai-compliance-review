@@ -13,9 +13,10 @@ venv/
 .vscode/
 .idea/
 
-# 系统文件
-.DS_Store
-Thumbs.db
+# Streamlit
+.streamlit/
 
-# 日志
-*.log
+AGENTS.md
+/docs
+/.agents
+/.codex
