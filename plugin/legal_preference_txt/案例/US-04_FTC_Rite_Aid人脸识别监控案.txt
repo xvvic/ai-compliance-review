@@ -1,0 +1,887 @@
+# doc_id: bcc8642f37bf-9aef62286969
+# source_path: 案例/US-04_FTC_Rite_Aid人脸识别监控案.pdf
+# category: 案例
+# method: mineru
+# pages: 54
+# sha256: 9aef622869696fbc8bb4244d72f8afc551c3afd8403a23e3ba6d326b5441467d
+
+UNITED STATES DISTRICT COURT FOR THE EASTERN DISTRICT OF PENNSYLVANIA
+
+FEDERAL TRADE COMMISSION,
+Plaintiff,
+v.
+RITE AID CORPORATION, a corporation,
+and
+RITE AID HDQTRS. CORP., a corporation,
+Defendants.
+
+Case No. 2:23-cv-5023
+
+COMPLAINT FOR PERMANENT INJUNCTION AND OTHER RELIEF
+
+Plaintiff, the Federal Trade Commission (“FTC” or “Commission”), for its Complaint alleges:
+
+1. The FTC brings this action under Section 13(b) of the Federal Trade Commission Act (“FTC Act”), 15 U.S.C. § 53(b), which authorizes the FTC to seek, and the Court to order, permanent injunctive relief and other relief for Defendants’ acts or practices in violation of Section 5(a) of the FTC Act, 15 U.S.C. § 45(a).
+
+SUMMARY OF THE CASE
+
+2. Rite Aid Corporation, through its wholly owned subsidiaries including Rite Aid Hdqtrs. Corp. (together with Rite Aid Corporation, “Rite Aid”), operates thousands of retail pharmacy locations throughout the United States. These locations sell a wide variety of products, including prescription and non-prescription medicines, medical supplies, groceries, cosmetics, and personal care items.
+
+3. From at least approximately October 2012 until July 2020, Rite Aid has used facial recognition technology in hundreds of its retail pharmacy locations to identify patrons that it had previously deemed likely to engage in shoplifting or other criminal behavior in order to “drive and keep persons of interest out of [Rite Aid’s] stores.” The technology generated alerts sent to Rite Aid’s employees, including by email or mobile phone application notifications (“match alerts”), indicating that individuals who had entered Rite Aid stores were matches for entries in Rite Aid’s watchlist database.
+
+4. In whole or in part due to facial recognition match alerts, Rite Aid employees took action against the individuals who had triggered the supposed matches, including subjecting them to increased surveillance; banning them from entering or making purchases at the Rite Aid stores; publicly and audibly accusing them of past criminal activity in front of friends, family, acquaintances, and strangers; detaining them or subjecting them to searches; and calling the police to report that they had engaged in criminal activity. In numerous instances, the match alerts that led to these actions were false positives (i.e., instances in which the technology incorrectly identified a person who had entered a store as someone in Rite Aid's database).
+
+5. As described in more detail below, Rite Aid failed to take reasonable measures to prevent harm to consumers from its use of facial recognition technology. Among other things, Rite Aid failed to consider or address foreseeable harms to consumers flowing from its use of facial recognition technology, failed to test or assess the technology's accuracy before or after deployment, failed to enforce image quality standards that were necessary for the technology to function accurately, and failed to take reasonable steps to train and oversee the employees charged with operating the technology in Rite Aid stores.
+
+6. Rite Aid's failures caused and were likely to cause substantial injury to consumers, and especially to Black, Asian, Latino, and women consumers.
+
+Case 2:23-cv-05023 Document 1 Filed 12/19/23 Page 3 of 38
+
+7. Rite Aid is the subject of a 2010 order previously issued by the FTC for alleged violations of Section 5(a) of the FTC Act. See Ex. A, In the Matter of Rite Aid Corporation, C-4308, 150 F.T.C. 694 (Nov. 12, 2010) (Decision and Order) (“Commission Order” or “2010 Order”). Rite Aid violated provisions in the 2010 Order requiring it to (1) implement and maintain a comprehensive information security program and (2) retain documents relating to its compliance with that provision. Specifically, Rite Aid routinely failed to use reasonable steps in selecting and retaining service providers capable of appropriately safeguarding personal information they received from Rite Aid; require service providers by contract to implement and maintain appropriate safeguards for personal information they received from Rite Aid; and maintain written records relating to its information security program. Furthermore, Rite Aid failed to produce documents relating to its compliance with the 2010 Order, including documents that contradict, qualify, or call into question its compliance.
+
+JURISDICTION AND VENUE
+
+8. This Court has subject matter jurisdiction over this action pursuant to 28 U.S.C. §§ 1331, 1337(a), and 1345.
+
+9. Venue is proper in this District under 28 U.S.C. §§ 1391(b)(1), (b)(2), (c)(2), and (d), and 15 U.S.C. § 53(b), because Rite Aid has its principal place of business in this District, because Rite Aid transacts business in this District, and because a substantial part of the events or omissions giving rise to the claims occurred in this District.
+
+10. Defendants Rite Aid Corporation and Rite Aid Hdqtrs. Corp. filed petitions for relief under Chapter 11 of the Bankruptcy Code on October 15, 2023. See In re Rite Aid Corporation, Case No. 3:23-bk-18993 (Bankr. D.N.J.); In re Rite Aid Hdqtrs. Corp., Case No. 3:23-bk-18999 (Bankr. D.N.J.). These cases are being jointly administered in the lead case, In re
+
+Rite Aid Corporation, Case No. 3:23-bk-18993 (Bankr. D.N.J.) (collectively, the “Bankruptcy Cases”).
+
+11. The FTC's commencement and prosecution of this action are actions to enforce the FTC's police or regulatory power. As a result, if the Bankruptcy Cases are pending as of the date of filing of this Complaint, the FTC's commencement and prosecution of this action is excepted from the automatic stay pursuant to 11 U.S.C. § 362(b)(4).
+
+PLAINTIFF
+
+12. The FTC is an independent agency of the United States Government created by the FTC Act, which authorizes the FTC to commence this district court civil action by its own attorneys. 15 U.S.C. §§ 41–58. The FTC enforces Section 5(a) of the FTC Act, 15 U.S.C. § 45(a), which prohibits unfair or deceptive acts or practices in or affecting commerce.
+
+DEFENDANTS
+
+13. Rite Aid Corporation is a Delaware corporation with its principal office or place of business at 1200 Intrepid Ave., 2nd Floor, Philadelphia, Pennsylvania. It conducts business through several wholly owned subsidiaries. Rite Aid Corporation transacts or has transacted business in this District and throughout the United States.
+
+14. Rite Aid Hdqtrs. Corp. is a Delaware corporation with its principal office or place of business at 1200 Intrepid Ave., 2nd Floor, Philadelphia, Pennsylvania. Rite Aid Hdqtrs. Corp. is a wholly owned subsidiary of Rite Aid Corporation. Rite Aid Hdqtrs. Corp. transacts or has transacted business in this District and throughout the United States.
+
+15. Officers and employees of Rite Aid Corporation and Rite Aid Hdqtrs. Corp. initiated, planned, directed, formulated policies for, and directly supervised and participated in the implementation of facial recognition technology to keep persons of interest out of Rite Aid's retail pharmacy locations. Regional and store-level employees worked at the direction of Rite Aid Corporation and Rite Aid Hdqtrs. Corp. to operate the technology as part of their job duties.
+
+COMMON ENTERPRISE
+
+16. Defendants have operated as a common enterprise while engaging in the unlawful acts and practices alleged below. Among other things, Defendants have conducted the business practices described below through interrelated companies that have had common ownership, officers, managers, business functions, and office locations and have filed joint financial disclosures with the Securities and Exchange Commission. Because Defendants have operated as a common enterprise, each of them is liable for the acts and practices alleged below.
+
+COMMERCE
+
+17. At all times relevant to this Complaint, Rite Aid has maintained a substantial course of trade in or affecting commerce, as “commerce” is defined in Section 4 of the FTC Act, 15 U.S.C. § 44.
+
+RITE AID'S USE OF FACIAL RECOGNITION TECHNOLOGY
+
+18. Rite Aid obtained its facial recognition technology from two third-party vendors that operated and supported the technology on Rite Aid's behalf and at its direction in retail stores. Rite Aid also contracted with one of its vendors to provide additional biometric technologies for use in Rite Aid distribution centers.
+
+19. Most of the stores in which Rite Aid installed the technology were located in and around New York City; Los Angeles; San Francisco; Philadelphia; Baltimore; Detroit; Atlantic City; Seattle; Portland, Oregon; Wilmington, Delaware; and Sacramento, California.
+
+20. Rite Aid did not inform consumers that it used facial recognition technology. Additionally, Rite Aid specifically instructed employees not to reveal Rite Aid's use of facial recognition technology to consumers or the media.
+
+Rite Aid's Enrollment Practices
+
+21. In connection with its use of facial recognition technology, Rite Aid created, or directed its facial recognition vendors to create, an enrollment database of images of individuals whom Rite Aid considered “persons of interest,” including because Rite Aid believed the individuals had engaged in actual or attempted criminal activity at a Rite Aid physical retail location or because Rite Aid had obtained law enforcement “BOLO” (“Be On the Look Out”) information about the individuals. Individual entries in this database are referred to herein as “enrollments.” Enrollments in the Rite Aid database included images of the individuals (“enrollment images”) along with accompanying information, including, to the extent known, individuals’ first and last names, individuals’ years of birth, and information related to criminal or “dishonest” behavior in which individuals had allegedly engaged.
+
+22. Rite Aid regularly used low-quality enrollment images in its database. Rite Aid obtained enrollment images by, among other methods, excerpting images captured via Rite Aid's closed-circuit television (“CCTV”) cameras, saving photographs taken by the facial recognition cameras, and by taking photographs of individuals using mobile phone cameras. On a few occasions, Rite Aid obtained enrollment images from law enforcement or from media reports. In some instances, Rite Aid employees enrolled photographs of individuals’ driver’s licenses or other government identification cards or photographs of images displayed on video monitors.
+
+23. Rite Aid trained store-level security employees to “push for as many enrollments as possible.” Rite Aid enrolled at least tens of thousands of individuals in its database.
+
+24. It was Rite Aid's general practice to retain enrollment images indefinitely.
+
+Rite Aid's Match Alert Practices
+
+25. Cameras installed in Rite Aid's retail pharmacy locations that used facial recognition technology would capture or attempt to capture images of all consumers as they entered or moved through the stores (“live images”). Rite Aid’s facial recognition technology would then compare the live images to the enrollment images in Rite Aid’s database to determine whether the live image was a match for an enrolled individual.
+
+26. When Rite Aid's facial recognition technology determined that a live image depicted the same person as an enrollment image, the technology generated a “match alert” that was sent to store-level employees’ Rite Aid-issued mobile phones. As part of the comparison process, Rite Aid’s facial recognition technology generated “confidence scores” or “confidence levels”—numerical values that expressed the system’s degree of confidence that two images were of the same person. A higher score indicated a higher degree of confidence. Rite Aid’s facial recognition technology generated a match alert when the confidence score associated with a match was above a certain threshold that was selected by Rite Aid in consultation with its vendors.
+
+27. However, match alerts provided to the store-level employees generally did not include confidence scores, so the employees who operated Rite Aid's facial recognition technology generally did not know the score associated with a given match alert.
+
+28. Generally, match alerts contained both the enrollment image and the live image, as well as Rite Aid's instruction as to the action that Rite Aid's employees should take if the individual entered the store. Rite Aid instructed employees to take the stated action if the employees believed the match to be accurate.
+
+29. Rite Aid's enrollments were assigned different match alert instructions depending on the reason the individual was enrolled. These instructions included (i) “Approach and Identify,” (ii) “Observe and Provide Customer Service,” (iii) “Pharmacy Patient – Escort to Pharmacy,” and (iv) “911 Alert” or “Potentially Violent – Notify Law Enforcement and Observe.” For enrollments with the instruction “911 Alert,” employees were told to “call 911 and notify [the police that] a potentially violent or dangerous subject has entered the store.”
+
+30. A majority of Rite Aid's facial recognition enrollments were assigned the match alert instruction “Approach and Identify,” which meant employees should approach the person, ask the person to leave, and, if the person refused, call the police.
+
+31. Rite Aid's facial recognition technology generated thousands of false-positive matches—that is, alerts that incorrectly indicated that a consumer was a “match” for an enrollment in Rite Aid’s database of individuals suspected or accused of wrongdoing. Indeed, despite a general failure to record the accuracy or outcomes of match alerts, Rite Aid employees recorded thousands of false positive match alerts between December 2019 and July 2020. Other evidence of false-positive matches includes:
+
+a. In numerous instances, Rite Aid's facial recognition technology generated match alerts that were likely false positives because they occurred in stores that were geographically distant from the store that created the relevant enrollment. For example, between December 2019 and July 2020, Rite Aid's facial recognition technology generated over 5,000 match alerts in stores that were more than 100 miles from the store that created the relevant enrollment. In fact, Rite Aid employees expressed frustration about the rate of false-positive match alerts that were generated for enrollments from geographically distant stores.
+
+b. Some enrollments generated high numbers of match alerts in locations throughout the United States. For instance, during a five-day period, Rite Aid's facial recognition technology generated over 900 match alerts for a single enrollment. The match alerts occurred in over 130 different Rite Aid stores (a majority of all locations using facial recognition technology), including hundreds of alerts each in New York and Los Angeles, over 100 alerts in Philadelphia, and additional alerts in Baltimore; Detroit; Sacramento; Delaware; Seattle; Manchester, New Hampshire; and Norfolk, Virginia. In multiple instances, Rite Aid employees took action, including asking consumers to leave stores, based on matches to this enrollment.
+
+c. Between December 2019 and July 2020, Rite Aid's facial recognition technology generated over 2,000 match alerts that occurred within a short time of one or more other match alerts to the same enrollment in geographically distant locations within a short period of time, such that it was impossible or implausible that the same individual could have caused the alerts in the different locations. For example, for a particular enrollment image that was originally captured at a Los Angeles store, Rite Aid's facial recognition technology generated over 30 match alerts in New York City and Philadelphia between February 2020 and July 2020. Each of the New York and Philadelphia matches occurred within 24 hours of a match alert in a California store and thus was likely a false positive.
+
+RITE AID'S FACIAL RECOGNITION TECHNOLOGY PRACTICES
+
+32. In connection with deploying facial recognition technology in a subset of its retail pharmacy locations, Rite Aid has failed to take reasonable measures to prevent harm to consumers. Among other things, Rite Aid has:
+
+a. Failed to assess, consider, or take reasonable steps to mitigate risks to consumers associated with its implementation of facial recognition technology, including risks associated with misidentification of consumers at higher rates depending on their race or gender;
+
+b. Failed to take reasonable steps to test, assess, measure, document, or inquire about the accuracy of its facial recognition technology before deploying the technology;
+
+c. Failed to take reasonable steps to prevent the use of low-quality images in connection with its facial recognition technology, increasing the likelihood of false-positive match alerts;
+
+d. Failed to take reasonable steps to train or oversee employees tasked with operating facial recognition technology and interpreting and acting on match alerts; and
+
+e. Failed to take reasonable steps, after deploying the technology, to regularly monitor or test the accuracy of the technology, including by failing to implement any procedure for tracking the rate of false positive facial recognition matches or actions taken on the basis of false positive facial recognition matches.
+
+33. In significant part as a result of Rite Aid's conduct, as discussed above, Rite Aid's facial recognition technology has generated numerous false positive facial recognition match alerts.
+
+34. As a result of these false-positive match alerts, Rite Aid subjected consumers to surveillance, removal from stores, and emotional and reputational harm, as well as other harms.
+
+Failure to Consider and Address Risks to Consumers, Including Increased Risks Based on Race or Gender
+
+35. Rite Aid failed to consider, assess, or take into account the likelihood of false-positive matches or the potential risks false-positive matches posed to consumers.
+
+36. An internal presentation advocating expansion of Rite Aid's facial recognition program following Rite Aid's pilot deployment of facial recognition technology identified only a single risk associated with the program: “[m]edia attention and customer acceptance.”
+
+37. Rite Aid failed to assess or address any other risks to consumers, including risks that false-positive match alerts could lead to a restriction of consumers' ability to make needed purchases, severe emotional distress, reputational harm, or even wrongful arrest.
+
+38. These risks were reasonably foreseeable by Rite Aid. For example, Rite Aid knew that it had instructed employees to take actions up to and including calling the police based on match alerts. Rite Aid also quickly became aware that its facial recognition technology generated false-positive match alerts.
+
+39. Rite Aid also failed to take steps to assess or address risks that its deployment of facial recognition technology would disproportionately harm consumers because of their race, gender, or other demographic characteristics.
+
+40. For example, Rite Aid failed to consider whether its policies related to the selection of certain stores to use facial recognition technology, including prioritizing what it called “urban” areas and stores along public transportation routes, would disproportionately impact certain populations, including racial or ethnic minority populations.
+
+41. In fact, although approximately 80 percent of Rite Aid stores are located in plurality-White (i.e., where White people are the single largest group by race or ethnicity) areas, about 60 percent of Rite Aid stores that used facial recognition technology were located in plurality non-White areas. As a result, store patrons in plurality-Black, plurality-Asian, and plurality-Latino areas were more likely to be subjected to and surveilled by Rite Aid's facial recognition technology.
+
+42. The accuracies of facial recognition technologies often vary depending on the demographics, including the race and gender, of image subjects. In particular, many currently available facial recognition technologies produce more false-positive matches for Black or Asian image subjects compared to White image subjects. Likewise, many facial recognition technologies have higher error rates for women image subjects than for men.
+
+43. However, Rite Aid made no effort, either before implementing facial recognition technology or at any time while using the technology, to assess, test, inquire, or monitor whether the accuracy of its facial recognition technology varied depending on characteristics of the image subject, including whether the technology was especially likely to generate false positives depending on image subjects' race or gender.
+
+44. In fact, match alerts occurring in stores located in areas where the plurality of the population was Black or Asian were significantly more likely to have low confidence scores than match alerts occurring in stores located in plurality-White areas.
+
+45. Similarly, match alerts to enrollments with typically feminine names (i.e., where the enrolled person was likely a woman) were significantly more likely to have low confidence scores than match alerts to enrollments with typically masculine names.
+
+46. Match alerts with low confidence scores were more likely to be false positives than match alerts with high confidence scores.
+
+47. Nonetheless, Rite Aid did not modify its policies in light of these low-confidence-score match alerts.
+
+48. Moreover, Rite Aid failed to modify its policies to address increased risks to consumers based on race and gender even after its facial recognition technology generated egregious results. For example, Rite Aid conducted an internal investigation into an incident in which Rite Aid's facial recognition technology generated an alert indicating that a consumer—specifically a Black woman—was a match for an enrollment image that Rite Aid employees described as depicting “a white lady with blonde hair.” In response to the alert, Rite Aid employees called the police and asked the woman to leave the store before realizing the alert was a false positive.
+
+49. As a result of Rite Aid's failures, Black, Asian, Latino, and women consumers were especially likely to be harmed by Rite Aid's use of facial recognition technology.
+
+Failure to Test or Assess Accuracy Before Deployment
+
+50. Rite Aid failed to test or assess the technology's accuracy before deploying facial recognition technology from its two vendors.
+
+51. Rite Aid did not ask its first vendor for any information about the extent to which the technology had been tested for accuracy and did not obtain, review, or rely on the results of any such testing. In fact, in its contract with Rite Aid, the vendor expressly disclaimed the accuracy of the technology it provided, stating:
+
+[VENDOR] MAKES NO REPRESENTATIONS OR WARRANTIES AS TO THE ACCURACY AND RELIABILITY OF THE PRODUCT IN THE PERFORMANCE OF ITS FACIAL RECOGNITION CAPABILITIES. [VENDOR] DISCLAIMS ANY RESPONSIBILITY OR WARRANTY, EXPRESS OR IMPLIED, WITH RESPECT TO ANY FALSE IDENTIFICATION OR MISIDENTIFICATION ARISING FROM THE USE OF THE PRODUCT.
+
+52. Additionally, at least some match alerts generated by the vendor's technology included a disclaimer stating, in part:
+
+YOU AGREE THAT THIS INFORMATION IS PROVIDED ON AN ‘AS IS’ BASIS WITHOUT WARRANTY OF ANY KIND.... THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE INFORMATION IS WITH YOU. SHOULD ANY INFORMATION PROVE INCORRECT IN ANY RESPECT, YOU ASSUME THE COST OF ANY CORRECTION.
+
+53. In addition to its failure to test or assess accuracy when contracting with its first vendor, Rite Aid also failed to test for accuracy during its pilot deployment of the facial recognition technology. Rite Aid's initial implementation of the vendor's technology included a pilot in a small number of stores before expanding to more stores, but Rite Aid did not assess the rate at which the technology generated false-positive match alerts during the pilot.
+
+54. After Rite Aid fully deployed the first vendor's facial recognition technology, it was aware or should have been aware that the technology generated numerous false-positive match alerts.
+
+55. Nevertheless, when switching to the second vendor's facial recognition technology, Rite Aid once again did not seek, and did not receive, any test results or other information about, assurances of, or evidence of accuracy, including the likelihood of false-positive matches, prior to piloting and fully implementing the technology.
+
+56. Like the first vendor, Rite Aid's second vendor also disclaimed the accuracy of match alerts generated by its technology. Match alerts generated by the vendor's technology included a disclaimer of the match alerts' accuracy, which stated that it had “identified a PROBABLE match. Feature matching technology cannot guarantee 100% matches. Discretion is advised.”
+
+Failure to Enforce Image Quality Controls
+
+57. Rite Aid regularly used low-quality enrollment images in connection with its facial recognition technology, increasing the likelihood of false-positive match alerts.
+
+58. Rite Aid knew that using high quality images was important for the accuracy of its facial recognition technology. For instance, Rite Aid employees noted in an internal presentation about its facial recognition technology that “[h]igh quality digital photos of enrollees enhance[d] [the] number of hits.” And Rite Aid’s first vendor told Rite Aid that “The quality of the photos used for [facial recognition technology] is extremely important.... Without good quality photos, an enrollment is not useful.”
+
+59. With this knowledge, Rite Aid established image quality policies that included requirements that enrollment images:
+
+a. Should “have equal lighting on the entire face, no hotspots or shading;”
+
+b. Should be aligned so that one could “see both ears equally in the photo” and “the person’s eyes should be aligned with the top of their ears;” and
+
+c. Should depict subjects with glasses removed and with neutral facial expressions.
+
+60. However, Rite Aid often used images that fell short of Rite Aid's own image quality standards contributing to the rate of false-positive match alerts. In fact, Rite Aid's methods for capturing images—for example, its use of cameras that frequently produced “blurry” images—increased the likelihood that its enrollment images would not meet its own image quality standards.
+
+61. Contrary to its policy, Rite Aid also regularly enrolled images with poor lighting, which further increased the likelihood of false-positive match alerts. Such lighting issues included overexposure, glare, and low natural light.
+
+62. For instance, a Rite Aid employee told Rite Aid's facial recognition vendor that “[t]he majority of images captured by [Rite Aid’s facial recognition] cameras” and enrolled in the database were of inadequate quality, citing the fact that Rite Aid’s cameras did not adjust to changes in daylight, and that many instances of criminal activity—i.e., instances in which Rite Aid sought to capture enrollment images—occurred at night, “when [the cameras’] images are the poorest.”
+
+63. Additionally, Rite Aid violated its own policy by regularly enrolling images in which the subject was not looking at or directly facing the camera, the subject's face was obscured, the subject was wearing accessories such as a hat or glasses, or the subject did not have a neutral expression.
+
+64. Enrollment images with these characteristics were likely to generate false-positive match alerts.
+
+65. Rite Aid also understood that a single poor-quality enrollment image could—and in multiple instances did—cause numerous false-positive matches. For example, in one instance, a Rite Aid executive told Rite Aid’s facial recognition technology vendor that a particular
+
+enrollment uploaded earlier the same day had caused “dozens of false alerts.” The enrollment was accompanied by an instruction to contact the police.
+
+Failure to Train and Oversee Employees
+
+66. Rite Aid's failure to appropriately train or oversee employees who operated facial recognition technology further increased the likelihood of harm to consumers.
+
+67. Although it was Rite Aid's policy that its retail stores provide employees authorized to operate facial recognition technology with approximately one to two hours of training on its facial recognition system, in nearly all cases Rite Aid did not verify or obtain any record that employees had received the required training.
+
+68. Moreover, Rite Aid's training materials were very limited and did not address the risks to consumers from using the technology. In numerous instances, the training materials Rite Aid prepared to train store-level employees who operated Rite Aid's facial recognition technology were limited to topics such as how to navigate the websites and mobile applications used to interact with the technology, and how to enter new enrollments. Rite Aid's training materials either did not address the possibility that the technology would generate false-positive match alerts or contained only a cursory reference to such a possibility.
+
+69. Rite Aid never provided any training to any employees, for example, about the limitations of facial recognition technology, how to evaluate the quality of live images to determine their value for comparison, how to compare facial images to determine whether they are a match, or the effects of various types of bias on the accuracy of facial comparisons by humans.
+
+70. Rite Aid knew that store employees who operated its facial recognition technology frequently failed to comply with company policies related to the use of facial recognition technology, including, as discussed above, image quality standards and procedures related to alert resolution. Among other things, data maintained by Rite Aid and its vendor showed that its employees failed to adhere to company policy, including because many enrollment images did not meet quality standards.
+
+71. Through consumer complaints and other means, Rite Aid was also aware that in some instances employees who were not authorized to operate Rite Aid's facial recognition technology and therefore did not receive training on how to use the technology, evaluate matches, or approach consumers, nevertheless used the technology.
+
+72. Rite Aid employees frequently recorded that they took more aggressive action in response to match alerts than the alerts instructed. In fact, between December 2019 and July 2020, in response to alerts with an instruction to “observe or provide customer service,” Rite Aid employees more frequently recorded that they had asked a consumer to leave the store than that they had “observed” the consumer as instructed.
+
+73. Despite employees' documented and frequent non-compliance with facial recognition policies and procedures, Rite Aid did not take any measures to improve its training and oversight of employees who operated the facial recognition technology.
+
+Failure to Monitor, Assess, or Test Accuracy of Results
+
+74. Rite Aid failed to regularly monitor and assess the accuracy of the results of its facial recognition technology. This failure persisted despite Rite Aid's general awareness that the technology generated numerous false-positive matches. Among other things, Rite Aid failed to adequately (i) verify or test the accuracy of match alerts, (ii) record outcomes or track the rate of false-positive matches, and (iii) remedy problematic enrollments.
+
+75. In part because of Rite Aid's failures to track, monitor, assess, or test its facial recognition technology, Rite Aid did not have a reasonable basis to believe that any given match alert was likely to be accurate. Nevertheless, Rite Aid continued to instruct store-level employees to take action against consumers on the basis of facial recognition match alerts.
+
+Failure to Verify or Test Accuracy of Match Alerts
+
+76. Rite Aid did not conduct, or require its vendors to conduct, any regular or ongoing testing demonstrating the accuracy of match alerts.
+
+77. Rite Aid did not require employees to verify the accuracy of matches by, e.g., checking individuals' identification before requiring them to leave the store. Although Rite Aid instructed employees to "identify" the subject of a match alert by calling out the name registered in the enrollment database before asking a consumer to leave a store, in numerous instances Rite Aid employees did not and could not have followed this procedure. As of July 2020, a majority of enrollments in Rite Aid's database did not include a first or last name for the enrolled individual, making it impossible to "identify" alert subjects using their names. Rite Aid employees recorded thousands of instances in which they asked consumers to leave stores based on match alerts to enrollments with no recorded name.
+
+78. Because Rite Aid did not have a procedure to verify the accuracy of facial recognition matches, its only basis for assessing the accuracy of any given match was the impression of store-level employees who, as discussed above, had not received any training in how to make such an assessment. These deficiencies in Rite Aid's procedures contributed to its failure to identify and address issues with match alerts.
+
+Failure to Record Outcomes or Track False Positives
+
+79. Rite Aid failed to record outcomes of alerts or track false positives in order to assess the accuracy of its facial recognition technology.
+
+80. The facial recognition technology that Rite Aid initially deployed did not include a mechanism to track outcomes and Rite Aid did not establish a procedure to track outcomes.
+
+81. Rite Aid later switched to a technology that included a mechanism to record the outcome of an alert. The mechanism allowed employees to input information about an alert, such as that the alert was a “Bad Match” or that they had approached a consumer and asked the consumer to leave. This process was referred to as “resolving” a match.
+
+82. Although Rite Aid's policy required employees to “resolve” every match alert, Rite Aid did not enforce this policy. For example, between December 2019 and July 2020, Rite Aid employees failed to “resolve” approximately two thirds of all match alerts.
+
+83. As a result of its lax policy enforcement, Rite Aid had no way to track false positives and therefore no way to assess the accuracy of the facial recognition technology as deployed.
+
+Failure to Remedy Problematic Enrollments
+
+84. Rite Aid retained active enrollments in its database even after they generated numerous false-positive matches. For example:
+
+a. Bronx Example—Employees at a Rite Aid retail pharmacy located in The Bronx in New York uploaded an enrollment image to Rite Aid’s database on May 16, 2020. Between May 16, 2020, and July 2020, Rite Aid’s facial recognition technology generated over 1,000 match alerts for the enrollment—nearly 5 percent of all match alerts generated by Rite Aid’s
+
+facial recognition technology during this time period. Many of these match alerts were likely false positives, including because:
+
+i. Over 99 percent of all match alerts for the enrollment were generated in Rite Aid locations in or near Los Angeles, California, on the other side of the country from the site of enrollment;
+
+ii. In at least four instances, match alerts for the enrollment were generated in both New York and California within a 24-hour period; and
+
+iii. Although Rite Aid employees only recorded outcomes for less than 3 percent of match alerts to the enrollment—all of them were labeled “Bad Matches.”
+
+b. Seattle Example—Employees at a Rite Aid store near Seattle uploaded an enrollment image in November 2019. Between December 2019 and July 2020, Rite Aid’s facial recognition technology generated hundreds of match alerts for the enrollment. Many match alerts to the enrollment were likely false positives, including because:
+
+i. Fewer than 10 percent of all match alerts for the enrollment occurred in or near Seattle, where the store that created the enrollment was located;
+
+ii. By contrast, over half of the match alerts were generated in stores located in or near New York City and a further one quarter of alerts were generated in the Los Angeles area, with dozens of additional alerts generated in Sacramento and Philadelphia; and iii. Rite Aid employees did not record any outcome for most of the match alerts, but over three quarters of the time when employees did record an outcome, they labeled the alerts as “Bad Matches.” In multiple instances—mostly in New York—employees recorded that they had carried out the instruction assigned to the enrollment, resulting in heightened employee surveillance of patrons whose live images triggered these likely false positive alerts.
+
+c. Virginia Example—Employees in a Rite Aid location in Norfolk, Virginia created an enrollment in November 2019. Rite Aid’s facial recognition technology generated hundreds of match alerts for this enrollment between December 2019 and July 2020, many of which were likely false positives. Among other things:
+
+i. The match alerts mostly occurred in or near Detroit, New York City, and Philadelphia, with additional instances occurring in the Sacramento, Seattle, Baltimore, and Los Angeles areas—sometimes within a short period of time. For example, within approximately 24 hours, match alerts to the enrollment occurred in Los Angeles, in Detroit, and in Mount Vernon, New York; and
+
+ii. Although Rite Aid's employees most often did not record the outcome of the match alerts, Rite Aid employees did report over 100 instances of “Bad Matches” to the enrollment. In multiple other instances, Rite Aid employees either subjected consumers to heightened surveillance or took even more aggressive action than the match alerts instructed by barring individuals from Rite Aid stores on the basis of likely false-positive matches to this enrollment.
+
+RITE AID'S FACIAL RECOGNITION TECHNOLOGY PRACTICES CAUSED OR WERE LIKELY TO CAUSE SUBSTANTIAL CONSUMER INJURY
+
+85. Rite Aid's facial recognition technology practices caused or were likely to cause substantial consumer injury by increasing the risk of false-positive match alerts.
+
+86. As described above, Rite Aid's use of facial recognition technology was especially likely to result in false-positive matches for Black, Latino, Asian, and women consumers.
+
+87. In numerous instances, Rite Aid's employees acted on match alerts that were false positives. As a result, numerous consumers were mistakenly identified as shoplifters or wrongdoers.
+
+88. Rite Aid's actions in relying on facial recognition technology without addressing these risks caused or were likely to cause injury to consumers, including because Rite Aid employees:
+
+a. surveilled and followed consumers around the store;
+
+b. instructed consumers to leave Rite Aid stores and prevented them from making needed or desired purchases, including prescribed and over-the-counter medications and other health aids;
+
+c. subjected consumers to unwarranted searches;
+
+d. publicly and wrongly accused consumers of shoplifting, including, according to consumer complaints, in front of the consumers' coworkers, employers, children, and others; or
+
+e. called the police to confront or remove the consumer.
+
+89. Therefore, taking action based on a false-positive match alert potentially exposed consumers to risks including the restriction of consumers' ability to make needed purchases, severe emotional distress, reputational harm, or even wrongful arrest.
+
+90. Consumers complained to Rite Aid that they had experienced humiliation and feelings of stigmatization as a result of being confronted by Rite Aid's employees based on false-positive facial recognition matches.
+
+91. Moreover, some of the consumers enrolled in Rite Aid's database or approached by Rite Aid's employees as a result of facial recognition match alerts were children. For example, Rite Aid employees stopped and searched an 11-year-old girl on the basis of a false-positive facial recognition match. The girl's mother told Rite Aid that she had missed work because her daughter was so distraught by the incident.
+
+92. Multiple consumers told Rite Aid that they believed the false-positive facial recognition stops were a result of racial profiling. One consumer wrote to Rite Aid: “I feel different from this experience when I walk into a store now it’s weird. Before any of your associates approach someone in this manner they should be absolutely sure because the effect that it can [have] on a person could be emotionally damaging.... [E]very black man is not [a] thief nor should they be made to feel like one.”
+
+93. The harms outlined above are not outweighed by countervailing benefits to consumers or competition.
+
+THE COMMISSION ORDER
+
+94. In the Commission's 2010 Administrative Complaint, bearing Docket No. C-4308, (the “Administrative Complaint”), the Commission charged Rite Aid Corporation with engaging in deceptive acts or practices in violation of Section 5(a) of the FTC Act, 15 U.S.C. § 45(a), for its failure to employ reasonable and appropriate measures to prevent unauthorized access to personal information. See Ex. B, In the Matter of Rite Aid Corporation, C-4308, 150 F.T.C. 694 (Nov. 12, 2010) (Administrative Complaint) at ¶¶ 6-12.
+
+95. The Administrative Complaint asserted Rite Aid Corporation misrepresented that it implemented reasonable and appropriate measures to protect personal information against unauthorized access because it (1) did not implement reasonable and appropriate measures to protect personal information against unauthorized access and (2) failed to employ reasonable and appropriate measures to prevent unauthorized access to personal information. Id. at ¶¶ 9-11.
+
+96. Rite Aid Corporation settled the Commission's Administrative Complaint with the Commission Order. The Commission Order became final in November 2010 and remains in effect.
+
+97. Pursuant to Section II of the Commission Order, Rite Aid must “establish, implement, and maintain a comprehensive information security program that is reasonably designed to protect the security, confidentiality, and integrity of [P]ersonal [I]nformation collected from or about consumers.” The information security program must include the “development and use of reasonable steps to select and retain service providers capable of appropriately safeguarding personal information they receive from [Rite Aid], and requiring service providers by contract to implement and maintain appropriate safeguards.” See Ex. A, Commission Order, § II.
+
+98. Rite Aid must “fully document the content and implementation of this information security program in writing.” See Ex. A, Commission Order, § II.
+
+99. The Commission Order defines “personal information” to include various forms of personally identifiable information, including personal health information and sensitive personally identifiable information. See Ex. A, Commission Order, Definition 4 (“Personal Information” throughout this Complaint).
+
+100. Section III of the Commission Order requires Rite Aid to “obtain initial and biennial assessments and reports (“Assessments”) from a qualified, objective, independent third-party professional, who uses procedures and standards generally accepted in the profession.” The Assessments must determine whether Rite Aid’s information security program is operating with sufficient effectiveness to provide reasonable assurance that the security, confidentiality, and integrity of personal information is protected and has so operated throughout the relevant reporting period. See Ex. A, Commission Order, § III.
+
+101. Section IV of the Commission Order provides:
+
+IT IS FURTHER ORDERED that [Rite Aid] shall maintain and, upon request, make available to the Federal Trade Commission for inspection and copying . . . for a period of five (5) years, a print or electronic copy of each document relating to compliance, including, but not limited to, documents, prepared by or on behalf of [Rite Aid], that contradict, qualify, or call into question [Rite Aid's] compliance with this order.
+
+See Ex. A, Commission Order, § IV (emphasis in original).
+
+RITE AID'S NOTICE OF THE COMMISSION ORDER
+
+102. Rite Aid Corporation consented to, was served with, and has notice of the Commission Order. Rite Aid Hdqtrs. Corp. is a wholly owned subsidiary of Rite Aid Corporation, is accordingly bound by the Commission Order, and had notice of it. See Ex. A, Commission Order, Definition 3 (defining “Respondent”).
+
+RITE AID'S INFORMATION SECURITY POLICIES AND ITS FAILURES TO COMPLY WITH THESE POLICIES AND THE COMMISSION ORDER
+
+Rite Aid's Information Security Policies
+
+103. Since at least November 2016, Rite Aid has instituted policies designed to select and retain service providers capable of appropriately safeguarding Personal Information they receive from Rite Aid and requiring service providers by contract to implement and maintain appropriate safeguards.
+
+104. Rite Aid's November 2016 “Information Security Program” outlines the process Rite Aid instituted to assess whether vendors were capable of appropriately safeguarding Personal Information received from Rite Aid (the “2016 Policy”).
+
+105. Specifically, the 2016 Policy required Rite Aid, whenever it engaged a new vendor on a project, to provide that vendor with its vendor technology guidelines. Additionally, the 2016 Policy required Rite Aid to provide the vendor with a base set of questions so Rite Aid could assess the security and technology environment surrounding the new vendor's technology.
+
+106. These risk-based questions required the vendor to provide: (1) a summary of the proposed technology; (2) a copy of any security assessments performed on the environment; (3) an explanation of the vendor's control environment; and (4) a signed non-disclosure agreement or business associate agreement, when applicable.
+
+107. The 2016 Policy also required the vendor to provide Rite Aid with responses to these questions. Once received, the 2016 Policy required its Chief Information Security Officer (“CISO”) to evaluate the vendor’s technology.
+
+108. After Rite Aid approved a vendor, the 2016 Policy required Rite Aid's Vice President and CISO to review the vendor contract. The 2016 Policy also required all new vendor contracts to contain language relevant to information security, including: (1) appropriate control of sensitive data (including at or after termination of an agreement); (2) control over access to vendor/Rite Aid systems; (3) control over potential virus introduction to Rite Aid systems; (4) adherence to industry “best practices” for security within the proposed environment; (5) security breach standards and processes; (6) requirements for providing Rite Aid with annual security and operations assessments on an ongoing basis; and (7) encryption credit card processing, if applicable.
+
+109. Rite Aid's May 2019 contract review and approval policy also required Rite Aid's information security division to approve all contracts where (a) the vendor will use, access or connect to Rite Aid systems or data; (b) the vendor will place equipment or software on Rite Aid's premises or network; (c) the vendor will provide technology services; (d) the vendor will receive or send data; (e) personal health information, personally identifiable information, or credit card data will be shared; (f) Rite Aid associates or customers will access a website/portal or mobile app; and/or (g) contractors or temporary employees will be working in information security.
+
+110. Once a vendor signed and completed the contract, the 2016 Policy required Rite Aid to maintain a tracking database of all contracts and vendors reviewed. The 2016 Policy also required Rite Aid to obtain and review updated security assessments on a periodic basis to determine whether the vendor continues to maintain a secure technology environment and an up-to-date Information Security Program. Additionally, the 2016 Policy required Rite Aid to maintain all risk documents for contracts that the CISO reviews for each subsidiary.
+
+111. Rite Aid revised the 2016 Policy in February 2018, March 2019, September 2019, and August 2020. Each of these information security policies contained substantially the same policies for assessing whether vendors were capable of appropriately safeguarding Personal Information received from Rite Aid as the 2016 Policy required.
+
+112. In July 2022, Rite Aid began using an electronic tool to help manage the process for assessing vendors that access Personal Information. Prior to that date, Rite Aid maintained significant amounts of information in hard copy files.
+
+113. In January 2023, Rite Aid launched a new contracting process pursuant to which its legal department (1) both reviews the vendor intake form and manages the contract through negotiation and signing, and (2) can require a security assessment if it determines one is necessary but was not originally undertaken.
+
+Rite Aid's Information Security Practices
+
+114. Since January 1, 2017, Rite Aid has provided Personal Information to over 420 third-party service providers.
+
+115. On numerous of those occasions, Rite Aid failed to: (1) conduct a comprehensive security assessment of service providers that would meet the standards set forth in its own policies; (2) document the implementation of its information security program; (3) use reasonable steps to retain service providers that would meet the standards set forth in its own policies; or (4) require service providers by contract to implement and maintain appropriate safeguards for Personal Information they received from Rite Aid, as set forth in its own policies.
+
+Rite Aid Failed to Use Reasonable Steps to Select Service Providers Capable of Appropriately Safeguarding Personal Information They Received from Rite Aid and Document the Implementation of This Process.
+
+116. On numerous occasions since January 1, 2017, Rite Aid has conducted security assessments of service providers on phone calls and in meetings, rather than requiring these vendors to provide written responses to survey questions.
+
+117. On numerous of these occasions, Rite Aid did not obtain backup documentation for the service providers it assessed through oral rather than written means, including service providers Rite Aid deemed to be “high risk” and service providers for which Rite Aid deemed ongoing assessments to be necessary, in violation of Rite Aid’s own policies.
+
+118. During phone calls and on other occasions, Rite Aid's practice was to use a form it called “Rite Aid Ongoing Vendor Risk Assessment” to capture information (the “Assessment Form”). An example of the Assessment Form is depicted below and attached as Exhibit C:
+
+119. On numerous occasions after having these phone calls and meetings, Rite Aid did not use the Assessment Form to document information about potential service providers' ability to appropriately safeguard Personal Information they would receive from Rite Aid. Indeed, on numerous occasions, Rite Aid did not document responses to the majority of the eight standard questions on the Assessment Form at all. Such questions included whether Rite Aid sent the
+
+service provider a security questionnaire; whether the service provider returned that questionnaire; the level of risk Rite Aid deemed that service provider to pose to Rite Aid's systems; whether Rite Aid received a security assessment from the vendor; and whether Rite Aid deemed it necessary to conduct ongoing assessments of that vendor.
+
+120. On numerous occasions between November 29, 2019 and November 28, 2021, Rite Aid did not maintain risk assessment documentation for vendors, in violation of its own policies.
+
+121. Pursuant to Section III of the Order, Rite Aid received an Assessment from Protiviti Inc. (“Protiviti”), an independent third-party assessor, alerting it to the problem specified in Paragraph 120 no later than January 27, 2022.
+
+Rite Aid Failed to Periodically Reassess Service Providers.
+
+122. On numerous occasions between November 29, 2017, and November 28, 2021, Rite Aid did not consistently reassess vendors' information security programs on a periodic basis, in violation of its own policies.
+
+123. Pursuant to Section III of the Order, Rite Aid received an Assessment from PricewaterhouseCoopers LLP, an independent third-party assessor, alerting it to the problem specified in Paragraph 122 by no later than January 28, 2020. Rite Aid also received an Assessment from Protiviti alerting it to this problem no later than January 27, 2022.
+
+124. Between November 29, 2019, and November 28, 2021, Rite Aid did not consistently use the contract renewal process to include cybersecurity policy provisions in vendor contracts and inform vendors of Rite Aid's information security requirements, in violation of Rite Aid's own policies.
+
+125. On at least one occasion between November 29, 2019 and November 28, 2021, Rite Aid did not cause a third-party risk assessment to be performed for a large pharmaceutical company with which it contracted and which had a third-party data breach in 2021.
+
+126. Rite Aid received an Assessment from Protiviti alerting it to the problems specified in Paragraphs 124 - 125 no later than January 27, 2022.
+
+Rite Aid Failed to Require Service Providers by Contract to Implement and Maintain Appropriate Safeguards for Personal Information They Received from Rite Aid.
+
+127. Between November 29, 2019, and November 28, 2021, numerous Rite Aid contracts with service providers who obtained Personal Information from Rite Aid lacked or only had minimal information security requirements as a part of the contract, in violation of Rite Aid's own policies.
+
+128. Between November 29, 2019, and November 28, 2021, numerous Rite Aid contracts with service providers who obtained Personal Information from Rite Aid did not include language regarding Rite Aid's breach notification requirements, in violation of Rite Aid's own policies.
+
+129. Between November 29, 2019, and November 28, 2021, numerous Rite Aid contracts with service providers who obtained Personal Information from Rite Aid did not include language regarding the return of confidential data, in violation of Rite Aid's own policies.
+
+130. Rite Aid received an Assessment from Protiviti alerting it to the problems specified in Paragraphs 127 - 129 no later than January 27, 2022.
+
+Rite Aid's Deficient Productions to the FTC
+
+131. On December 13, 2022, the FTC demanded that Rite Aid produce a copy of each document sufficient to show the steps Rite Aid took to ensure that each of these service providers was capable of appropriately safeguarding Personal Information it received from Rite Aid.
+
+132. On December 13, 2022, the FTC also demanded that Rite Aid produce a copy of each contract with a service provider requiring it to implement and maintain appropriate safeguards.
+
+133. For numerous service providers to which it provided Personal Information, Rite Aid did not maintain records demonstrating it took any steps to determine whether these service providers were capable of appropriately safeguarding Personal Information.
+
+134. For numerous service providers to which it provided Personal Information, Rite Aid did not produce to the FTC records demonstrating it took any steps to ensure these service providers were capable of appropriately safeguarding Personal Information.
+
+135. For numerous service providers to which it provided Personal Information, Rite Aid did not maintain records demonstrating that it required, by contract, these service providers to implement and maintain appropriate safeguards to protect Personal Information.
+
+136. For numerous service providers to which it provided Personal Information, Rite Aid did not produce to the FTC records demonstrating that it required, by contract, these service providers to implement and maintain appropriate safeguards to protect Personal Information.
+
+RITE AID'S VIOLATIONS OF THE 2010 ORDER ARE LIKELY TO CAUSE SUBSTANTIAL CONSUMER INJURY
+
+137. By failing to implement or maintain a comprehensive information security program in violation of the 2010 Order, Rite Aid is likely to cause substantial consumer injury.
+
+138. The harms outlined in Paragraph 137 above are not outweighed by countervailing benefits to consumers or competition.
+
+THE DEFENDANTS' ILLEGAL CONDUCT TOOK PLACE OVER A DECADE
+
+139. Based on the facts and violations of law alleged in this Complaint, the FTC has reason to believe that Defendants are violating or are about to violate laws enforced by the Commission because, among other things:
+
+a. Defendants engaged in their unlawful facial recognition acts and practices continually over a period of at least seven years, and have violated the Commission Order since at least 2017;
+
+b. Defendants continued their unlawful acts or practices despite knowledge of longstanding problems with false-positive facial recognition matches and despite receiving consumer complaints describing harms that consumers experienced in connection with false-positive facial recognition matches;
+
+c. Defendants stopped their unlawful conduct only after they learned that press coverage of their facial recognition practices would be published imminently;
+
+d. Defendants remain in the business of operating retail pharmacies and maintain the means, ability, and incentive to resume their unlawful conduct; and
+
+e. Rite Aid continues to violate the Commission Order because it has not produced hundreds of contracts with, or security assessments for, vendors in violation of Sections II and IV of the Commission Order.
+
+Count I: Unfair Facial Recognition Technology Practices
+
+140. In numerous instances, as described in Paragraphs 2-93, Defendants have used facial recognition technology in their retail stores without taking reasonable steps to address the risks that their deployment of such technology was likely to result in harm to consumers as a result of false-positive facial recognition match alerts.
+
+141. Defendants' actions cause or have been likely to cause substantial injury to consumers that consumers cannot reasonably avoid themselves and that is not outweighed by countervailing benefits to consumers or competition.
+
+142. Therefore, Defendants' acts or practices as set forth in Paragraph 140 constitute unfair acts or practices in violation of Section 5 of the FTC Act, 15 U.S.C. §§ 45(a), (n).
+
+Count II: Unfair Failure to Implement or Maintain a Comprehensive Information Security Program in Violation of Section II of the 2010 Order
+
+143. Paragraphs 1 through 17 and 94 through 139 are incorporated as if set forth herein.
+
+144. Section II of the Commission Order requires Rite Aid to “establish and implement, and thereafter maintain, a comprehensive information security program that is reasonably designed to protect the security, confidentiality, and integrity of [P]ersonal [I]nformation collected from or about consumers.” To do so under Section II of the Commission Order, Rite Aid must:
+
+A. “Develop[] and use . . . reasonable steps to select and retain service providers capable of appropriately safeguarding [P]ersonal [I]nformation they receive from [Rite Aid]”;
+
+B. “Requir[e] service providers by contract to implement and maintain appropriate safeguards” to protect Personal Information they receive from Rite Aid; and
+
+C. “Fully document[] in writing” the “content and implementation of” the information security program.
+
+145. In truth and in fact, in numerous instances, Rite Aid did not implement or maintain a comprehensive information security program. Rite Aid:
+
+A. Did not use reasonable steps to select and retain service providers capable of appropriately safeguarding Personal Information they received from Rite Aid, including by failing to follow its own information security policies.
+
+B. Did not require service providers to which it provided Personal Information to, by contract, implement or maintain appropriate safeguards.
+
+C. Failed to fully document in writing the content and implementation of its information security program.
+
+146. Therefore, in numerous instances, as described in Paragraphs 143-145, Defendants failed to implement or maintain a comprehensive information security program in violation of Section II of the 2010 Order.
+
+147. Defendants' actions cause or have been likely to cause substantial injury to consumers that consumers cannot reasonably avoid themselves and that is not outweighed by countervailing benefits to consumers or competition.
+
+148. Therefore, Defendants' acts or practices as set forth in Paragraphs 143-147 constitute unfair acts or practices in violation of Section 5 of the FTC Act, 15 U.S.C. §§ 45(a), (n).
+
+CONSUMER INJURY
+
+149. Consumers have suffered and will continue to suffer substantial injury as a result of Defendants' violations of the FTC Act and the 2010 Order. Absent injunctive relief by this Court, Defendants are likely to continue to injure consumers and harm the public interest.
+
+PRAYER FOR RELIEF
+
+WHEREFORE, the FTC requests that the Court:
+
+A. Enter a permanent injunction to prevent future violations by Rite Aid of the FTC Act or the 2010 Order, or as the 2010 Order is subsequently modified by operation of law; and
+
+B. Award any additional relief as the Court determines to be just and proper.
+
+Respectfully submitted,
+
+Dated: December 19, 2023 /s/ Robin L. Wetherill
+Robin L. Wetherill, CA Bar No. 323912
+Leah Frazier, DC Bar No. 492540
+N. Diana Chang, CA Bar No. 287624
+Christopher J. Erickson, MD Bar No. 1712130163
+Brian M. Welke, DC Bar No. 1017026
+Federal Trade Commission
+600 Pennsylvania Avenue, N.W.
+Washington, D.C. 20580
+Phone: (202) 326-2220 (Wetherill); -2187 (Frazier)
+-3671 (Erickson); -2897 (Welke);
+(415) 848-5192 (Chang)
+Fax: (202) 326-3062
+rwetherill@ftc.gov
+lfrazier@ftc.gov
+nchang@ftc.gov
+cerickson@ftc.gov
+bwelke@ftc.gov
+
+Attorneys for Plaintiff
+
+FEDERAL TRADE COMMISSION
+
+Exhibit A
+
+In the Matter of Rite Aid Corporation, C-4308, 2010 Decision and Order
+
+072-3121
+
+UNITED STATES OF AMERICA FEDERAL TRADE COMMISSION
+
+COMMISSIONERS: Jon Leibowitz, Chairman
+William E. Kovacic
+J. Thomas Rosch
+Edith Ramirez
+Julie Brill
+
+In the Matter of
+RITE AID CORPORATION,
+a corporation.
+
+DOCKET NO. C-4308
+
+DECISION AND ORDER
+
+The Federal Trade Commission having initiated an investigation of certain acts and practices of the Respondent named in the caption hereof, and the Respondent having been furnished thereafter with a copy of a draft Complaint that the Bureau of Consumer Protection proposed to present to the Commission for its consideration and which, if issued by the Commission, would charge the Respondent with violation of the Federal Trade Commission Act, 15 U.S.C. § 45 et seq;
+
+The Respondent, its attorney, and counsel for the Commission having thereafter executed an Agreement Containing Consent Order (“Consent Agreement”), an admission by the Respondent of all the jurisdictional facts set forth in the aforesaid draft Complaint, a statement that the signing of said Consent Agreement is for settlement purposes only and does not constitute an admission by Respondent that the law has been violated as alleged in such Complaint, or that the facts as alleged in such Complaint, other than jurisdictional facts, are true, and waivers and other provisions as required by the Commission's Rules; and
+
+The Commission having thereafter considered the matter and having determined that it has reason to believe that the Respondent has violated the said Act, and that a Complaint should issue stating its charges in that respect, and having thereupon accepted the executed Consent Agreement and placed such Consent Agreement on the public record for a period of thirty (30) days, and having duly considered the comments filed thereafter by interested persons pursuant to Section 2.34 of its Rules, now in further conformity with the procedure described in Section 2.34 of its Rules, the Commission hereby issues its Complaint, makes the following jurisdictional findings and enters the following Order:
+
+1. Respondent Rite Aid Corporation is a Delaware corporation with its principal office or place of business at 30 Hunter Lane, Camp Hill, Pennsylvania 17011.
+
+2. The Federal Trade Commission has jurisdiction of the subject matter of this proceeding and of the Respondent, and the proceeding is in the public interest.
+
+ORDER
+
+DEFINITIONS
+
+For purposes of this order, the following definitions shall apply:
+
+1. Unless otherwise specified, “store” shall mean each pharmacy entity or store location that sells prescription medicines, drugs, devices, supplies, or services and/or non-prescription products and services.
+
+2. Unless otherwise specified, “LLC” shall mean a limited liability company: (a) that owns, controls, or operates one or more stores (including, but not limited to, the companies identified in attached Exhibit A), and (b) in which Rite Aid Corporation is a member, directly or indirectly.
+
+3. Unless otherwise specified, “Respondent” shall mean Rite Aid Corporation, its subsidiaries, divisions, affiliates, and LLCs, and its successors and assigns.
+
+4. “Personal information” shall mean individually identifiable information from or about an individual consumer including, but not limited to: (a) a first and last name; (b) a home or other physical address, including street name and name of city or town; (c) an email address or other online contact information, such as an instant messaging user identifier or a screen name; (d) a telephone number; (e) a Social Security number; (f) a driver’s license number or other government-issued identification number; (g) prescription information, such as medication and dosage, and prescribing physician name, address, and telephone number, health insurer name, insurance account number, or insurance policy number; (h) a bank account, debit card, or credit card account number; (i) a persistent identifier, such as a customer number held in a “cookie” or processor serial number, that is combined with other available data that identifies an individual consumer; (j) a biometric record; or (k) any information that is combined with any of (a) through (j) above. For the purpose of this provision, a “consumer” shall include an “employee,” and an individual seeking to become an employee, where “employee” shall mean an agent, servant, salesperson, associate, independent contractor, and other person directly or indirectly under the control of Respondent.
+
+5. “Commerce” shall mean as defined in Section 4 of the Federal Trade Commission Act, 15 U.S.C. § 44.
+
+I.
+
+IT IS ORDERED that Respondent, and its officers, agents, representatives, and employees, directly or through any corporation, subsidiary, limited liability company, division, or other device, in connection with the advertising, marketing, promotion, offering for sale, or sale of any product or service, in or affecting commerce, shall not misrepresent in any manner, expressly or by implication, the extent to which it maintains and protects the privacy, confidentiality, security, or integrity of personal information collected from or about consumers.
+
+II.
+
+IT IS FURTHER ORDERED that Respondent, and its officers, agents, representatives, and employees, directly or through any corporation, subsidiary, limited liability company, division, or other device, in connection with the advertising, marketing, promotion, offering for sale, or sale of any product or service, in or affecting commerce, shall, no later than the date of service of this order, establish and implement, and thereafter maintain, a comprehensive information security program that is reasonably designed to protect the security, confidentiality, and integrity of personal information collected from or about consumers. Such program, the content and implementation of which must be fully documented in writing, shall contain administrative, technical, and physical safeguards appropriate to Respondent's size and complexity, the nature and scope of Respondent's activities, and the sensitivity of the personal information collected from or about consumers, including:
+
+A. the designation of an employee or employees to coordinate and be accountable for the information security program.
+
+B. the identification of material internal and external risks to the security, confidentiality, and integrity of personal information that could result in the unauthorized disclosure, misuse, loss, alteration, destruction, or other compromise of such information, and assessment of the sufficiency of any safeguards in place to control these risks. At a minimum, this risk assessment should include consideration of risks in each area of relevant operation, including, but not limited to: (1) employee training and management; (2) information systems, including network and software design, information processing, storage, transmission, and disposal; and (3) prevention, detection, and response to attacks, intrusions, or other systems failures.
+
+C. the design and implementation of reasonable safeguards to control the risks identified through risk assessment, and regular testing or monitoring of the effectiveness of the safeguards' key controls, systems, and procedures.
+
+D. the development and use of reasonable steps to select and retain service providers capable of appropriately safeguarding personal information they receive from Respondent, and requiring service providers by contract to implement and maintain appropriate safeguards.
+
+E. the evaluation and adjustment of Respondent's information security program in light of the results of the testing and monitoring required by subpart C, any material changes to Respondent's operations or business arrangements, or any other circumstances that Respondent knows or has reason to know may have a material impact on the effectiveness of its information security program.
+
+III.
+
+IT IS FURTHER ORDERED that, in connection with their compliance with Part II of this order, Respondent, and its officers, agents, representatives, and employees, shall obtain initial and biennial assessments and reports (“Assessments”) from a qualified, objective, independent third-party professional, who uses procedures and standards generally accepted in the profession. The reporting period for the Assessments shall cover: (1) the first year after service of the order for the initial Assessment, and (2) each two (2) year period thereafter for twenty (20) years after service of the order for the biennial Assessments. Each Assessment shall:
+
+A. set forth the specific administrative, technical, and physical safeguards that Respondent has implemented and maintained during the reporting period;
+
+B. explain how such safeguards are appropriate to Respondent's size and complexity, the nature and scope of Respondent's activities, and the sensitivity of the personal information collected from or about consumers;
+
+C. explain how the safeguards that have been implemented meet or exceed the protections required by the Part II of this order; and
+
+D. certify that Respondent's security program is operating with sufficient effectiveness to provide reasonable assurance that the security, confidentiality, and integrity of personal information is protected and has so operated throughout the reporting period.
+
+Each Assessment shall be prepared and completed within sixty (60) days after the end of the reporting period to which the Assessment applies by a person qualified as a Certified Information System Security Professional (CISSP) or as a Certified Information Systems Auditor (CISA); a person holding Global Information Assurance Certification (GIAC) from the SysAdmin, Audit, Network, Security (SANS) Institute; or a qualified person or organization approved by the Associate Director for Enforcement, Bureau of Consumer Protection, Federal Trade Commission, Washington, D.C. 20580.
+
+Respondent shall provide the initial Assessment to the Associate Director for Enforcement, Bureau of Consumer Protection, Federal Trade Commission, Washington, D.C. 20580, within ten (10) days after the Assessment has been prepared. All subsequent biennial Assessments shall be retained by Respondent until the order is terminated and provided to the Associate Director for Enforcement within ten (10) days of request.
+
+IV.
+
+IT IS FURTHER ORDERED that Respondent shall maintain and, upon request, make available to the Federal Trade Commission for inspection and copying:
+
+A. for a period of five (5) years, a print or electronic copy of each document relating to compliance, including, but not limited to, documents, prepared by or on behalf of Respondent, that contradict, qualify, or call into question Respondent's compliance with this order; and
+
+B. for a period of three (3) years after the date of preparation of each Assessment required under Part III of this order, all materials relied upon to prepare the Assessment, whether prepared by or on behalf of Respondent, including, but not limited to, all plans, reports, studies, reviews, audits, audit trails, policies, training materials, and assessments, and any other materials relating to Respondent's compliance with Parts II and III of this order, for the compliance period covered by such Assessment.
+
+V.
+
+IT IS FURTHER ORDERED that Respondent Rite Aid Corporation shall deliver a copy of this order to all its current and future subsidiaries (including LLCs and each store that is owned, controlled, or operated by Respondent or an LLC), current and future principals, officers, directors, and managers, and to all current and future employees, agents, and representatives having responsibilities relating to the subject matter of this order. Respondent shall deliver this order to such current subsidiaries and personnel within sixty (60) days after service of this order, and to such future subsidiaries and personnel within sixty (60) days after the Respondent acquires the subsidiary or the person assumes such position or responsibilities.
+
+VI.
+
+IT IS FURTHER ORDERED that Respondent shall notify the Commission at least thirty (30) days prior to any change in Respondent that may affect compliance obligations arising under this order, including, but not limited to, a dissolution, assignment, sale, merger, or other action that would result in the emergence of a successor company; the creation or dissolution of a subsidiary (including an LLC), parent, or affiliate that engages in any acts or practices subject to this order; the proposed filing of a bankruptcy petition; or a change in Respondent's name or address. Provided, however, that, with respect to any proposed change in Respondent about which Respondent learns less than thirty (30) days prior to the date such action is to take place, Respondent shall notify the Commission as soon as is practicable after obtaining such knowledge. All notices required by this Part shall be sent by certified mail to the Associate Director, Division of Enforcement, Bureau of Consumer Protection, Federal Trade Commission, Washington, D.C. 20580.
+
+VII.
+
+IT IS FURTHER ORDERED that Respondent, and its successors and assigns, within sixty (60) days after the date of service of this order, shall file with the Commission a true and accurate report, in writing, setting forth in detail the manner and form of its compliance with this order. Within ten (10) days of receipt of written notice from a representative of the Commission, it shall submit additional true and accurate written reports.
+
+VIII.
+
+This order will terminate on November 12, 2030, or twenty (20) years from the most recent date that the United States or the Federal Trade Commission files a complaint (with or without an accompanying consent decree) in federal court alleging any violation of the order, whichever comes later; provided, however, that the filing of such a complaint will not affect the duration of:
+
+A. Any Part in this order that terminates in less than twenty (20) years;
+
+B. This order's application to any Respondent that is not named as a defendant in such
+
+complaint; and
+
+C. This order if such complaint is filed after the order has terminated pursuant to this Part.
+
+Provided, further, that if such complaint is dismissed or a federal court rules that Respondent did not violate any provision of the order, and the dismissal or ruling is either not appealed or upheld on appeal, then the order will terminate according to this Part as though the complaint had never been filed, except that the order will not terminate between the date such complaint is filed and the later of the deadline for appealing such dismissal or ruling and the date such dismissal or ruling is upheld on appeal.
+
+By the Commission.
+
+Donald S. Clark
+
+Secretary
+
+SEAL
+
+ISSUED: November 12, 2010
+
+Exhibit B
+
+In the Matter of Rite Aid Corporation, C-4308, 2010 Administrative Complaint
+
+UNITED STATES OF AMERICA FEDERAL TRADE COMMISSION
+
+072-3121
+
+COMMISSIONERS:
+
+Jon Leibowitz, Chairman
+William E. Kovacic
+J. Thomas Rosch
+Edith Ramirez
+Julie Brill
+
+In the Matter of
+
+RITE AID CORPORATION,
+a corporation.
+
+DOCKET NO. C-4308
+
+COMPLAINT
+
+The Federal Trade Commission (“Commission”), having reason to believe that Rite Aid Corporation (“Respondent” or “Rite Aid”) has violated the provisions of the Federal Trade Commission Act, and it appearing to the Commission that this proceeding is in the public interest, alleges:
+
+1. Respondent Rite Aid is a Delaware corporation with its principal office or place of business at 30 Hunter Lane, Camp Hill, PA 17011. It conducts business through several wholly-owned subsidiaries and limited liability companies.
+
+2. The acts and practices of Respondent as alleged in this complaint are in or affecting commerce, as “commerce” is defined in Section 4 of the Federal Trade Commission Act.
+
+RESPONDENT'S BUSINESS
+
+3. At all relevant times, Respondent has been in the business of selling prescription and non-prescription medicines and supplies, as well as other products. It operates, among other things, approximately 4,900 retail pharmacy stores in the United States (collectively, “Rite Aid pharmacies”) and an online pharmacy business. Respondent allows consumers to pay for their purchases with credit, debit and electronic benefit transfer cards (collectively, “payment cards”); insurance cards; personal checks; or cash.
+
+4. In conducting its business, Respondent routinely obtains information from or about its customers, including, but not limited to, name; telephone number; address; date of birth;
+
+bank account number; payment card account number and expiration date; prescription information, such as medication and dosage, prescribing physician name, address, and telephone number, health insurer name, and insurance account number and policy number; and Social Security number (collectively, “personal information”). Respondent also collects personal information from or about employees and job applicants, including, but not limited to, Social Security number.
+
+5. Respondent operates computer networks in its pharmacies, corporate headquarters, and distribution centers. Among other things, Respondent uses the networks to fill orders for prescription medicines and supplies; process sales, including to obtain authorization for payment card and insurance card transactions; and aggregate, store, and transmit personal information.
+
+RESPONDENT'S REPRESENTATIONS
+
+6. Respondent has disseminated or caused to be disseminated statements and privacy policies to consumers regarding the privacy and confidentiality of personal information, including, but not limited to:
+
+a. From at least 2003, the following statement in its Notice of Privacy Practices:
+
+Rite Aid takes its responsibility for maintaining your protected health information in confidence very seriously. Protected health information means information about you that may identify you and that relates to your past, present or future physical or mental health or condition and related health care services. It also includes basic demographic information. We are required by law to maintain the privacy of protected health information and to provide you with a Notice of Privacy Practices including our legal duties with respect to protected health information. (See Exhibit A).
+
+b. From at least 2004, the following statement in a brochure seeking its customers' medical history:
+
+Although you have the right not to disclose your medical history, Rite Aid would like to assure you that we respect and protect your privacy. (See Exhibit B.)
+
+RESPONDENT'S SECURITY PRACTICES
+
+7. Respondent has engaged in a number of practices that, taken together, failed to provide reasonable and appropriate security for personal information. Among other things, Respondent has failed to: (1) implement policies and procedures to dispose securely of such information, including, but not limited to, policies and procedures to render the information unreadable in the course of disposal; (2) adequately train employees to dispose securely of such information; (3) use reasonable measures to assess compliance with its established policies and procedures for the disposal of such information; and (4) employ a reasonable process for discovering and remedying risks to such information.
+
+8. As a result of the failures set forth in Paragraph 7, Respondent discarded materials containing personal information in clear readable text (such as pharmacy labels and employment applications) in unsecured, publicly-accessible trash dumpsters used by Rite Aid pharmacies on numerous occasions. For example, in late 2006 and continuing into 2007 and 2008, television stations and other media outlets reported finding personal information in unsecured dumpsters used by Rite Aid pharmacies in at least 7 cities throughout the United States. The personal information found in the dumpsters included information about Respondent's customers and job applicants. Information discarded in publicly-accessible dumpsters could be misused to commit identity theft or to steal prescription medicines.
+
+VIOLATIONS OF THE FTC ACT
+
+9. Through the means described in Paragraph 6, Respondent represented, expressly or by implication, that it implemented reasonable and appropriate measures to protect personal information against unauthorized access.
+
+10. In truth and in fact, Respondent did not implement reasonable and appropriate measures to protect personal information against unauthorized access. Therefore, the representation set forth in Paragraph 9 was, and is, false or misleading.
+
+11. As set forth in Paragraph 7, Respondent failed to employ reasonable and appropriate measures to prevent unauthorized access to personal information. Respondent's practices caused, or are likely to cause, substantial injury to consumers that is not offset by countervailing benefits to consumers or competition and is not reasonably avoidable by consumers. This practice was, and is, an unfair act or practice.
+
+12. The acts and practices of Respondent as alleged in this complaint constitute unfair or deceptive acts or practices, in or affecting commerce, in violation of Section 5(a) of the Federal Trade Commission Act.
+
+THEREFORE, the Federal Trade Commission this twelfth day of November, 2010 has issued this complaint against Respondent.
+
+By the Commission.
+
+Donald S. Clark
+Secretary
+
+Exhibit C
+
+Example Rite Aid Assessment Form
+
+Rite Aid Ongoing Vendor Risk Assessment
+
+Vendor Name:
+
+1. Vendor Questionnaire- Sent to vendor
+
+2. Vendor Questionnaire- Returned from vendor
+
+3. Risk Assessment (High/Medium/Low)
+
+4. Vendor security assessments received (SSAE16. Etc.)
+
+5. Risk Analyst
+
+6. VP & CISO
+
+7. Ongoing risk assessment required?
+
+8. Next Assessment
+
+None
+
+X.
+
+X.
+
+Case 2:23-cv-05023 Document 1.4 Filed 12/19/23 Page 1 of 1 CIVIL COVER SHEET
+
+The JS 44 civil cover sheet and the information contained herein neither replace nor supplement the filing and service of pleadings or other papers as required by law, except as provided by local rules of court. This form, approved by the Judicial Conference of the United States in September 1974, is required for the use of the Clerk of Court for the purpose of initiating the civil docket sheet. (SEE INSTRUCTIONS ON NEXT PAGE OF THIS FORM.)
+
+<table><tr><td colspan="3">I. (a) PLAINTIFFSFederal Trade Commission(b) County of Residence of First Listed Plaintiff(EXCEPT IN U.S. PLAINTIFF CASES)(c) Attorneys (Firm Name, Address, and Telephone Number)See attachment</td><td colspan="3">DEFENDANTSRite Aid Corporation, and Rite Aid Hdqtrs. Corp.County of Residence of First Listed Defendant Philadelphia County(IN U.S. PLAINTIFF CASES ONLY)NOTE: IN LAND CONDEMNATION CASES, USE THE LOCATION OFTHE TRACT OF LAND INVOLVED.Attorneys (If Known)See attachment</td></tr><tr><td colspan="3">II. BASIS OF JURISDICTION (Place an &quot;X&quot; in One Box Only)1 U.S. Government 3 Federal Question Plaintiff (U.S. Government Not a Party)2 U.S. Government 4 Diversity Defendant (Indicate Citizenship of Parties in Item III)</td><td colspan="3">III. CITIZENSHIP OF PRINCIPAL PARTIES (Place an &quot;X&quot; in One Box for Plaintiff(For Diversity Cases Only)PTF DEFPTF DEFCitizen of This State 1 1 Incorporated or Principal Placeof Business In This State 4 4Citizen of Another State 2 2 Incorporated and Principal Placeof Business In Another State 5 5Citizen or Subject of a Foreign Country 3 3 Foreign Nation 6 6</td></tr><tr><td colspan="6">IV. NATURE OF SUIT (Place an &quot;X&quot; in One Box Only)Click here for:Nature of Suit Code Descriptions.</td></tr><tr><td>CONTRACT</td><td colspan="2">TORTS</td><td>FORFEITURE/PENALTY</td><td>BANKRUPTCY</td><td>OTHER STATUTES</td></tr><tr><td>110 Insurance120 Marine130 Miller Act140 Negotiable Instrument150 Recovery of Overpayment &amp; Enforcement of Judgment151 Medicare Act152 Recovery of Defaulted Student Loans (Excludes Veterans)153 Recovery of Overpayment of Veteran&#x27;s Benefits160 Stockholders&#x27; Suits190 Other Contract195 Contract Product Liability196 Franchise</td><td>PERSONAL INJURY310 Airplane315 Airplane ProductLiability320 Assault, Libel &amp; Slander330 Federal Employers&#x27;Liability340 Marine345 Marine ProductLiability350 Motor Vehicle355 Motor VehicleProduct Liability360 Other Personal Injury362 Personal Injury - Medical Malpractice</td><td>PERSONAL INJURY365 Personal Injury - Product Liability367 Health Care/PharmaceuticalPersonal InjuryProduct Liability368 Asbestos Personal Injury ProductLiabilityPERSONAL PROPERTY370 Other Fraud371 Truth in Lending380 Other PersonalProperty Damage385 Property DamageProduct Liability</td><td>625 Drug Related Seizure of Property 21 USC 881690 Other</td><td>422 Appeal 28 USC 158423 Withdrawal28 USC 157INTELLECTUALPROPERTY RIGHTS820 Copyrights830 Patent835 Patent - Abbreviated New Drug Application840 Trademark880 Defend Trade Secrets Act of 2016SOCIAL SECURITY861 HIA (1395ff)862 Black Lung (923)863 DIWC/DIWW (405(g))864 SSID Title XVI865 RSI (405(g))FEDERAL TAX SUITS870 Taxes (U.S. Plaintiff or Defendant)871 IRS-Third Party26 USC 7609</td><td></td></tr><tr><td>REAL PROPERTY</td><td>CIVIL RIGHTS</td><td>PRISONER PETITIONS</td><td></td><td></td><td></td></tr><tr><td>210 Land Condemnation220 Foreclosure230 Rent Lease &amp; Ejectionment240 Torts to Land245 Tort Product Liability290 All Other Real Property</td><td>440 Other Civil Rights441 Voting442 Employment443 Housing/Accommodations445 Amer. w/Disabilities - Employment446 Amer. w/Disabilities - Other448 Education</td><td>Habeas Corpus:463 Alien Detainee510 Motions to VacateSentence530 General535 Death PenaltyOther:540 Mandamus &amp; Other550 Civil Rights555 Prison Condition560 Civil Detainee - Conditions of Confinement</td><td>791 Employee Retirement Income Security ActIMMIGRATION462 Naturalization Application465 Other Immigration Actions</td><td></td><td></td></tr><tr><td colspan="6">V.ORIGIN (Place an &quot;X&quot; in One Box Only)1 Original 2 Removed from 3 Remanded from 4 Reinstated or 5 Transferred from 6 Multidistrict 8 MultidistrictProceeding State Court Appellate Court Reopened Another District Litigation -Litigation -Direct File</td></tr><tr><td>VI. CAUSE OF ACTION</td><td colspan="5">Cite the U.S. Civil Statute under which you are filing (Do not cite jurisdictional statutes unless diversity):Section 13(b) of the FTC Act, 15 U.S.C. § 53(b)Brief description of cause:Unfair acts or practices through (1) use of facial recognition technology and (2) failure to implement or maintain information security program</td></tr><tr><td>VII. REQUESTED IN COMPLAINT:</td><td colspan="2">CHECK IF THIS IS A CLASS ACTIONUNDER RULE 23, F.R.Cv.P.</td><td>DEMAND $</td><td colspan="2">CHECK YES only if demanded in complaint:JURY DEMAND:YesNo</td></tr><tr><td colspan="6">VIII. RELATED CASE(S)IF ANY (See instructions):JUDGE DOCKET NUMBER</td></tr><tr><td colspan="6">DATESIGNATURE OF ATTORNEY OF RECORDDec 19, 2023/s/ Robin L. Wetherill</td></tr><tr><td colspan="6">FOR OFFICE USE ONLYRECEIPT # AMOUNT APPLYING IFP JUDGE MAG. JUDGE</td></tr></table>
+
+ATTACHMENT TO CIVIL COVER SHEET
+
+Plaintiff's Attorneys
+
+FEDERAL TRADE COMMISSION
+600 Pennsylvania Avenue, N.W.
+Washington, D.C. 20580
+Robin L. Wetherill; Tel: (202) 326-2220; rwetherill@ftc.gov
+Leah Frazier; Tel: (202) 326-2187; lfrazier@ftc.gov
+N. Diana Chang; Tel: (415) 848-5192; nchang@ftc.gov
+Christopher J. Erickson; Tel: (202) 326-3671; cerickson@ftc.gov
+Brian M. Welke; Tel: (202) 326-2897; bwelke@ftc.gov
+
+Defendants' Attorneys
+
+HOLLAND & KNIGHT LLP
+800 17th Street N.W.
+Suite 1100 Washington, D.C. 20006
+Anthony E. Diresta; Tel: (202) 469-5164; Anthony.DiResta@hklaw.com
+Mark S. Melodia; Tel: (212) 513-3583; Mark.Melodia@hklaw.com
+
+KIRKLAND & ELLIS LLP
+1301 Pennsylvania Ave. N.W.
+Washington D.C. 20004
+Richard H. Cunningham; Tel: (202) 389-3119; Richard.Cunningham@kirkland.com
+Allison W. Buchner; Tel: (310) 552-4302; Allison.Buchner@kirkland.com
+
+Case 2:23-cv-05023 Document 1-6 Filed 12/19/23 Page 1 of 1 UNITED STATES DISTRICT COURT FOR THE EASTERN DISTRICT OF PENNSYLVANIA
+
+DESIGNATION FORM
+
+(to be used by counsel to indicate the category of the case for the purpose of assignment to the appropriate calendar)
+
+Address of Plaintiff: 600 Pennsylvania Avenue, N.W., Washington, D.C. 20580
+
+Address of Defendant: 1200 Intrepid Avenue, 2nd Floor, Philadelphia, PA 19112
+
+Place of Accident, Incident or Transaction: Nationwide
+
+RELATED CASE IF ANY:
+
+Case Number: \_\_\_\_ Judge: \_\_\_\_ Date Terminated \_\_\_\_
+
+Civil cases are deemed related when Yes is answered to any of the following questions:
+
+1. Is this case related to property included in an earlier numbered suit pending or within one year    Yes □ No x previously terminated action in this court?
+
+2. Does this case involve the same issue of fact or grow out of the same transaction as a prior suit
+
+Pending or within one year previously terminated action in this court?
+
+4. Is this case a second or successive habeas corpus, social security appeal, or pro se case filed by the same individual?
+Yes □ No x
+
+I certify that, to my knowledge, the within case $\square$ is / $\boxed{\mathbf{x}}$ is not related to any now pending or within one year previously terminated action in this court except as note above.
+
+DATE: 12/19/2023 /s/ Robin L. Wetherill
+
+Attorney-at-Law (Must sign above)
+
+n/a (federal agency) (CA Bar No. 323912)
+
+Attorney I.D. # (if applicable)
+
+Civil (Place a √ in one category only)
+
+A. Federal Question Cases:
+
+☐ 1. Indemnity Contract, Marine Contract, and All Other Contracts)
+
+2. FELA
+
+3. Jones Act-Personal Injury
+
+4. Antitrust
+
+5. Wage and Hour Class Action/Collective Action
+
+6. Patent
+
+7. Copyright/Trademark
+
+8. Employment
+
+B. Diversity Jurisdiction Cases:
+
+☐ 1. Insurance Contract and Other Contracts
+
+9. Labor-Management Relations
+
+2. Airplane Personal Injury
+
+3. Assault, Defamation
+
+4. Marine Personal Injury
+
+5. Motor Vehicle Personal Injury
+
+6. Other Personal Injury (Please specify): \_\_\_\_
+
+7. Products Liability
+
+☐ 8. All Other Diversity Cases: (Please specify) \_\_\_\_
+
+10. Civil Rights
+
+11. Habeas Corpus
+
+12. Securities Cases
+
+13. Social Security Review Cases
+
+14. Qui Tam Cases
+
+X 15. All Other Federal Question Cases. (Please specify): Federal Trade Commission Act
+
+ARBITRATION CERTIFICATION
+
+(The effect of this certification is to remove the case from eligibility for arbitration)
+
+I, Robin Wetherill \_\_\_\_, counsel of record or pro se plaintiff, do hereby certify:
+
+Pursuant to Local Civil Rule 53.2 § 3(c)(2), that to the best of my knowledge and belief, the damages recoverable in this civil action case exceed the sum of \$150,000.00 exclusive of interest and costs:
+
+Relief other than monetary damages is sought.
+
+DATE: 12/19/2023
+
+/s/ Robin L. Wetherill
+
+Attorney-at-Law (Sign here if applicable)
+
+n/a (federal agency) (CA Bar No. 323912)
+
+Attorney ID # (if applicable)
+
+NOTE: A trial de novo will be a jury only if there has been compliance with F.R.C.P. 38.

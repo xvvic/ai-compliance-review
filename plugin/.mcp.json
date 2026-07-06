@@ -1,0 +1,54 @@
+{
+  "mcpServers": {
+    "pkulaw-law-search": {
+      "type": "http",
+      "url": "${PKULAW_LAW_SEARCH_URL}",
+      "title": "北大法宝-检索法律法规（语义）",
+      "description": "Use semantic search for laws and regulations when the local corpus is insufficient or a broader compliance search is needed.",
+      "headers": {
+        "Authorization": "Bearer ${PKULAW_ACCESS_TOKEN}"
+      }
+    },
+    "pkulaw-law-keyword": {
+      "type": "http",
+      "url": "${PKULAW_LAW_KEYWORD_URL}",
+      "title": "北大法宝-检索法律法规（关键词）",
+      "description": "Use keyword search for targeted law and regulation lookup by title or text fragments.",
+      "headers": {
+        "Authorization": "Bearer ${PKULAW_ACCESS_TOKEN}"
+      }
+    },
+    "pkulaw-case-semantic-search": {
+      "type": "http",
+      "url": "${PKULAW_CASE_SEMANTIC_URL}",
+      "title": "北大法宝-检索司法案例（语义）",
+      "description": "Use semantic case search for enforcement examples, disputes, and fact-pattern analogies.",
+      "headers": {
+        "Authorization": "Bearer ${PKULAW_ACCESS_TOKEN}"
+      }
+    },
+    "pkulaw-law-item-keyword": {
+      "type": "http",
+      "url": "${PKULAW_LAW_ITEM_URL}",
+      "title": "北大法宝-精准查找法条（关键词）",
+      "description": "Use exact article lookup when the report needs a specific law name and article number.",
+      "headers": {
+        "Authorization": "Bearer ${PKULAW_ACCESS_TOKEN}"
+      }
+    },
+    "pkulaw-citation-validator": {
+      "type": "http",
+      "url": "${PKULAW_CITATION_VALIDATOR_URL}",
+      "title": "北大法宝-修正生成幻觉（法条）",
+      "description": "Use citation validation before finalizing concrete article references in a compliance report.",
+      "headers": {
+        "Authorization": "Bearer ${PKULAW_ACCESS_TOKEN}"
+      }
+    }
+  },
+  "recommendedCategories": [
+    "legal-research",
+    "regulations",
+    "case-law"
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "name": "ai-startup-compliance-review",
+  "version": "0.1.0",
+  "description": "AI startup compliance review skill for product launch, data processing, financing diligence, cross-border, and vendor contract risk workflows.",
+  "author": {
+    "name": "legal-agent project"
+  },
+  "license": "MIT",
+  "keywords": [
+    "ai-compliance",
+    "legal",
+    "startup",
+    "risk-review",
+    "data-compliance",
+    "mcp",
+    "pkulaw"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "AI Startup Compliance Review",
+    "shortDescription": "Structured compliance review for AI startups with optional Pkulaw MCP retrieval.",
+    "longDescription": "Provides a source-tagged workflow for AI startup compliance review across product launch, data processing, financing diligence, cross-border deployment, and AI vendor contract scenarios, using local corpus materials first and 北大法宝 MCP when configured.",
+    "developerName": "legal-agent project",
+    "category": "Productivity",
+    "capabilities": [
+      "Research",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "Review this AI startup launch for compliance risk using local sources first and Pkulaw MCP when configured.",
+      "Assess training data and model IP risk with sourced remediation steps.",
+      "Review this AI vendor contract and identify legal verification gaps."
+    ],
+    "brandColor": "#2563EB"
+  }
+}
