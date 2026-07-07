@@ -6,6 +6,7 @@ AI合规审查系统 - 后端接口(修正版)
 前提:
     - 已登录 Claude Code，或环境变量 ANTHROPIC_API_KEY 可用
     - 可选: 用 CLAUDE_CODE_MODEL / CLAUDE_CODE_FALLBACK_MODEL 指定模型
+    - 默认以 full access 启动 Claude agent，避免因权限确认卡住
     - skill 放在 .claude/skills/ 下(标准结构),或用下面的兜底拼prompt方式
     - MCP 配置(北大法宝等)在 .mcp.json 或代码里配置
 """
@@ -75,13 +76,13 @@ async def review_stream(req: ReviewReq):
             # 3. 配置 Agent SDK
             #    - cwd 指向工作目录,agent 就能在里面读写文件
             #    - plugins 直接挂载仓库内已整理好的 Claude Code 插件
+            #    - permission_mode=bypassPermissions 给予 agent full access
             option_kwargs = dict(
                 cwd=work_dir,
                 setting_sources=["user", "project"],
                 plugins=[{"type": "local", "path": str(PLUGIN_DIR)}],
                 skills=["ai-startup-compliance-review"],
-                permission_mode="acceptEdits",
-                max_turns=10,
+                permission_mode="bypassPermissions",
             )
             if DEFAULT_MODEL:
                 option_kwargs["model"] = DEFAULT_MODEL

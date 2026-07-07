@@ -20,3 +20,6 @@ AGENTS.md
 /docs
 /.agents
 /.codex
+/.deps
+/.venv-test
+*.docx

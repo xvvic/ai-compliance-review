@@ -20,6 +20,13 @@ st.set_page_config(page_title="AI 合规审查系统", page_icon="⚖️", layou
 st.title("⚖️ AI 初创企业合规审查系统")
 st.caption("上传企业材料,自动识别合规风险 · 展示 AI 审查全过程")
 
+if "trace_items" not in st.session_state:
+    st.session_state.trace_items = []
+if "report_text" not in st.session_state:
+    st.session_state.report_text = ""
+if "review_finished" not in st.session_state:
+    st.session_state.review_finished = False
+
 with st.sidebar:
     st.header("设置")
     backend_url = st.text_input(
@@ -80,18 +87,25 @@ if uploaded:
         with st.expander("查看解析出的文本", expanded=False):
             st.text(text[:2000] + ("..." if len(text) > 2000 else ""))
 
+        col_trace, col_result = st.columns([1, 1])
+        col_trace.subheader("AI 执行过程")
+        col_result.subheader("审查结果")
+
+        trace_placeholder = col_trace.empty()
+        result_placeholder = col_result.empty()
+
+        render_trace(trace_placeholder, st.session_state.trace_items)
+        if st.session_state.report_text:
+            result_placeholder.markdown(st.session_state.report_text)
+        else:
+            result_placeholder.info("审查进行中,结果生成后显示在这里...")
+
         if st.button("开始合规审查", type="primary"):
-            col_trace, col_result = st.columns([1, 1])
-            col_trace.subheader("AI 执行过程")
-            col_result.subheader("审查结果")
+            st.session_state.trace_items = []
+            st.session_state.report_text = ""
+            st.session_state.review_finished = False
 
-            trace_placeholder = col_trace.empty()
-            result_placeholder = col_result.empty()
-
-            trace_items = []
-            final_text = ""
-
-            render_trace(trace_placeholder, trace_items)
+            render_trace(trace_placeholder, st.session_state.trace_items)
             result_placeholder.info("审查进行中,结果生成后显示在这里...")
 
             try:
@@ -99,32 +113,35 @@ if uploaded:
                     t = ev.get("type")
 
                     if t == "thinking":
-                        trace_items.append(("思考", ev.get("content", "")))
-                        render_trace(trace_placeholder, trace_items)
+                        st.session_state.trace_items.append(("思考", ev.get("content", "")))
+                        render_trace(trace_placeholder, st.session_state.trace_items)
                     elif t == "tool_start":
                         args = json.dumps(ev.get("args", {}), ensure_ascii=False)
-                        trace_items.append(("调用工具", f"**{ev.get('tool_name','')}**  \n入参: `{args}`"))
-                        render_trace(trace_placeholder, trace_items)
+                        st.session_state.trace_items.append(("调用工具", f"**{ev.get('tool_name','')}**  \n入参: `{args}`"))
+                        render_trace(trace_placeholder, st.session_state.trace_items)
                     elif t == "tool_end":
                         res = ev.get("result", "")
                         show = res[:500] + "..." if len(res) > 500 else res
-                        trace_items.append(("工具返回", f"**{ev.get('tool_name','')}**  \n{show}"))
-                        render_trace(trace_placeholder, trace_items)
+                        st.session_state.trace_items.append(("工具返回", f"**{ev.get('tool_name','')}**  \n{show}"))
+                        render_trace(trace_placeholder, st.session_state.trace_items)
                     elif t == "final":
-                        final_text += ev.get("content", "")
-                        result_placeholder.markdown(final_text)
+                        st.session_state.report_text = ev.get("content", "")
+                        result_placeholder.markdown(st.session_state.report_text)
 
             except requests.exceptions.RequestException as e:
                 result_placeholder.error(f"连接后端失败:{e}\n\n检查后端是否启动、地址是否正确。")
-                final_text = ""
+                st.session_state.report_text = ""
+                st.session_state.review_finished = False
+            else:
+                st.session_state.review_finished = bool(st.session_state.report_text)
 
-            if final_text:
-                st.success("审查完成!")
-                st.download_button(
-                    "下载审查报告",
-                    data=final_text,
-                    file_name="compliance_report.md",
-                    mime="text/markdown",
-                )
+        if st.session_state.review_finished and st.session_state.report_text:
+            st.success("审查完成!")
+            st.download_button(
+                "下载审查报告",
+                data=st.session_state.report_text,
+                file_name="compliance_report.md",
+                mime="text/markdown",
+            )
 else:
     st.info("请先上传一份企业材料文件开始审查。")
