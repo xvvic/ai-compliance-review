@@ -4,7 +4,8 @@ AI合规审查系统 - 后端接口(修正版)
 安装:
     pip install claude-agent-sdk fastapi uvicorn python-dotenv
 前提:
-    - 环境变量 ANTHROPIC_API_KEY(放 .env 或系统环境变量)
+    - 已登录 Claude Code，或环境变量 ANTHROPIC_API_KEY 可用
+    - 可选: 用 CLAUDE_CODE_MODEL / CLAUDE_CODE_FALLBACK_MODEL 指定模型
     - skill 放在 .claude/skills/ 下(标准结构),或用下面的兜底拼prompt方式
     - MCP 配置(北大法宝等)在 .mcp.json 或代码里配置
 """
@@ -13,6 +14,7 @@ import os
 import json
 import tempfile
 import shutil
+from pathlib import Path
 from fastapi import FastAPI
 from fastapi.responses import StreamingResponse
 from fastapi.middleware.cors import CORSMiddleware
@@ -21,9 +23,26 @@ from dotenv import load_dotenv
 import uvicorn
 
 # 正确的包:claude-agent-sdk(不是 anthropic 的 Agent)
-from claude_agent_sdk import query, ClaudeAgentOptions
+from claude_agent_sdk import (
+    AssistantMessage,
+    ClaudeAgentOptions,
+    ResultMessage,
+    ServerToolResultBlock,
+    ServerToolUseBlock,
+    StreamEvent,
+    TextBlock,
+    ThinkingBlock,
+    ToolResultBlock,
+    ToolUseBlock,
+    query,
+)
 
 load_dotenv()
+
+REPO_ROOT = Path(__file__).resolve().parent
+PLUGIN_DIR = REPO_ROOT / "claude-code-plugin" / "ai-startup-compliance-review"
+DEFAULT_MODEL = os.getenv("CLAUDE_CODE_MODEL")
+DEFAULT_FALLBACK_MODEL = os.getenv("CLAUDE_CODE_FALLBACK_MODEL")
 
 app = FastAPI()
 app.add_middleware(
@@ -50,22 +69,25 @@ async def review_stream(req: ReviewReq):
             with open(material_path, "w", encoding="utf-8") as fp:
                 fp.write(req.document_text)
 
+            if not PLUGIN_DIR.exists():
+                raise RuntimeError(f"插件目录不存在: {PLUGIN_DIR}")
+
             # 3. 配置 Agent SDK
             #    - cwd 指向工作目录,agent 就能在里面读写文件
-            #    - setting_sources=["project"] 让 SDK 自动加载 .claude/skills/ 下的 skill
-            #    - mcp_servers 配置北大法宝等 MCP(TODO-1)
-            options = ClaudeAgentOptions(
+            #    - plugins 直接挂载仓库内已整理好的 Claude Code 插件
+            option_kwargs = dict(
                 cwd=work_dir,
-                setting_sources=["project"],   # 自动加载 .claude/skills/ 里的 skill
-                permission_mode="acceptEdits", # 允许 agent 读写工作区文件
-                # ============ TODO-1:配置 MCP ============
-                # 把北大法宝等 MCP 服务配进来。参考 claude-agent-sdk 文档的 mcp_servers 写法。
-                # 例如(具体字段以真实SDK文档为准):
-                # mcp_servers={
-                #     "pkulaw": {"type": "http", "url": "https://...北大法宝MCP地址..."}
-                # },
-                # ==================================================
+                setting_sources=["user", "project"],
+                plugins=[{"type": "local", "path": str(PLUGIN_DIR)}],
+                skills=["ai-startup-compliance-review"],
+                permission_mode="acceptEdits",
+                max_turns=10,
             )
+            if DEFAULT_MODEL:
+                option_kwargs["model"] = DEFAULT_MODEL
+            if DEFAULT_FALLBACK_MODEL:
+                option_kwargs["fallback_model"] = DEFAULT_FALLBACK_MODEL
+            options = ClaudeAgentOptions(**option_kwargs)
 
             prompt = (
                 "请审查工作目录中的《待审查材料.txt》,完成合规审查。"
@@ -75,32 +97,55 @@ async def review_stream(req: ReviewReq):
 
             # 4. 流式跑 agent,把每条消息转成前端约定的 SSE 格式
             async for message in query(prompt=prompt, options=options):
-                # ============ TODO-2:解析真实消息 ============
-                # 重要:先用真实SDK跑一次、打印 message 看清结构,再写这里!
-                # 真实 claude-agent-sdk 的消息是 AssistantMessage / ToolUseBlock /
-                # ToolResultBlock 等对象,字段不是豆包猜的 event.type=="tool_call_start"。
-                # 下面是"伪代码框架",按真实字段名改:
-                #
-                # 参考思路(具体类名/字段以你打印出来的为准):
-                #   from claude_agent_sdk import AssistantMessage, TextBlock, ToolUseBlock, ToolResultBlock
-                #   if isinstance(message, AssistantMessage):
-                #       for block in message.content:
-                #           if isinstance(block, TextBlock):
-                #               yield sse({"type": "final", "content": block.text})
-                #           elif isinstance(block, ToolUseBlock):
-                #               yield sse({"type": "tool_start", "tool_name": block.name, "args": block.input})
-                #   elif isinstance(message, ToolResultBlock):   # 或在对应消息类型里
-                #       yield sse({"type": "tool_end", "tool_name": ..., "result": str(...)[:2000]})
-                #
-                # 在没改对之前,先把原始消息打印出来看结构:
-                print("SDK消息:", type(message), message)
-                # 临时:先把能拿到的文本透传,保证前端至少有输出(队友改对后删掉这行)
-                text = getattr(message, "text", None) or str(message)
-                yield sse({"type": "final", "content": ""})  # 占位,队友按上面改成真解析
-                # ======================================================
+                if isinstance(message, AssistantMessage):
+                    for block in message.content:
+                        if isinstance(block, ThinkingBlock) and block.thinking:
+                            yield sse({"type": "thinking", "content": block.thinking})
+                        elif isinstance(block, TextBlock):
+                            yield sse({"type": "final", "content": block.text})
+                        elif isinstance(block, (ToolUseBlock, ServerToolUseBlock)):
+                            yield sse(
+                                {
+                                    "type": "tool_start",
+                                    "tool_name": block.name,
+                                    "args": block.input,
+                                }
+                            )
+                        elif isinstance(block, ToolResultBlock):
+                            yield sse(
+                                {
+                                    "type": "tool_end",
+                                    "tool_name": block.tool_use_id,
+                                    "result": stringify_result(block.content),
+                                }
+                            )
+                        elif isinstance(block, ServerToolResultBlock):
+                            yield sse(
+                                {
+                                    "type": "tool_end",
+                                    "tool_name": block.tool_use_id,
+                                    "result": stringify_result(block.content),
+                                }
+                            )
+                elif isinstance(message, StreamEvent):
+                    delta = message.event.get("delta", {})
+                    thinking = delta.get("thinking")
+                    if thinking:
+                        yield sse({"type": "thinking", "content": thinking})
+                elif isinstance(message, ResultMessage) and message.is_error:
+                    error_text = message.result or "; ".join(message.errors or []) or "Claude SDK 调用失败"
+                    yield sse({"type": "final", "content": f"\n\n审查出错:{error_text}"})
 
         except Exception as e:
-            yield sse({"type": "final", "content": f"审查出错:{str(e)}(请检查 ANTHROPIC_API_KEY、MCP配置、skill路径)"})
+            yield sse(
+                {
+                    "type": "final",
+                    "content": (
+                        f"审查出错:{str(e)}"
+                        "(请检查 Claude Code 登录状态或 ANTHROPIC_API_KEY、MCP配置、插件目录)"
+                    ),
+                }
+            )
         finally:
             shutil.rmtree(work_dir, ignore_errors=True)
 
@@ -110,6 +155,14 @@ async def review_stream(req: ReviewReq):
 def sse(event: dict) -> str:
     """打包成 SSE 一行。前端约定格式:{type, tool_name?, args?, result?, content?}"""
     return f"data: {json.dumps(event, ensure_ascii=False)}\n\n"
+
+
+def stringify_result(value) -> str:
+    if value is None:
+        return ""
+    if isinstance(value, str):
+        return value
+    return json.dumps(value, ensure_ascii=False)
 
 
 @app.get("/")
