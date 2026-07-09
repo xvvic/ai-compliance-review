@@ -94,37 +94,75 @@ async def review_stream(req: ReviewReq):
                 "请审查工作目录中的《待审查材料.txt》,完成合规审查。"
                 "优先使用本地MCP工具检索真实法条,按技能规则输出Markdown报告,"
                 "包含:风险等级、审查结论、匹配法条、整改建议。"
+                "【硬性要求】在做任何检索或分析之前,你的第一个动作必须是把整个审查拆成若干步骤并建立任务清单"
+                "(每步用简洁正式的中文命名,如「检索个人信息保护相关法条」);之后每开始一步就把它标为进行中、"
+                "做完标为完成,全程始终恰好保持一个进行中的步骤。不要跳过这个规划步骤。"
+                "最后把完整的Markdown审查报告写入工作目录下的《合规审查报告.md》文件(只写报告正文,不要写别的)。"
             )
 
             # 4. 流式跑 agent,把每条消息转成前端约定的 SSE 格式
+            #    - 中间文本 -> "assistant"(归到左侧执行过程),不再当最终报告
+            #    - TodoWrite -> "todos"(右上 Task 面板)
+            #    - 循环结束后统一读报告文件,只发一个 "final"
+            report_texts = []  # 兜底:累积所有助手文本,取最长的一段当报告
+            task_list = {}     # Task面板状态: 顺序id(str) -> {content, status}
+            task_seq = 0       # TaskCreate 计数,约定第N个创建的任务 id 即为 str(N)
             async for message in query(prompt=prompt, options=options):
                 if isinstance(message, AssistantMessage):
                     for block in message.content:
                         if isinstance(block, ThinkingBlock) and block.thinking:
                             yield sse({"type": "thinking", "content": block.thinking})
                         elif isinstance(block, TextBlock):
-                            yield sse({"type": "final", "content": block.text})
+                            report_texts.append(block.text)
+                            yield sse({"type": "assistant", "content": block.text})
                         elif isinstance(block, (ToolUseBlock, ServerToolUseBlock)):
-                            yield sse(
-                                {
-                                    "type": "tool_start",
-                                    "tool_name": block.name,
-                                    "args": block.input,
+                            name = block.name
+                            inp = block.input or {}
+                            if name == "TodoWrite":
+                                # 有的模型直接用 TodoWrite,格式已是 {content,status,activeForm}
+                                task_list = {
+                                    str(i): {
+                                        "content": td.get("content") or td.get("activeForm", ""),
+                                        "status": td.get("status", "pending"),
+                                        "activeForm": td.get("activeForm", ""),
+                                    }
+                                    for i, td in enumerate(inp.get("todos", []), 1)
                                 }
-                            )
-                        elif isinstance(block, ToolResultBlock):
+                                yield sse({"type": "todos", "items": list(task_list.values())})
+                            elif name == "TaskCreate":
+                                task_seq += 1
+                                task_list[str(task_seq)] = {
+                                    "content": inp.get("subject", ""),
+                                    "status": "pending",
+                                    "activeForm": inp.get("activeForm", ""),
+                                }
+                                yield sse({"type": "todos", "items": list(task_list.values())})
+                            elif name == "TaskUpdate":
+                                tid = str(inp.get("taskId", ""))
+                                if tid in task_list:
+                                    status = inp.get("status")
+                                    if status == "deleted":
+                                        task_list.pop(tid, None)
+                                    elif status:
+                                        task_list[tid]["status"] = status
+                                    if inp.get("subject"):
+                                        task_list[tid]["content"] = inp["subject"]
+                                    if inp.get("activeForm"):
+                                        task_list[tid]["activeForm"] = inp["activeForm"]
+                                yield sse({"type": "todos", "items": list(task_list.values())})
+                            else:
+                                yield sse(
+                                    {
+                                        "type": "tool_start",
+                                        "tool_name": name,
+                                        "args": inp,
+                                    }
+                                )
+                        elif isinstance(block, (ToolResultBlock, ServerToolResultBlock)):
                             yield sse(
                                 {
                                     "type": "tool_end",
-                                    "tool_name": block.tool_use_id,
-                                    "result": stringify_result(block.content),
-                                }
-                            )
-                        elif isinstance(block, ServerToolResultBlock):
-                            yield sse(
-                                {
-                                    "type": "tool_end",
-                                    "tool_name": block.tool_use_id,
+                                    "tool_name": getattr(block, "tool_use_id", ""),
                                     "result": stringify_result(block.content),
                                 }
                             )
@@ -136,6 +174,10 @@ async def review_stream(req: ReviewReq):
                 elif isinstance(message, ResultMessage) and message.is_error:
                     error_text = message.result or "; ".join(message.errors or []) or "Claude SDK 调用失败"
                     yield sse({"type": "final", "content": f"\n\n审查出错:{error_text}"})
+
+            # 5. 审查结束:优先读 agent 写出的报告文件,读不到就用最长的一段助手文本兜底
+            report = load_report(work_dir, report_texts)
+            yield sse({"type": "final", "content": report})
 
         except Exception as e:
             yield sse(
@@ -164,6 +206,25 @@ def stringify_result(value) -> str:
     if isinstance(value, str):
         return value
     return json.dumps(value, ensure_ascii=False)
+
+
+def load_report(work_dir: str, fallback_texts: list) -> str:
+    """取最终报告:1)约定文件名 -> 2)工作目录里最大的 .md -> 3)最长的一段助手文本。"""
+    work = Path(work_dir)
+    preferred = work / "合规审查报告.md"
+    if preferred.exists():
+        txt = preferred.read_text(encoding="utf-8", errors="ignore").strip()
+        if txt:
+            return txt
+    md_files = [p for p in work.glob("*.md") if p.is_file()]
+    if md_files:
+        biggest = max(md_files, key=lambda p: p.stat().st_size)
+        txt = biggest.read_text(encoding="utf-8", errors="ignore").strip()
+        if txt:
+            return txt
+    if fallback_texts:
+        return max(fallback_texts, key=len)
+    return "(agent 未生成报告,请查看左侧执行过程)"
 
 
 @app.get("/")
