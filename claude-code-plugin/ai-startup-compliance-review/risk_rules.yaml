@@ -1,0 +1,312 @@
+# =====================================================================
+# AI 初创企业法律风险识别 Skill —— 风险触发规则库 (risk_rules.yaml)
+# =====================================================================
+# 用途: 供 detect_risks.py 做确定性预扫描, 并作为 Agent 风险分类的核对清单。
+# 结构与项目书第十章(二)的 BIO-001 示例对应; 一票升级规则对应项目书第七章。
+# 类目: 项目书第六章的八大类风险。
+# 评分: 六维评分与 L1-L4 阈值见 skills/ai-startup-compliance-review/references/02-risk-scoring.md
+meta:
+  version: "1.0"
+  updated: "2026-09-09"
+  category_count: 8
+  categories:
+    - 数据合规风险
+    - 个人信息与敏感个人信息风险
+    - 算法公平与自动化决策风险
+    - AI宣传与消费者误导风险
+    - 训练数据与知识产权风险
+    - 网络安全与数据安全风险
+    - 合同、供应商与责任分配风险
+    - 行业监管与合规治理风险
+  scoring_dimensions: [法律触发明确性, 损害严重性, 发生可能性, 可控性, 影响对象范围, 证据充分性]
+  one_vote_escalation_source: 项目书第七章(7条一票升级规则)
+
+# 企业画像提示词(非风险, 用于 intake 阶段的画像预提取)
+profile_keywords:
+  product_type:
+    陪伴机器人: [陪伴机器人, 家庭机器人, 儿童机器人]
+    具身智能: [具身智能, 人形机器人, 机械臂]
+    AI求职就业: [AI求职, 简历筛选, 智能招聘, 求职推荐]
+    智慧眼镜/安防: [智慧眼镜, 智能眼镜, 安防摄像头, 监控设备]
+    生成式AI服务: [大模型, 生成式, AIGC, 对话助手, 内容生成]
+    数据平台: [数据平台, 数据标注, 数据集]
+  third_party_model: [接入千问, 接入通义, 第三方模型, API接入, 开源模型, 微调]
+
+rules:
+  # ---------- 一、数据合规风险 ----------
+  - id: DATA-001
+    category: 数据合规风险
+    risk_type: 数据来源合法性风险
+    trigger:
+      keywords: [爬虫, 网络抓取, 公开数据, 自行采集, 数据集, 训练数据, 高校合作数据]
+      semantic:
+        - 数据来源无法证明合法性(授权链条缺失)
+        - 公开数据再利用未评估版权与个人信息风险
+    default_level: L2
+    escalation:
+      - condition_keywords: [大规模抓取, 公开人脸, 未授权抓取, 无授权采集]
+        level: L4
+        reason: 无授权大规模抓取个人信息或公开人脸图像用于训练(一票升级)
+    human_review: false
+    evidence_needed: [数据来源台账, 授权协议, 采集告知说明, 爬虫合规说明]
+    remediation_hint: 建立数据来源台账, 保留授权协议, 禁用无法证明来源的数据
+    refs: {scenario: scenario-data-processing.md, domain: domain-data-compliance.md}
+
+  - id: DATA-002
+    category: 数据合规风险
+    risk_type: 数据台账与删除机制缺失风险
+    trigger:
+      keywords: [无台账, 没有台账, 无授权记录, 永久保存, 不删除, 无删除机制]
+      semantic: 缺少数据资产记录、保存期限约定或删除响应机制
+    default_level: L2
+    human_review: false
+    evidence_needed: [数据清单, 保存期限政策, 删除流程说明]
+    remediation_hint: 建立数据清单与保存期限政策, 提供删除响应通道
+    refs: {domain: domain-data-compliance.md}
+
+  - id: DATA-003
+    category: 数据合规风险
+    risk_type: 数据出境与跨境传输风险
+    trigger:
+      keywords: [跨境, 出境, 境外服务器, 海外部署, 境外传输, 数据出境, 美国, 境外, 海外用户, 传输至境外]
+      semantic: 向境外提供个人信息或重要数据
+    default_level: L3
+    escalation:
+      - condition_keywords: [无评估, 未评估, 无标准合同, 未签标准合同, 无认证]
+        level: L4
+        reason: 数据出境无评估、认证或标准合同(一票升级)
+    human_review: true
+    evidence_needed: [数据出境安全评估报告, 标准合同备案, 认证证书]
+    remediation_hint: 完成出境评估/标准合同/认证三选一, 明确境外接收方义务
+    refs: {scenario: scenario-cross-border.md, domain: domain-data-compliance.md}
+
+  # ---------- 二、个人信息与敏感个人信息风险 ----------
+  - id: BIO-001
+    category: 个人信息与敏感个人信息风险
+    risk_type: 敏感个人信息与生物识别风险
+    trigger:
+      keywords: [人脸识别, 面部识别, 声纹识别, 眼动追踪, 生物识别, 活体检测, 指纹, 人脸信息, 人脸, 人像, 声纹]
+      semantic:
+        - 采集或处理人脸、声纹、眼动等生物识别信息
+        - 在公共场所部署人脸/车辆识别能力
+    default_level: L3
+    escalation:
+      - condition_keywords: [公安, 安防, 执法, 布控, 天网]
+        level: L4
+        reason: 高监管场景叠加生物识别(项目书第十章 BIO-001 示例的一票升级)
+      - condition_keywords: [无合法依据, 未经单独同意, 未取得单独同意]
+        level: L4
+        reason: 无合法依据处理生物识别信息(一票升级)
+    human_review: true
+    evidence_needed: [单独同意记录, 个人信息保护影响评估(PIA), 加密存储与访问控制说明]
+    remediation_hint: 开展PIA, 补充单独同意机制, 限制采集范围, 加密存储
+    refs: {domain: domain-data-compliance.md}
+
+  - id: PI-001
+    category: 个人信息与敏感个人信息风险
+    risk_type: 个人信息收集与告知同意风险
+    trigger:
+      keywords: [用户资料, 学生信息, 求职信息, 行为记录, 家庭陪伴数据, 收集用户信息, 隐私政策, 用户数据, 个人数据, 读取用户]
+      semantic: 收集使用个人信息但告知同意机制不完整
+    default_level: L2
+    escalation:
+      - condition_keywords: [无隐私政策, 未告知, 无同意机制]
+        level: L3
+        reason: 告知同意机制缺失
+    human_review: false
+    evidence_needed: [隐私政策, 同意记录, 数据字段清单]
+    remediation_hint: 完善隐私政策与同意记录, 明确保存期限与删除机制
+    refs: {domain: domain-data-compliance.md}
+
+  - id: PI-002
+    category: 个人信息与敏感个人信息风险
+    risk_type: 未成年人信息保护风险
+    trigger:
+      keywords: [儿童, 未成年人, 青少年, 中小学生, 少儿]
+      semantic: 面向未成年人提供产品或处理其个人信息
+    default_level: L3
+    escalation:
+      - condition_keywords: [无监护人同意, 未取得监护人同意, 缺少监护人同意]
+        level: L4
+        reason: 未成年人敏感信息缺少监护人同意(一票升级)
+    human_review: true
+    evidence_needed: [年龄识别机制, 监护人同意流程, 未成年人模式说明]
+    remediation_hint: 建立年龄识别与监护人同意机制, 限制画像与精准推荐
+    refs: {domain: domain-data-compliance.md}
+
+  # ---------- 三、算法公平与自动化决策风险 ----------
+  - id: ALG-001
+    category: 算法公平与自动化决策风险
+    risk_type: 自动化决策与人工复核缺失风险
+    trigger:
+      keywords: [自动推荐, 智能推荐, 自动筛选, 自动化决策, 算法推荐, 自动生成方案]
+      semantic: 利用算法实施推荐/筛选/决策但缺少人工介入与申诉渠道
+    default_level: L2
+    escalation:
+      - condition_keywords: [无人工复核, 全自动, 无申诉, 无纠错机制]
+        level: L3
+        reason: 对个人权益有重大影响的自动化决策缺少人工复核
+    human_review: false
+    evidence_needed: [人工复核机制说明, 申诉纠错流程]
+    remediation_hint: 设置人工复核与申诉纠错机制, 提供关闭个性化推荐选项
+    refs: {domain: domain-ai-governance.md}
+
+  - id: ALG-002
+    category: 算法公平与自动化决策风险
+    risk_type: 算法偏见与误识别风险
+    trigger:
+      keywords: [偏见, 歧视, 误识别, 错误率, 无差别识别]
+      semantic: 模型输出可能产生歧视性影响或较高误识别率
+    default_level: L3
+    human_review: true
+    evidence_needed: [准确率测试报告, 偏差测试报告, 误识别处理流程]
+    remediation_hint: 进行准确率与偏差测试, 保留测试证据, 设置误识别人工处理
+    refs: {domain: domain-ai-governance.md}
+
+  # ---------- 四、AI宣传与消费者误导风险 ----------
+  - id: ADV-001
+    category: AI宣传与消费者误导风险
+    risk_type: AI能力夸大宣传风险
+    trigger:
+      keywords: [高准确率, 业内领先, 智能陪伴, 实时识别, 全自动]
+      semantic: 对AI能力作绝对化或无证据支撑的宣传
+    default_level: L2
+    escalation:
+      - condition_keywords: [绝对准确, 无偏见, 绝对安全, 百分百, 100%]
+        level: L3
+        reason: 绝对化表述且无测试证据(一票升级)
+      - condition_keywords: [融资, 路演, 尽调, 商业计划书, BP]
+        level: L3
+        reason: 融资场景夸大宣传可能构成投资人误导
+    human_review: false
+    evidence_needed: [宣传材料审核记录, 测试报告, 第三方认证]
+    remediation_hint: 建立宣传审核机制, 保留测试证据, 删除绝对化表述
+    refs: {domain: domain-consumer-marketing.md, scenario: scenario-financing.md}
+
+  # ---------- 五、训练数据与知识产权风险 ----------
+  - id: IP-001
+    category: 训练数据与知识产权风险
+    risk_type: 训练数据版权风险
+    trigger:
+      keywords: [公开素材, 网络图片, 爬取文本, 训练语料, 讲故事, 写作业, 图片视频数据]
+      semantic: 训练数据含未经授权的第三方作品
+    default_level: L2
+    escalation:
+      - condition_keywords: [商用, 上线收费, 对外提供, 无授权]
+        level: L3
+        reason: 未经授权作品用于商业用途
+    human_review: false
+    evidence_needed: [训练素材授权文件, 数据集清单, 开源许可证分析]
+    remediation_hint: 审查训练数据授权, 建立数据集清单与权属说明
+    refs: {domain: domain-ip.md}
+
+  - id: IP-002
+    category: 训练数据与知识产权风险
+    risk_type: 生成内容与深度合成风险
+    trigger:
+      keywords: [AI换脸, 换脸, 深度合成, 数字人, 生成图像, 生成视频]
+      semantic: 生成内容可能侵犯著作权或人格权益
+    default_level: L2
+    escalation:
+      - condition_keywords: [无授权, 未获同意, 冒用]
+        level: L3
+        reason: 换脸/深度合成涉及他人肖像声音未获授权
+    human_review: false
+    evidence_needed: [生成内容权属说明, 素材授权记录, 标识添加机制]
+    remediation_hint: 明确生成内容权属, 添加AI生成标识, 保留素材授权记录
+    refs: {domain: domain-ip.md}
+
+  # ---------- 六、网络安全与数据安全风险 ----------
+  - id: SEC-001
+    category: 网络安全与数据安全风险
+    risk_type: 安全措施缺失风险
+    trigger:
+      keywords: [明文存储, 无加密, 无访问控制, 无日志, 数据泄露, 泄露风险]
+      semantic: 缺少加密、访问控制、日志留存等基线安全措施
+    default_level: L2
+    escalation:
+      - condition_keywords: [已发生泄露, 被举报, 监管约谈]
+        level: L3
+        reason: 已出现安全事件或监管接触
+    human_review: false
+    evidence_needed: [安全措施说明, 日志留存机制, 应急预案]
+    remediation_hint: 落实加密存储、访问控制与日志留存, 制定应急预案
+    refs: {domain: domain-cybersecurity.md}
+
+  # ---------- 七、合同、供应商与责任分配风险 ----------
+  - id: CTR-001
+    category: 合同、供应商与责任分配风险
+    risk_type: 第三方模型与API依赖风险
+    trigger:
+      keywords: [第三方模型, API调用, 接入千问, 接入GPT, 开源模型, 模型微调, 供应商]
+      semantic: 核心能力依赖第三方但权责与数据处理约定不明
+    default_level: L2
+    escalation:
+      - condition_keywords: [无数据处理协议, 合同未约定, 无责任条款]
+        level: L3
+        reason: 第三方处理敏感数据但合同无约束(一票升级)
+    human_review: false
+    evidence_needed: [API服务协议, 数据处理协议(DPA), 责任分配条款]
+    remediation_hint: 签署DPA, 明确数据使用、训练、删除与责任承担条款
+    refs: {scenario: scenario-vendor-contract.md}
+
+  - id: CTR-002
+    category: 合同、供应商与责任分配风险
+    risk_type: 客户数据权属与外包风险
+    trigger:
+      keywords: [客户提供数据, 外包标注, 数据权属, 客户数据训练, 售卖用户数据, 出售数据, 数据变现]
+      semantic: 客户数据用于自身模型训练或外包处理且权属不清
+    default_level: L2
+    escalation:
+      - condition_keywords: [用于通用模型, 混用, 共享给第三方]
+        level: L3
+        reason: 客户数据超出约定用途使用
+    human_review: false
+    evidence_needed: [客户合同数据条款, 保密协议, 外包协议]
+    remediation_hint: 合同明确数据权属与使用范围, 禁止超范围训练
+    refs: {scenario: scenario-vendor-contract.md}
+
+  # ---------- 八、行业监管与合规治理风险 ----------
+  - id: GOV-001
+    category: 行业监管与合规治理风险
+    risk_type: 高监管场景专项义务风险
+    trigger:
+      keywords: [公安, 安防, 医疗, 金融, 律师, 交通调度, 考试评价, 贷款, 抵押贷款, 放贷, 借贷, 征信]
+      semantic: 产品落入高监管行业场景, 触发专项合规义务
+    default_level: L2
+    escalation:
+      - condition_keywords: [无专项评估, 未做专项评估, 无资质, 未备案]
+        level: L4
+        reason: 高监管场景缺少专项评估或资质(一票升级, L3-L4)
+    human_review: false
+    evidence_needed: [专项合规评估, 行业资质文件, 备案记录]
+    remediation_hint: 开展专项合规评估, 取得行业资质或完成备案
+    refs: {scenario: scenario-product-launch.md}
+
+  - id: GOV-002
+    category: 行业监管与合规治理风险
+    risk_type: 生成式AI服务合规风险
+    trigger:
+      keywords: [生成式人工智能, AIGC, 内容生成, 对话机器人]
+      semantic: 面向公众提供生成式AI服务
+    default_level: L2
+    escalation:
+      - condition_keywords: [无内容审核, 未做安全评估, 无备案]
+        level: L3
+        reason: 生成式AI服务缺内容审核/安全评估/备案
+    human_review: false
+    evidence_needed: [安全评估报告, 算法备案记录, 内容审核机制]
+    remediation_hint: 完成安全评估与算法备案, 建立内容审核与标注机制
+    refs: {scenario: scenario-product-launch.md, domain: domain-ai-governance.md}
+
+  - id: GOV-003
+    category: 行业监管与合规治理风险
+    risk_type: 内部治理与审计缺失风险
+    trigger:
+      keywords: [无合规负责人, 没有法务, 无审计, 无复核机制, 无测试报告]
+      semantic: 缺少合规负责人、审计留痕与人工复核机制
+    default_level: L2
+    human_review: false
+    evidence_needed: [责任人设置文件, 审批流程, 审计记录]
+    remediation_hint: 设置合规责任人, 建立审批、留痕与定期复查机制
+    refs: {domain: domain-ai-governance.md}

@@ -32,9 +32,10 @@ Keep this folder self-contained. When installed as a Claude Code plugin, treat `
    - `references/stage-risk-classification.md` before assigning risk levels.
    - `references/stage-remediation.md` before drafting corrective actions.
 5. Load only domain references triggered by the facts.
-6. Search local sources first when legal authority, enforcement examples, or risk-framework support is needed. If configured, use 北大法宝 MCP as the next retrieval layer for regulations, cases, exact article lookup, and citation checking.
-7. Produce the report using `references/03-output-template.md`.
-8. Run `${CLAUDE_PLUGIN_ROOT}/skills/ai-startup-compliance-review/scripts/check_report_structure.py` on saved report drafts when the plugin is installed, or `scripts/check_report_structure.py` when the skill is used standalone.
+6. Before risk classification, read `${CLAUDE_PLUGIN_ROOT}/risk_rules.yaml` (when the skill is used standalone, the copy next to the skill root) and run `${CLAUDE_PLUGIN_ROOT}/skills/ai-startup-compliance-review/scripts/detect_risks.py <material-file>` on the user's material. Treat the matched rules as the deterministic risk-trigger checklist: every identified risk should map to a rule `id` where applicable, one-vote escalation rules in the YAML must be honored, and `evidence_needed` feeds the missing-evidence list. Use `semantic` cues for judgment the keyword scan cannot make.
+7. Search local sources first when legal authority, enforcement examples, or risk-framework support is needed. If configured, use 北大法宝 MCP as the next retrieval layer for regulations, cases, exact article lookup, and citation checking.
+8. Produce the report using `references/03-output-template.md`.
+9. Run `${CLAUDE_PLUGIN_ROOT}/skills/ai-startup-compliance-review/scripts/check_report_structure.py` on saved report drafts when the plugin is installed, or `scripts/check_report_structure.py` when the skill is used standalone.
 
 ## Retrieval Order
 
@@ -79,6 +80,7 @@ If the scenario is unclear, read `references/stage-intake.md`, ask no more than 
 
 ## Scripts
 
+- `scripts/detect_risks.py`: deterministic pre-scan of the material against `risk_rules.yaml`; emits matched rule ids, hit keywords, one-vote escalation results, and evidence needs as JSON.
 - `scripts/search_corpus.py`: search local text corpus and emit source-tagged snippets.
 - `scripts/score_risk.py`: compute a repeatable risk level from structured factors.
 - `scripts/check_report_structure.py`: validate report sections, accepted source tags including 北大法宝 MCP labels, forbidden pseudo-verification claims, and high-risk remediation coverage.
