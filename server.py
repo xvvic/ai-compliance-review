@@ -13,8 +13,11 @@ AI合规审查系统 - 后端接口(修正版)
 
 import os
 import json
+import subprocess
+import sys
 import tempfile
 import shutil
+from datetime import datetime
 from pathlib import Path
 from fastapi import FastAPI
 from fastapi.responses import StreamingResponse
@@ -42,6 +45,8 @@ load_dotenv()
 
 REPO_ROOT = Path(__file__).resolve().parent
 PLUGIN_DIR = REPO_ROOT / "claude-code-plugin" / "ai-startup-compliance-review"
+DETECT_SCRIPT = PLUGIN_DIR / "skills" / "ai-startup-compliance-review" / "scripts" / "detect_risks.py"
+REPORTS_DIR = REPO_ROOT / "reports"  # 每次审查的 risk_report.json 持久化目录(不入库)
 DEFAULT_MODEL = os.getenv("CLAUDE_CODE_MODEL")
 DEFAULT_FALLBACK_MODEL = os.getenv("CLAUDE_CODE_FALLBACK_MODEL")
 
@@ -65,10 +70,9 @@ async def review_stream(req: ReviewReq):
         # 1. 建临时工作目录(agent 读写文件用,审查完删除)
         work_dir = tempfile.mkdtemp(prefix="compliance_")
         try:
-            # 2. 把待审材料写进工作目录
-            material_path = os.path.join(work_dir, "待审查材料.txt")
-            with open(material_path, "w", encoding="utf-8") as fp:
-                fp.write(req.document_text)
+            # 2. 把待审材料写进工作目录(固定文件名,agent 按名读取)
+            material_path = Path(work_dir) / "待审查材料.txt"
+            material_path.write_text(req.document_text, encoding="utf-8")
 
             if not PLUGIN_DIR.exists():
                 raise RuntimeError(f"插件目录不存在: {PLUGIN_DIR}")
@@ -179,6 +183,11 @@ async def review_stream(req: ReviewReq):
             report = load_report(work_dir, report_texts)
             yield sse({"type": "final", "content": report})
 
+            # 6. 组装并持久化机器可读结果 risk_report.json:
+            #    材料快照 + 规则库预扫描命中 + Markdown 报告全文, 供复核页/评测/导出复用
+            report_json = build_report_json(req.document_text, report)
+            yield sse({"type": "report_json", "content": report_json, "saved_as": save_report_json(report_json)})
+
         except Exception as e:
             yield sse(
                 {
@@ -225,6 +234,55 @@ def load_report(work_dir: str, fallback_texts: list) -> str:
     if fallback_texts:
         return max(fallback_texts, key=len)
     return "(agent 未生成报告,请查看左侧执行过程)"
+
+
+def run_detection(material_path: str) -> dict:
+    """对材料跑 risk_rules.yaml 确定性预扫描;失败不影响主流程,返回降级结果。"""
+    if not DETECT_SCRIPT.exists():
+        return {"error": f"预扫描脚本不存在: {DETECT_SCRIPT}", "matched_rules": [], "summary": {}}
+    try:
+        proc = subprocess.run(
+            [sys.executable, str(DETECT_SCRIPT), material_path],
+            capture_output=True, text=True, encoding="utf-8", timeout=60,
+        )
+        data = json.loads(proc.stdout) if proc.stdout.strip() else {}
+        return {k: data.get(k) for k in ("profile_hints", "matched_rules", "summary")} if data else \
+            {"error": proc.stderr[-500:] or "预扫描无输出", "matched_rules": [], "summary": {}}
+    except Exception as e:  # noqa: BLE001 预扫描失败只降级不中断
+        return {"error": f"预扫描失败: {e}", "matched_rules": [], "summary": {}}
+
+
+def build_report_json(document_text: str, report_markdown: str) -> str:
+    """组装 risk_report.json:画像提示/规则命中/等级汇总 + 报告全文。"""
+    material_path = None  # 材料文本在临时目录,直接走内存临时文件复用脚本
+    with tempfile.NamedTemporaryFile("w", suffix=".txt", delete=False, encoding="utf-8") as fp:
+        fp.write(document_text)
+        material_path = fp.name
+    try:
+        detection = run_detection(material_path)
+    finally:
+        os.unlink(material_path)
+    payload = {
+        "generated_at": datetime.now().isoformat(timespec="seconds"),
+        "model": DEFAULT_MODEL or "",
+        "material": {"chars": len(document_text), "preview": document_text[:200]},
+        "risk_scan": detection,
+        "report_markdown": report_markdown,
+        "schema_version": "1.0",
+    }
+    return json.dumps(payload, ensure_ascii=False, indent=2)
+
+
+def save_report_json(report_json: str) -> str:
+    """落盘到 reports/ 目录(文件名带时间戳), 返回文件名; 失败返回空串。"""
+    try:
+        REPORTS_DIR.mkdir(exist_ok=True)
+        ts = datetime.now().strftime("%Y%m%d_%H%M%S")
+        name = f"risk_report_{ts}.json"
+        (REPORTS_DIR / name).write_text(report_json, encoding="utf-8")
+        return name
+    except Exception:  # noqa: BLE001 持久化失败不影响前端拿到 JSON
+        return ""
 
 
 @app.get("/")

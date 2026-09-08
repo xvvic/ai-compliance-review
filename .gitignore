@@ -23,3 +23,7 @@ AGENTS.md
 /.deps
 /.venv-test
 *.docx
+# 审查产物与本地产物(不入库)
+reports/
+reviews/
+claude-code-plugin/ai-startup-compliance-review/search[0-9]*.txt

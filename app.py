@@ -16,6 +16,12 @@ AI 合规审查系统 - 前端界面(改版)
 import os
 import re
 import json
+import ipaddress
+import socket
+from datetime import datetime
+from pathlib import Path
+from urllib.parse import urlparse
+
 import requests
 import streamlit as st
 
@@ -28,7 +34,10 @@ DEFAULTS = {
     "trace_items": [],   # 执行过程条目:[{step, label, count}],连续相同操作聚合计数
     "tasks": [],         # 任务清单(Task面板)
     "report_text": "",   # 最终报告
+    "report_json": "",   # 机器可读报告(risk_report.json 内容)
+    "report_json_name": "",  # 后端持久化的文件名(展示用)
     "review_finished": False,
+    "review_done": False,   # 本轮复核是否已提交
     "running": False,    # 审查进行中?进行时禁用"开始"按钮,防重复触发
 }
 for k, v in DEFAULTS.items():
@@ -67,9 +76,36 @@ def parse_file(uploaded_file):
         return None
 
 
+def _validated_backend_url(url: str) -> str:
+    """校验后端地址并返回净化后的 URL。
+
+    边界规则(本工具定位为本地/队友内网部署):
+    - 仅允许 http/https 协议,禁止携带用户信息(@);
+    - 主机解析后必须全部落在 回环/私网/链路本地 网段,拒绝任何公网目标,
+      防止把企业审查材料发往外部地址;
+    - 仅保留 协议://主机/路径,丢弃 query 与 fragment。
+    """
+    parsed = urlparse(url or "")
+    if parsed.scheme not in ("http", "https") or not parsed.netloc or "@" in parsed.netloc:
+        raise requests.exceptions.InvalidURL(f"后端地址无效(仅支持 http/https): {url}")
+    host = parsed.hostname or ""
+    try:
+        infos = socket.getaddrinfo(host, parsed.port or (443 if parsed.scheme == "https" else 80))
+    except OSError as e:
+        raise requests.exceptions.InvalidURL(f"后端主机无法解析: {host}") from e
+    for info in infos:
+        ip = ipaddress.ip_address(info[4][0])
+        if not (ip.is_loopback or ip.is_private or ip.is_link_local):
+            raise requests.exceptions.InvalidURL(
+                f"后端地址必须是本机/局域网地址,已拒绝公网目标: {host}({ip})"
+            )
+    return f"{parsed.scheme}://{parsed.netloc}{parsed.path or '/'}"
+
+
 def real_stream(url, text):
-    """对接后端SSE流,逐事件yield"""
-    resp = requests.post(url, json={"document_text": text}, stream=True, timeout=600)
+    """对接后端SSE流,逐事件yield;请求前先过后端地址边界校验,并禁用重定向。"""
+    safe_url = _validated_backend_url(url)
+    resp = requests.post(safe_url, json={"document_text": text}, stream=True, timeout=600, allow_redirects=False)
     resp.raise_for_status()
     for line in resp.iter_lines():
         if line:
@@ -195,6 +231,97 @@ def render_trace(placeholder, items):
                 st.markdown(header)
 
 
+# ---------------- 人工复核(机器初评 -> 人工确认/调级/补证/退回) ----------------
+REVIEW_DIR = Path(__file__).resolve().parent / "reviews"  # 复核记录落盘目录
+LEVELS = ["L1", "L2", "L3", "L4"]
+ACTIONS = ["认可初评", "调整等级", "补充依据", "退回重审"]
+
+
+def render_review_section():
+    """报告生成后的复核区:对规则库命中逐条复核,记录落盘 reviews/*.jsonl。"""
+    rj = st.session_state.report_json
+    if not rj:
+        return
+    try:
+        scan = json.loads(rj).get("risk_scan", {})
+    except json.JSONDecodeError:
+        st.warning("结构化结果解析失败,复核区不可用(仍可下载 JSON)。")
+        return
+    rules = scan.get("matched_rules", [])
+    if not rules:
+        st.info("本次预扫描无风险命中,无需人工复核。")
+        return
+
+    st.divider()
+    must = sum(1 for r in rules if r.get("final_level") in ("L3", "L4"))
+    st.subheader("🧑‍⚖️ 人工复核")
+    st.caption(
+        f"共 {len(rules)} 条风险命中,其中 {must} 条 L3/L4 系统标记为必须复核;"
+        "复核记录落盘 reviews/ 目录,用于调级统计与规则库更新。"
+    )
+
+    decisions = []
+    for r in rules:
+        sys_level = r.get("final_level", "L2")
+        badge = " 🔴必须复核" if sys_level in ("L3", "L4") else ""
+        kws = "、".join(list(r.get("matched_keywords", {}))[:6])
+        with st.expander(f"{r.get('id')} · {r.get('risk_type')} · 初评 {sys_level}{badge}"):
+            st.caption(f"命中关键词:{kws or '—'}")
+            action = st.radio(
+                "复核动作", ACTIONS, horizontal=True, key=f"rv_act_{r.get('id')}"
+            )
+            level = st.selectbox(
+                "复核后等级",
+                LEVELS,
+                index=LEVELS.index(sys_level),
+                key=f"rv_lv_{r.get('id')}",
+                disabled=(action != "调整等级"),
+            )
+            note = st.text_area(
+                "补充依据 / 复核意见(可选)", key=f"rv_nt_{r.get('id')}", height=80
+            )
+            decisions.append((r, action, level, note))
+
+    if st.button(
+        "提交复核记录",
+        type="primary",
+        disabled=st.session_state.running or st.session_state.get("review_done", False),
+    ):
+        reviewed_at = datetime.now().isoformat(timespec="seconds")
+        lines, adjusted = [], 0
+        for r, action, level, note in decisions:
+            adj = action == "调整等级" and level != r.get("final_level")
+            adjusted += 1 if adj else 0
+            lines.append(
+                json.dumps(
+                    {
+                        "rule_id": r.get("id"),
+                        "category": r.get("category"),
+                        "risk_type": r.get("risk_type"),
+                        "matched_keywords": list(r.get("matched_keywords", {})),
+                        "system_level": r.get("final_level"),
+                        "review_level": level if action == "调整等级" else r.get("final_level"),
+                        "action": action,
+                        "adjusted": adj,
+                        "evidence_note": note.strip(),
+                        "evidence_needed": r.get("evidence_needed", []),
+                        "source_report": st.session_state.report_json_name,
+                        "report_generated_at": None,
+                        "reviewed_at": reviewed_at,
+                    },
+                    ensure_ascii=False,
+                )
+            )
+        REVIEW_DIR.mkdir(exist_ok=True)
+        name = f"review_{datetime.now().strftime('%Y%m%d_%H%M%S')}.jsonl"
+        (REVIEW_DIR / name).write_text("\n".join(lines) + "\n", encoding="utf-8")
+        st.session_state.review_done = True
+        st.success(
+            f"复核完成:{name}(共 {len(lines)} 条,调级 {adjusted} 条,"
+            f"调级率 {adjusted / len(lines):.0%})——供规则库更新与评测统计使用。"
+        )
+
+
 # ---------------- 主流程 ----------------
 uploaded = st.file_uploader("上传企业材料(txt / docx / pdf)", type=["txt", "docx", "pdf"])
 
@@ -238,15 +365,35 @@ else:
         ):
             with footer_placeholder.container():
                 st.success("审查完成!")
-                st.download_button(
-                    "下载审查报告",
-                    data=st.session_state.report_text,
-                    file_name="compliance_report.md",
-                    mime="text/markdown",
-                    key="download_report",
-                )
+                dl_col1, dl_col2 = st.columns(2)
+                with dl_col1:
+                    st.download_button(
+                        "下载审查报告(Markdown)",
+                        data=st.session_state.report_text,
+                        file_name="compliance_report.md",
+                        mime="text/markdown",
+                        key="download_report",
+                    )
+                with dl_col2:
+                    if st.session_state.report_json:
+                        st.download_button(
+                            "下载结构化结果(JSON)",
+                            data=st.session_state.report_json,
+                            file_name="risk_report.json",
+                            mime="application/json",
+                            key="download_json",
+                            help=(
+                                f"后端已存档: {st.session_state.report_json_name}"
+                                if st.session_state.report_json_name
+                                else "含企业画像提示、规则命中清单与等级汇总"
+                            ),
+                        )
         else:
             footer_placeholder.empty()
+
+        # 报告就绪且不在运行中 -> 显示人工复核区
+        if st.session_state.review_finished and st.session_state.report_json and not st.session_state.running:
+            render_review_section()
 
         # 两段式,保证审查进行时按钮真正禁用(先 rerun 成禁用态,再干活):
         #   闲置 -> 点击设 running=True 并 rerun
@@ -295,6 +442,11 @@ else:
                         result_placeholder.markdown(st.session_state.report_text)
                         render_status(status_placeholder, st.session_state.tasks, False, True)
 
+                    elif t == "report_json":
+                        # 机器可读报告(画像/规则命中/等级汇总 + 报告全文)
+                        st.session_state.report_json = ev.get("content", "")
+                        st.session_state.report_json_name = ev.get("saved_as", "")
+
                     # thinking / assistant / tool_end 不展示:
                     #   前两者是模型口语化的自述("太好了、让我…"),太啰嗦不正式;
                     #   左侧只保留正式动作(读取/检索/命令数)与任务清单。
@@ -313,6 +465,9 @@ else:
                 st.session_state.trace_items = []
                 st.session_state.tasks = []
                 st.session_state.report_text = ""
+                st.session_state.report_json = ""
+                st.session_state.report_json_name = ""
                 st.session_state.review_finished = False
+                st.session_state.review_done = False
                 st.session_state.running = True
                 st.rerun()
