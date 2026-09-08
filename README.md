@@ -10,11 +10,19 @@
 
 | 层 | 文件/目录 | 说明 |
 |----|----------|------|
-| 前端展示 | `app.py` | Streamlit 网页:上传文件、调后端 SSE、展示步骤/操作、下载报告 |
-| 后端编排 | `server.py` | FastAPI 暴露 `/review/stream`,用 `claude-agent-sdk` 调起 agent,把消息转成 SSE 事件 |
+| 前端展示 | `app.py` | Streamlit 网页:上传文件、调后端 SSE、展示步骤/操作、下载报告、人工复核 |
+| 后端编排 | `server.py` | FastAPI 暴露 `/review/stream`,用 `claude-agent-sdk` 调起 agent,把消息转成 SSE 事件;审查结果同步落盘 `risk_report.json` |
+| 风险规则库 | `claude-code-plugin/ai-startup-compliance-review/risk_rules.yaml` | 8 大类 18 条风险触发规则(触发词/语义线索/默认等级/一票升级),Policy-as-Code |
+| 规则预扫描 | `.../scripts/detect_risks.py` | 对材料做确定性规则匹配,输出命中规则与等级(JSON),agent 复核用 |
 | 知识与技能 | `claude-code-plugin/ai-startup-compliance-review/` | 后端实际挂载的本地插件:skill、法律语料、脚本、MCP 声明 |
 
-数据流:`浏览器 → app.py(前端) → server.py(后端) → agent(+插件/语料/MCP) → 报告 & 过程回流`
+数据流:`浏览器 → app.py(前端) → server.py(后端) → agent(+规则库/插件/语料/MCP) → Markdown 报告 + risk_report.json & 过程回流 → 人工复核记录(reviews/)`
+
+**一次审查会产出三样东西:**
+
+1. **Markdown 审查报告**(右侧展示、可下载)——结论、风险等级、匹配法条、整改建议;
+2. **`risk_report.json` 结构化结果**(可下载;后端同时存档到 `reports/`)——企业画像提示、规则库命中清单(规则号/等级/一票升级/所需证据)、等级汇总;
+3. **人工复核记录**——报告生成后页面底部出现「人工复核」区,L3/L4 标记"必须复核",可逐条 认可初评/调整等级/补充依据/退回重审,提交后落盘 `reviews/*.jsonl`,用于调级率统计与规则库更新。
 
 ---
 
@@ -83,7 +91,7 @@ streamlit run app.py
 
 ### 步骤 7 · 使用
 
-浏览器打开 **http://localhost:8501** → 上传一份企业材料(txt/docx/pdf)→ 点「开始合规审查」。左侧看审查步骤和执行过程,右侧等最终报告(视模型约几分钟),完成后可下载。
+浏览器打开 **http://localhost:8501** → 上传一份企业材料(txt/docx/pdf)→ 点「开始合规审查」。左侧看审查步骤和执行过程,右侧等最终报告(视模型约几分钟),完成后可下载 **Markdown 报告**与**结构化 JSON** 两种格式;页面底部「人工复核」区可对命中风险逐条 认可/调级/补证/退回,复核记录自动落盘 `reviews/`。
 
 ---
 
@@ -262,10 +270,15 @@ PKULAW_CITATION_VALIDATOR_URL=...
 ├── requirements.txt            # 后端基础依赖
 ├── .env.example                # 环境变量示例(复制成 .env 使用)
 ├── CLAUDE_CODE接入说明.md       # 插件市场 & 北大法宝 MCP 详细接入说明
+├── reports/                    # 每次审查的 risk_report.json 存档(自动生成,不入库)
+├── reviews/                    # 人工复核记录(*.jsonl,自动生成,不入库)
 └── claude-code-plugin/ai-startup-compliance-review/
     ├── .mcp.json               # 北大法宝 MCP 声明(读取 PKULAW_* 环境变量)
+    ├── risk_rules.yaml         # 风险触发规则库(8 类 18 条 + 一票升级)
     ├── legal_preference_txt/   # 本地法律语料(MCP 不可用时的兜底来源)
-    └── skills/ai-startup-compliance-review/SKILL.md   # 审查 skill 主说明
+    └── skills/ai-startup-compliance-review/
+        ├── SKILL.md            # 审查 skill 主说明(含规则库预扫描步骤)
+        └── scripts/            # detect_risks.py / score_risk.py / check_report_structure.py
 ```
 
 > `plugin/` 是更完整的参考资料与镜像 skill;改 skill 或语料时,`plugin/` 与 `claude-code-plugin/` 两边保持一致。
