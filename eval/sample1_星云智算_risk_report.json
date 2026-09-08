@@ -1,0 +1,169 @@
+{
+  "generated_at": "2026-09-09T00:52:14",
+  "model": "",
+  "material": {
+    "chars": 722,
+    "preview": "AI初创企业数据合规与产品上线方案（测试版）\n企业名称：星云智算（北京）科技有限公司\n文档用途：内部合规评审（测试文件）\n版本：V0.9（草案）\n一、项目概况\n公司拟上线一款生成式AI办公助手“NovaAI”，提供文档总结、合同分析、智能客服等功能。系统收集用户姓名、手机号、邮箱、聊天记录、上传文件及设备信息，并计划使用部分用户数据持续优化模型。\n二、拟开展的数据处理活动\n收集用户姓名、手机号、身"
+  },
+  "risk_scan": {
+    "profile_hints": {
+      "生成式AI服务": {
+        "生成式": 3
+      }
+    },
+    "matched_rules": [
+      {
+        "id": "DATA-003",
+        "category": "数据合规风险",
+        "risk_type": "数据出境与跨境传输风险",
+        "matched_keywords": {
+          "跨境": 1,
+          "境外": 1
+        },
+        "default_level": "L3",
+        "final_level": "L3",
+        "escalated": false,
+        "escalation_detail": [],
+        "human_review_required": true,
+        "semantic_cues": "向境外提供个人信息或重要数据",
+        "evidence_needed": [
+          "数据出境安全评估报告",
+          "标准合同备案",
+          "认证证书"
+        ],
+        "remediation_hint": "完成出境评估/标准合同/认证三选一, 明确境外接收方义务",
+        "refs": {
+          "scenario": "scenario-cross-border.md",
+          "domain": "domain-data-compliance.md"
+        }
+      },
+      {
+        "id": "PI-002",
+        "category": "个人信息与敏感个人信息风险",
+        "risk_type": "未成年人信息保护风险",
+        "matched_keywords": {
+          "未成年人": 1
+        },
+        "default_level": "L3",
+        "final_level": "L3",
+        "escalated": false,
+        "escalation_detail": [],
+        "human_review_required": true,
+        "semantic_cues": "面向未成年人提供产品或处理其个人信息",
+        "evidence_needed": [
+          "年龄识别机制",
+          "监护人同意流程",
+          "未成年人模式说明"
+        ],
+        "remediation_hint": "建立年龄识别与监护人同意机制, 限制画像与精准推荐",
+        "refs": {
+          "domain": "domain-data-compliance.md"
+        }
+      },
+      {
+        "id": "DATA-002",
+        "category": "数据合规风险",
+        "risk_type": "数据台账与删除机制缺失风险",
+        "matched_keywords": {
+          "永久保存": 1
+        },
+        "default_level": "L2",
+        "final_level": "L2",
+        "escalated": false,
+        "escalation_detail": [],
+        "human_review_required": false,
+        "semantic_cues": "缺少数据资产记录、保存期限约定或删除响应机制",
+        "evidence_needed": [
+          "数据清单",
+          "保存期限政策",
+          "删除流程说明"
+        ],
+        "remediation_hint": "建立数据清单与保存期限政策, 提供删除响应通道",
+        "refs": {
+          "domain": "domain-data-compliance.md"
+        }
+      },
+      {
+        "id": "GOV-002",
+        "category": "行业监管与合规治理风险",
+        "risk_type": "生成式AI服务合规风险",
+        "matched_keywords": {
+          "生成式人工智能": 2
+        },
+        "default_level": "L2",
+        "final_level": "L2",
+        "escalated": false,
+        "escalation_detail": [],
+        "human_review_required": false,
+        "semantic_cues": "面向公众提供生成式AI服务",
+        "evidence_needed": [
+          "安全评估报告",
+          "算法备案记录",
+          "内容审核机制"
+        ],
+        "remediation_hint": "完成安全评估与算法备案, 建立内容审核与标注机制",
+        "refs": {
+          "scenario": "scenario-product-launch.md",
+          "domain": "domain-ai-governance.md"
+        }
+      },
+      {
+        "id": "PI-001",
+        "category": "个人信息与敏感个人信息风险",
+        "risk_type": "个人信息收集与告知同意风险",
+        "matched_keywords": {
+          "隐私政策": 1,
+          "用户数据": 1
+        },
+        "default_level": "L2",
+        "final_level": "L2",
+        "escalated": false,
+        "escalation_detail": [],
+        "human_review_required": false,
+        "semantic_cues": "收集使用个人信息但告知同意机制不完整",
+        "evidence_needed": [
+          "隐私政策",
+          "同意记录",
+          "数据字段清单"
+        ],
+        "remediation_hint": "完善隐私政策与同意记录, 明确保存期限与删除机制",
+        "refs": {
+          "domain": "domain-data-compliance.md"
+        }
+      },
+      {
+        "id": "SEC-001",
+        "category": "网络安全与数据安全风险",
+        "risk_type": "安全措施缺失风险",
+        "matched_keywords": {
+          "数据泄露": 1
+        },
+        "default_level": "L2",
+        "final_level": "L2",
+        "escalated": false,
+        "escalation_detail": [],
+        "human_review_required": false,
+        "semantic_cues": "缺少加密、访问控制、日志留存等基线安全措施",
+        "evidence_needed": [
+          "安全措施说明",
+          "日志留存机制",
+          "应急预案"
+        ],
+        "remediation_hint": "落实加密存储、访问控制与日志留存, 制定应急预案",
+        "refs": {
+          "domain": "domain-cybersecurity.md"
+        }
+      }
+    ],
+    "summary": {
+      "total_matched": 6,
+      "by_level": {
+        "L3": 2,
+        "L2": 4
+      },
+      "human_review_required": 2
+    }
+  },
+  "report_markdown": "现在我将执行任务#6：对比分析风险点。我需要结合之前提到的技能规则，对比相关法规来识别风险点。\n\n从待审查材料中，我识别出以下主要风险点：\n\n1. 个人信息保护风险：\n   - 材料显示公司收集用户姓名、联系方式、公司信息等个人信息，但未明确说明获得用户同意\n   - 根据《个人信息保护法》，处理个人信息应当取得个人同意\n\n2. 数据跨境传输风险：\n   - 材料提到将部分数据存储于境外服务器，这涉及数据跨境传输\n   - 根据《数据安全法》和《个人信息保护法》，重要数据和敏感个人信息跨境需满足特定条件\n\n3. 数据处理透明度风险：\n   - 业务模式中提到\"在未经明确告知的情况下，使用客户提供的数据优化自身算法\"\n   - 违反了个人信息处理的透明度原则\n\n4. 数据安全保障风险：\n   - 材料提到\"未部署完善的数据加密措施\"\n   - 不符合《网络安全法》《数据安全法》关于采取必要安全措施的要求\n\n5. 缺乏合规管理制度：\n   - 材料提到\"尚未建立完善的合规体系\"、\"缺乏专门的数据保护政策\"\n   - 不符合法律法规对企业建立数据合规制度的要求\n\n这些是我根据材料内容和相关法规初步识别的风险点。\n\n",
+  "schema_version": "1.0"
+}
