@@ -1,292 +1,126 @@
 # AI 初创企业合规审查系统
 
-面向法律/合规场景的 agent 应用。用户在网页上传企业材料后,前端把文本发给后端;后端通过 `claude-agent-sdk` 调起 agent,挂载本仓库内的本地 skill 与法律语料,生成一份 Markdown 合规审查报告,并把审查步骤、执行过程以 SSE 流实时回传给前端展示。
+Windows 本机合规审查工作台。上传企业材料，查看审查进度、报告和规则预扫描风险清单，再逐项完成人工复核。
 
-> 本文档面向**第一次拉代码的人**,照着从上到下做即可跑通。命令给的是通用形式,Windows 用 PowerShell、Mac/Linux 用终端,差异处会单独标注。
+## 使用便携包
 
----
+1. 解压 `AI-Compliance-Workbench-Windows-x64.zip` 到可写目录，打开其中的 `AI-Compliance-Workbench` 文件夹。
+2. 双击 **启动应用.vbs**，浏览器自动打开本机工作台。无需安装 Python、Node、Git 或管理员权限。
+3. 点击右上角 **设置**，在 **模型服务** 中选择服务商、填写密钥，点击 **测试模型连接**，成功后点击 **保存设置**。测试连接不会自动保存配置。DeepSeek 预设自动填写 Anthropic 兼容地址和 `deepseek-v4-flash`。自定义地址与鉴权位于“服务地址与鉴权”；已有 Claude 登录的用户可在其中选择“使用本机 Claude 登录”。
+4. 上传 TXT、DOCX 或文字型 PDF，点击 **开始审查**。完成后下载 Markdown/JSON 报告，在 **人工复核** 中逐项确认并提交。
+5. 使用完毕，双击 **停止应用.vbs**。关闭浏览器标签不会停止后台审查。
 
-## 一、项目架构
+未配置模型时，可在 **审查示例** 区域点击 **查看示例报告**，报告页会提示当前为合成案例；该操作不调用模型、不产生正式复核记录。正式审查和连接测试需要联网，使用所配置模型账户的额度。材料在本机解析，提取文本会发送到所配置的模型服务。
 
-| 层 | 文件/目录 | 说明 |
-|----|----------|------|
-| 前端展示 | `app.py` | Streamlit 网页:上传文件、调后端 SSE、展示步骤/操作、下载报告、人工复核 |
-| 后端编排 | `server.py` | FastAPI 暴露 `/review/stream`,用 `claude-agent-sdk` 调起 agent,把消息转成 SSE 事件;审查结果同步落盘 `risk_report.json` |
-| 风险规则库 | `claude-code-plugin/ai-startup-compliance-review/risk_rules.yaml` | 8 大类 18 条风险触发规则(触发词/语义线索/默认等级/一票升级),Policy-as-Code |
-| 规则预扫描 | `.../scripts/detect_risks.py` | 对材料做确定性规则匹配,输出命中规则与等级(JSON),agent 复核用 |
-| 知识与技能 | `claude-code-plugin/ai-startup-compliance-review/` | 后端实际挂载的本地插件:skill、法律语料、脚本、MCP 声明 |
+默认监听 `http://127.0.0.1:8000`，端口已占用时自动选择空闲端口。重复启动会打开已运行的实例，不启动第二份服务。仅面向 Windows 10/11 x64 本机单用户使用。
 
-数据流:`浏览器 → app.py(前端) → server.py(后端) → agent(+规则库/插件/语料/MCP) → Markdown 报告 + risk_report.json & 过程回流 → 人工复核记录(reviews/)`
+## 工作台操作
 
-**一次审查会产出三样东西:**
+1. **准备材料**：在“待审查材料”区域选择或拖入一份文件。解析完成后核对文件名，可展开“材料预览”检查提取文本。需要更换文件时再次选择或拖入。
+2. **开始审查**：点击 **开始审查**。若按钮显示 **配置模型并审查**，先完成模型配置，再开始任务。审查过程中可查看当前步骤和执行进度；需要中止时点击 **取消审查**。
+3. **阅读结果**：完成后在 **审查报告** 中阅读正文，在 **风险清单** 中按风险或规则编号搜索、按等级筛选，并打开条目查看命中关键词、所需证据与整改方向。
+4. **人工复核**：切换到 **人工复核**，为每个命中项选择“认可初评”“调整等级”“补充依据”或“退回重审”。调整等级时选择复核等级；调级、补证或退回时填写依据。填写完整后点击 **提交复核**；成功后记录存档，当前页面不可再次编辑。
+5. **导出与继续**：通过 **下载报告** 选择 Markdown 或 JSON。审查下一份材料时点击右上角 **新建审查**，按弹窗确认清空当前页面。该操作不会删除已保存的报告和复核记录。
 
-1. **Markdown 审查报告**(右侧展示、可下载)——结论、风险等级、匹配法条、整改建议;
-2. **`risk_report.json` 结构化结果**(可下载;后端同时存档到 `reports/`)——企业画像提示、规则库命中清单(规则号/等级/一票升级/所需证据)、等级汇总;
-3. **人工复核记录**——报告生成后页面底部出现「人工复核」区,L3/L4 标记"必须复核",可逐条 认可初评/调整等级/补充依据/退回重审,提交后落盘 `reviews/*.jsonl`,用于调级率统计与规则库更新。
+手机窄屏下，右上角“设置”显示为滑杆图标，审查示例排列在材料上传区域下方。工作台入口和设置均位于页面顶部。
 
----
+## 配置与数据
 
-## 二、运行前需要准备
+所有本机配置和产物保存在 `%LOCALAPPDATA%\AIComplianceWorkbench`：
 
-1. **Python 3.10+**(建议 3.11/3.12;本项目在 3.13 上验证过)。检查:`python --version`
-2. **一个能用的模型接入**(三选一):
-   - 一个 `ANTHROPIC_API_KEY`(见 [四、鉴权](#四鉴权)),**或**
-   - 一个**付费的 Claude 订阅账号**(Pro/Max/Team,用于登录),**或**
-   - 国产模型(豆包/通义/DeepSeek)的 key,走兼容端点(见 [六、接入其他模型](#六接入其他模型glm--豆包--通义千问--deepseek))
-3. 不需要单独安装 Node 或 Claude CLI —— `claude-agent-sdk` **自带内置 CLI**。
+| 目录或文件 | 内容 |
+| --- | --- |
+| `settings.json` | 模型和可选 MCP 配置；密钥使用 Windows DPAPI 加密 |
+| `reports/` | 已生成的结构化报告，包含报告正文及材料短预览 |
+| `reviews/` | 与报告 ID 关联的逐项复核记录，JSONL 格式 |
+| `logs/startup.log` | 启动失败的脱敏提示 |
+| `instance.json` | 当前服务的进程及端口记录 |
 
----
+DPAPI 密钥绑定当前 Windows 用户，拷贝配置到其他用户或机器后需重新填写。界面不读取密钥明文，不使用浏览器持久化存储保存密钥。修改设置对下一次审查生效；服务地址或鉴权方式变化时需要重新填写模型密钥。
 
-## 三、快速开始(按顺序做)
+界面设置优先于源码目录 `.env` 和环境变量；尚未保存界面设置时才读取后两者。网络连接默认直连，不继承启动终端的代理；需要代理时选择“使用系统代理”，支持 HTTP(S) 代理。测试和正式审查使用同一网络设置与审查引擎。连接失败会区分鉴权、余额、限流、无效请求、超时及运行环境问题。
 
-### 步骤 1 · 获取代码
+“法规检索”默认使用本地法规与案例。有北大法宝服务的用户可开启在线检索，选择已开通的服务，填写对应 URL 和可选访问令牌。关闭在线检索会保留已保存的连接资料，但审查不加载这些连接。原有非空 MCP 地址配置会自动迁移为启用状态。“测试模型连接”仅验证模型与审查引擎，不验证在线法规服务。
 
-```bash
-git clone https://github.com/xvvic/ai-compliance-review.git
-cd ai-compliance-review
-```
+单实例同时审查一份材料。刷新页面可恢复本次服务实例中的任务与结果；停止服务后不恢复页面状态，但已保存的报告和复核文件仍保留。本版不提供历史记录中心。
 
-### 步骤 2 · 安装依赖
+## 文件与复核
 
-```bash
-pip install -r requirements.txt
-pip install streamlit python-docx pypdf requests
-```
+- 单文件不超过 20MB，提取文本不超过 30 万字符。DOCX 提取段落和表格；PDF 支持可提取文字的文档，不包含 OCR。
+- 风险清单来自确定性规则预扫描，与 Agent 报告分别展示，不代表两者等级一定相同。预扫描失败会提示“未完成”，不会当成无风险。
+- L3/L4 和规则要求的项目标记为必须复核。所有命中项需选择复核动作；调级、补证及退回需填写依据。复核不会改写原始报告。
+- 审查失败或取消不生成成功报告。报告生成但磁盘保存失败时，页面明确提示并允许下载；复核写入失败可重试。
+- “退回重审”记录复核决定，不自动再次调用模型；补充材料后新建审查。
 
-> 🇨🇳 国内如果 `pip` 报 `403 Forbidden`(镜像抽风),换阿里云源重试:
-> `pip install -r requirements.txt -i https://mirrors.aliyun.com/pypi/simple/`
+## 源码开发
 
-### 步骤 3 · 创建并填写 `.env`
-
-复制示例文件,得到你自己的 `.env`(它已被 `.gitignore`,不会上传):
-
-```bash
-# Windows
-copy .env.example .env
-# Mac/Linux
-cp .env.example .env
-```
-
-然后编辑 `.env`,**至少填好鉴权**(下一步详解)。用 Claude 时模型建议保留 `CLAUDE_CODE_MODEL=sonnet`;想用国产免费模型见 [六](#六接入其他模型glm--豆包--通义千问--deepseek)。北大法宝 MCP 那几行是可选的,不填也能跑。
-
-### 步骤 4 · 完成鉴权
-
-见下方 [四、鉴权](#四鉴权)。**最简单的方式**:在 `.env` 里填 `ANTHROPIC_API_KEY=sk-ant-你的key`,这一步就完成了,可直接跳到步骤 5。
-
-### 步骤 5 · 启动后端(开一个终端窗口)
-
-```bash
-python server.py
-```
-
-看到 `Uvicorn running on http://0.0.0.0:8000` 即成功。**保持这个窗口不关。**
-
-### 步骤 6 · 启动前端(再开一个终端窗口)
-
-```bash
-streamlit run app.py
-```
-
-它会打印 `Local URL: http://localhost:8501`。
-
-### 步骤 7 · 使用
-
-浏览器打开 **http://localhost:8501** → 上传一份企业材料(txt/docx/pdf)→ 点「开始合规审查」。左侧看审查步骤和执行过程,右侧等最终报告(视模型约几分钟),完成后可下载 **Markdown 报告**与**结构化 JSON** 两种格式;页面底部「人工复核」区可对命中风险逐条 认可/调级/补证/退回,复核记录自动落盘 `reviews/`。
-
----
-
-## 四、鉴权
-
-`claude-agent-sdk` 用它**自带的内置 claude CLI**(无需你另外安装 Claude CLI)。它需要能通过鉴权,**二选一**(想用国产模型跳到 [六](#六接入其他模型glm--豆包--通义千问--deepseek)):
-
-### 方式 A:用 API Key(推荐,最省事)
-
-在 `.env` 里填:
-
-```dotenv
-ANTHROPIC_API_KEY=sk-ant-xxxxxxxx
-```
-
-- 高校学生可用学校邮箱在 https://console.anthropic.com 申请「Claude for Student Builders」免费额度,拿到 `sk-ant-` 开头的 key。
-- 填好即可,`server.py` 用 `load_dotenv()` 会自动读取。
-
-### 方式 B:用订阅账号登录(需付费 Claude 套餐)
-
-不填 API Key 时,需要登录 SDK 自带的内置 CLI。先找到它的路径:
-
-```bash
-python -c "import claude_agent_sdk, os; print(os.path.join(os.path.dirname(claude_agent_sdk.__file__), '_bundled'))"
-```
-
-在上面打印出的目录里,有 `claude.exe`(Windows)或 `claude`(Mac/Linux)。执行登录:
+需要 Windows x64、Python 3.13 和 Node.js 22+。首次安装与构建：
 
 ```powershell
-# Windows(把 <上面的目录> 换成实际路径)
-& "<上面的目录>\claude.exe" auth login --claudeai
-```
-```bash
-# Mac/Linux
-"<上面的目录>/claude" auth login --claudeai
-```
-
-浏览器授权后,用同一个可执行文件确认:
-
-```bash
-<内置claude> auth status     # 看到 "loggedIn": true 即成功
+python -m venv .venv
+.venv\Scripts\python.exe -m pip install -r requirements.lock
+npm --prefix frontend ci
+npm --prefix frontend run build
+.venv\Scripts\python.exe launcher.py start
 ```
 
-> ⚠️ 登录用的账号**必须有付费套餐**(Pro/Max/Team),否则授权时会被跳到升级付费页。免费账号请改用方式 A,或用国产模型(见 [六](#六接入其他模型glm--豆包--通义千问--deepseek))。
+之后可双击源码目录的 `start.vbs` / `stop.vbs`。`python app.py` 也是新启动器的兼容入口。生产使用不再依赖 Streamlit。
 
----
+开发前端时，在两个终端分别运行：
 
-## 五、更换 / 选择 Claude 模型
-
-用 Claude 时,模型由 `.env` 里的 `CLAUDE_CODE_MODEL` 决定。可选值与取舍:
-
-| 值 | 特点 | 一次审查耗时(参考) |
-|----|------|------------------|
-| `haiku` | 最快,但复杂任务/审查步骤规划不稳定 | ~3 分钟 |
-| `sonnet` | 均衡,步骤规划稳定,质量好(**推荐**) | ~6 分钟 |
-| 不填(默认 Opus) | 质量最高,最慢 | 更久 |
-
-**怎么换(三步):**
-
-1. 编辑 `.env`,改这一行,例如 `CLAUDE_CODE_MODEL=sonnet`(想用默认 Opus,就把这行删掉或用 `#` 注释掉);
-2. **重启后端**:到运行 `server.py` 的窗口按 `Ctrl+C` 停掉,再 `python server.py`。
-   ⚠️ 模型是**后端启动时读取**的,`.env` 改完**不重启不生效**;
-3. 前端**不用**重启,浏览器刷新页面即可。
-
-> - 慢的主因是 skill 工作流本身重(读很多参考文件、多轮检索),不是模型;换更快的模型收效有限。
-> - 可选 `CLAUDE_CODE_FALLBACK_MODEL`:主模型不可用时自动兜底的备用模型。
-
----
-
-## 六、接入其他模型(GLM / 豆包 / 通义千问 / DeepSeek)
-
-没有 Claude 付费额度?想蹭国产模型的免费/便宜额度?可以。智谱 GLM、豆包、通义千问、DeepSeek 都提供了 **"Anthropic 兼容端点"**(专门给 Claude Code 这类工具用):这些模型本身不认 Claude 接口,但各自架了一层"翻译",你把请求地址指过去就能用。
-
-只需在 `.env` 里加/改几个变量,**改完重启后端**即可。三条通用规则:
-
-- 第三方端点一律用 **`ANTHROPIC_AUTH_TOKEN`**(**不要**用 `ANTHROPIC_API_KEY`;两者不能同时设,否则鉴权冲突);
-- 有了 `ANTHROPIC_BASE_URL` 后,把原来那行 `CLAUDE_CODE_MODEL` **删掉或注释**,模型改由 `ANTHROPIC_MODEL` 指定;
-- 下面的地址/模型名截至编写时有效,**以各家官方文档为准**(附了链接)。
-
-### 智谱 GLM(BigModel)
-
-```dotenv
-ANTHROPIC_BASE_URL=https://open.bigmodel.cn/api/anthropic
-ANTHROPIC_AUTH_TOKEN=你的智谱APIKey
-ANTHROPIC_MODEL=glm-5.2                     # 也可用 glm-4.6 等
+```powershell
+.venv\Scripts\python.exe server.py
+npm --prefix frontend run dev
 ```
 
-- key 在智谱开放平台 https://open.bigmodel.cn 申请。官方接入文档:https://docs.bigmodel.cn/cn/coding-plan/quick-start
-- 国际版(z.ai)用户把地址换成 `https://api.z.ai/api/anthropic`。
+开发页由 Vite 打印地址；接口通过本机代理访问 FastAPI。运行数据可通过 `COMPLIANCE_DATA_DIR` 指向独立测试目录，服务端口可通过 `COMPLIANCE_PORT` 设置。
 
-### DeepSeek
+## 测试与构建便携包
 
-```dotenv
-ANTHROPIC_BASE_URL=https://api.deepseek.com/anthropic
-ANTHROPIC_AUTH_TOKEN=sk-你的DeepSeek密钥
-ANTHROPIC_MODEL=deepseek-v4-flash          # 便宜、快;要更强用 deepseek-v4-pro
+```powershell
+.venv\Scripts\python.exe -m pip install pytest pytest-asyncio
+.venv\Scripts\python.exe -m pytest tests -q
+npm --prefix frontend test
+cd frontend
+npx playwright test
+cd ..
+.venv\Scripts\python.exe scripts\build_portable.py
 ```
 
-- key 在 https://platform.deepseek.com 申请。官方接入文档:https://api-docs.deepseek.com/quick_start/agent_integrations/claude_code/
-- 注:旧模型名 `deepseek-chat` / `deepseek-reasoner` 将于 2026-07-24 停用,请用上面的 `v4` 名字。
+浏览器测试默认使用本机 Chrome，启动独立测试服务器和模拟 Agent，不消耗模型额度。截图位于 `output/playwright/`。构建脚本输出 ZIP、SHA256 文件和解压目录到 `dist/`；下载缓存在 `build/downloads/`。可使用 `--skip-frontend` 复用已有前端构建，或 `--proxy http://host:port` 指定仅本次构建使用的代理。
 
-### 通义千问(阿里云百炼 Model Studio)
+便携包包含嵌入式 Python、锁定依赖、SDK 内置 CLI、PortableGit、本地插件语料、字体和前端资源。第三方许可保留在依赖目录、字体目录和 `licenses/`。发布包排除 Git 元数据、真实配置、用户上传材料和运行日志。
 
-```dotenv
-ANTHROPIC_BASE_URL=https://dashscope.aliyuncs.com/apps/anthropic
-ANTHROPIC_AUTH_TOKEN=sk-你的百炼APIKey
-ANTHROPIC_MODEL=qwen3-coder-plus           # 具体模型名以百炼文档为准
+## 结构与接口
+
+| 模块 | 职责 |
+| --- | --- |
+| `frontend/` | React、TypeScript、Ant Design 企业工作台 |
+| `server.py`、`workbench/` | 文件解析、配置、单任务审查、SSE、报告与人工复核 |
+| `launcher.py` | 本机进程管理、端口选择、浏览器启动 |
+| `claude-code-plugin/ai-startup-compliance-review/` | 审查技能、规则与语料 |
+| `scripts/` | 依赖锁定、合成示例生成和便携包构建 |
+
+`POST /review/stream` 保留 `document_text` 输入及 `todos`、`tool_start`、`final`、`report_json` 成功事件，新增 `started`、`error`、`done` 和审查 ID。最终以 `done.status` 判断成功、失败或取消。
+
+其他接口：`/api/health`、`/api/session`、`/api/config`、`/api/config/test`、`/api/documents/parse`、`/api/review/current`、`/api/review/{id}/events`、`/api/review/{id}/cancel`、`/api/review/{id}/decisions`、`/api/example`。写请求必须携带 `/api/session` 返回的 `x-session-token`，仅接受同源本机请求。
+
+## 常见问题
+
+| 现象 | 处理 |
+| --- | --- |
+| 双击没有打开页面 | 确认完整解压；检查本地应用数据目录的 `logs/startup.log` |
+| Windows 禁用 VBS | 终端运行 `runtime\python\python.exe launcher.py start`；停止时将 `start` 换成 `stop` |
+| 模型连接失败 | 检查服务地址、鉴权方式、模型名称和额度；第三方服务必须兼容 Anthropic 协议 |
+| 已保存配置无法读取 | 换机或换用户后重新填写密钥并保存 |
+| PDF 没有提取文字 | 使用文字型 PDF，或先完成 OCR |
+| 报告保存失败 | 先下载报告，再检查用户数据目录权限与磁盘空间 |
+
+Git 新增提交使用 `LegalAgent <legalagent@example.com>` 作为作者和提交者。可在当前仓库设置提交身份：
+
+```powershell
+git config --local user.name "LegalAgent"
+git config --local user.email "legalagent@example.com"
 ```
 
-- 百炼对新用户有免费额度;key 在阿里云百炼控制台申请。官方接入文档:https://help.aliyun.com/zh/model-studio/claude-code
-- 若用官方 Coding Plan,地址换成 `https://coding.dashscope.aliyuncs.com/apps/anthropic` 并使用 `sk-sp-` 专用 key(详见文档)。
-
-### 豆包(火山方舟 Coding Plan)
-
-```dotenv
-ANTHROPIC_BASE_URL=https://ark.cn-beijing.volces.com/api/coding
-ANTHROPIC_AUTH_TOKEN=你的火山方舟APIKey
-ANTHROPIC_MODEL=doubao-seed-code-preview-latest   # 或 ark-code-latest(自动跟最新)
-CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1         # 火山建议加,避免连接报错
-```
-
-- key 在火山引擎方舟控制台申请。官方接入文档:https://www.volcengine.com/docs/82379/1928262
-
-### ⚠️ 重要提醒:换非 Claude 模型可能变"笨"
-
-能跑,但**很可能让 agent 表现下降**:审查步骤规划、skill 触发、工具调用、MCP 都是**针对 Claude 调校的**,能力较弱的模型常见问题:
-
-- 不好好规划步骤 → 左侧「审查步骤」面板空;
-- skill 不按套路走、法条检索/报告质量下降。
-
-**建议:先用 Claude(方式 A/B)把流程跑通、确认效果,再换国产模型试。** 换了之后如果发现变笨了,那是模型能力差异,不是前端 bug。
-
----
-
-## 七、北大法宝 MCP(可选)
-
-- **不配置也能运行**:skill 设计为「先查本地语料 `legal_preference_txt/`,不足时才用 MCP」,所以缺 MCP 时会自动用本地语料兜底,照样出报告。
-- 要启用真实法条检索,需从**北大法宝控制台**获取并在 `.env` 里填这 6 个值(变量名别写错):
-
-```dotenv
-PKULAW_ACCESS_TOKEN=...
-PKULAW_LAW_SEARCH_URL=...
-PKULAW_LAW_KEYWORD_URL=...
-PKULAW_CASE_SEMANTIC_URL=...
-PKULAW_LAW_ITEM_URL=...
-PKULAW_CITATION_VALIDATOR_URL=...
-```
-
-- 这些 URL/token 绑定你们的**购买实例**,只能自行获取。详见 [CLAUDE_CODE接入说明.md](CLAUDE_CODE接入说明.md)。
-- 验证:启动后 `/mcp` 能看到 5 个 pkulaw 服务且能实际调用,才算通。
-
----
-
-## 八、常见问题排查
-
-| 现象 | 原因 & 解决 |
-|------|-----------|
-| 报告区显示 `审查出错:Claude Code returned an error result: success` | **没鉴权**。填好 `ANTHROPIC_API_KEY`,或用方式 B 登录(`auth status` 确认 `loggedIn: true`),或按 [六](#六接入其他模型glm--豆包--通义千问--deepseek) 配国产模型。 |
-| 授权时浏览器跳到 Upgrade/付费页 | 登录的账号没有付费套餐。换有 Pro/Max 的账号,或改用 API Key(方式 A),或用国产模型。 |
-| `pip install` 报 403 | 换源:`-i https://mirrors.aliyun.com/pypi/simple/`。 |
-| 前端报「连接后端失败」 | 后端没起或地址不对。确认步骤 5 的窗口在跑、侧边栏地址是 `http://127.0.0.1:8000/review/stream`。 |
-| 端口 8000/8501 被占用 | 关掉占用的进程,或换端口:后端改 `server.py` 里的 `port=`;前端 `streamlit run app.py --server.port 8600`。 |
-| 上传后提示「文件解析为空」 | 多为扫描版 PDF(图片)无法提取文字。换文字版 PDF/docx/txt。 |
-| `/mcp` 里 pkulaw 服务调不通 | 6 个 PKULAW 变量没填或填错;不影响出报告(走本地语料)。 |
-| 审查步骤没规划出来 / 左侧步骤面板空 | 模型能力波动,`haiku` 和国产模型尤其明显。改用 `CLAUDE_CODE_MODEL=sonnet`。 |
-| 配了国产模型仍连不上 | 检查是否用了 `ANTHROPIC_AUTH_TOKEN`(不是 `ANTHROPIC_API_KEY`)、`ANTHROPIC_BASE_URL` 是否正确、改后是否重启了后端。 |
-
----
-
-## 九、目录结构
-
-```
-.
-├── app.py                      # 前端入口(Streamlit)
-├── server.py                   # 后端入口(FastAPI + claude-agent-sdk)
-├── requirements.txt            # 后端基础依赖
-├── .env.example                # 环境变量示例(复制成 .env 使用)
-├── CLAUDE_CODE接入说明.md       # 插件市场 & 北大法宝 MCP 详细接入说明
-├── reports/                    # 每次审查的 risk_report.json 存档(自动生成,不入库)
-├── reviews/                    # 人工复核记录(*.jsonl,自动生成,不入库)
-└── claude-code-plugin/ai-startup-compliance-review/
-    ├── .mcp.json               # 北大法宝 MCP 声明(读取 PKULAW_* 环境变量)
-    ├── risk_rules.yaml         # 风险触发规则库(8 类 18 条 + 一票升级)
-    ├── legal_preference_txt/   # 本地法律语料(MCP 不可用时的兜底来源)
-    └── skills/ai-startup-compliance-review/
-        ├── SKILL.md            # 审查 skill 主说明(含规则库预扫描步骤)
-        └── scripts/            # detect_risks.py / score_risk.py / check_report_structure.py
-```
-
-> `plugin/` 是更完整的参考资料与镜像 skill;改 skill 或语料时,`plugin/` 与 `claude-code-plugin/` 两边保持一致。
-
----
-
-## 十、备注
-
-- 前后端要分别在**两个终端**里常驻;关掉窗口服务就停。
-- `.env` 含密钥,**切勿提交**(已在 `.gitignore` 中)。分享配置请改 `.env.example`。
-- 运行时 agent 可能在插件目录里生成 `search*.txt` 等临时文件,属正常产物,不必提交。
+提交前检查暂存内容，不提交真实密钥、个人目录路径、用户材料或运行日志；保留第三方许可与署名，不改写既有共享历史。

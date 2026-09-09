@@ -27,3 +27,11 @@ AGENTS.md
 reports/
 reviews/
 claude-code-plugin/ai-startup-compliance-review/search[0-9]*.txt
+node_modules/
+frontend/dist/
+dist/
+build/
+output/
+.pytest_cache/
+.playwright-cli/
+*.tsbuildinfo

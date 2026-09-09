@@ -1,294 +1,205 @@
-"""
-AI合规审查系统 - 后端接口(修正版)
-============================================
-安装:
-    pip install claude-agent-sdk fastapi uvicorn python-dotenv
-前提:
-    - 已登录 Claude Code，或环境变量 ANTHROPIC_API_KEY 可用
-    - 可选: 用 CLAUDE_CODE_MODEL / CLAUDE_CODE_FALLBACK_MODEL 指定模型
-    - 默认以 full access 启动 Claude agent，避免因权限确认卡住
-    - skill 放在 .claude/skills/ 下(标准结构),或用下面的兜底拼prompt方式
-    - MCP 配置(北大法宝等)在 .mcp.json 或代码里配置
-"""
-
-import os
+"""Single-origin local application server."""
+import asyncio
 import json
-import subprocess
-import sys
-import tempfile
-import shutil
-from datetime import datetime
+import os
+import secrets
+from contextlib import asynccontextmanager
 from pathlib import Path
-from fastapi import FastAPI
-from fastapi.responses import StreamingResponse
-from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
-from dotenv import load_dotenv
-import uvicorn
+from typing import Literal
+from urllib.parse import urlsplit
 
-# 正确的包:claude-agent-sdk(不是 anthropic 的 Agent)
-from claude_agent_sdk import (
-    AssistantMessage,
-    ClaudeAgentOptions,
-    ResultMessage,
-    ServerToolResultBlock,
-    ServerToolUseBlock,
-    StreamEvent,
-    TextBlock,
-    ThinkingBlock,
-    ToolResultBlock,
-    ToolUseBlock,
-    query,
-)
+from fastapi import FastAPI, File, HTTPException, UploadFile
+from fastapi.exceptions import RequestValidationError
+from fastapi.responses import JSONResponse, StreamingResponse
+from fastapi.staticfiles import StaticFiles
+from pydantic import BaseModel, Field
 
-load_dotenv()
-
-REPO_ROOT = Path(__file__).resolve().parent
-PLUGIN_DIR = REPO_ROOT / "claude-code-plugin" / "ai-startup-compliance-review"
-DETECT_SCRIPT = PLUGIN_DIR / "skills" / "ai-startup-compliance-review" / "scripts" / "detect_risks.py"
-REPORTS_DIR = REPO_ROOT / "reports"  # 每次审查的 risk_report.json 持久化目录(不入库)
-DEFAULT_MODEL = os.getenv("CLAUDE_CODE_MODEL")
-DEFAULT_FALLBACK_MODEL = os.getenv("CLAUDE_CODE_FALLBACK_MODEL")
-
-app = FastAPI()
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+from workbench.config import ConfigStore, DATA_DIR, ROOT, Settings, atomic_write
+from workbench.documents import MAX_BYTES, MAX_CHARS, parse_document
+from workbench.jobs import ReviewManager, now
 
 
 class ReviewReq(BaseModel):
-    document_text: str
+    document_text: str = Field(min_length=1, max_length=MAX_CHARS)
+    filename: str = Field(default="企业材料", max_length=255)
 
 
-@app.post("/review/stream")
-async def review_stream(req: ReviewReq):
-    async def event_generator():
-        # 1. 建临时工作目录(agent 读写文件用,审查完删除)
-        work_dir = tempfile.mkdtemp(prefix="compliance_")
+class Decision(BaseModel):
+    rule_id: str
+    action: Literal["认可初评", "调整等级", "补充依据", "退回重审"]
+    review_level: Literal["L1", "L2", "L3", "L4"]
+    evidence_note: str = Field(default="", max_length=5000)
+
+
+class Decisions(BaseModel):
+    items: list[Decision] = Field(min_length=1, max_length=100)
+
+
+def create_app(data_dir: Path = DATA_DIR):
+    manager = ReviewManager(data_dir)
+    config = ConfigStore(data_dir)
+    token = secrets.token_urlsafe(32)
+
+    @asynccontextmanager
+    async def lifespan(app):
+        yield
+        await manager.cancel()
+
+    app = FastAPI(lifespan=lifespan, docs_url=None, redoc_url=None)
+    app.state.manager = manager
+    app.state.config = config
+
+    @app.middleware("http")
+    async def local_boundary(request, call_next):
+        host = urlsplit("http://" + request.headers.get("host", "")).hostname
+        if host not in ("127.0.0.1", "localhost", "::1", "testserver"):
+            return JSONResponse({"detail": "仅接受本机访问。"}, status_code=403)
+        origin = request.headers.get("origin")
+        if origin and origin != str(request.base_url).rstrip("/"):
+            return JSONResponse({"detail": "不允许跨站请求。"}, status_code=403)
+        if request.method in ("POST", "PUT", "PATCH", "DELETE"):
+            if not secrets.compare_digest(request.headers.get("x-session-token", ""), token):
+                return JSONResponse({"detail": "会话已更新，请刷新页面。"}, status_code=403)
+        response = await call_next(request)
+        response.headers["X-Content-Type-Options"] = "nosniff"
+        response.headers["Referrer-Policy"] = "no-referrer"
+        response.headers["Content-Security-Policy"] = "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self'; frame-ancestors 'none'"
+        if request.url.path.startswith(("/api", "/review")):
+            response.headers["Cache-Control"] = "no-store"
+        return response
+
+    @app.exception_handler(RequestValidationError)
+    async def validation_error(request, exc):
+        return JSONResponse({"detail": "请求内容无效，请检查文件、连接地址或必填项。"}, status_code=422)
+
+    @app.exception_handler(Exception)
+    async def internal_error(request, exc):
+        return JSONResponse({"detail": "操作失败，请检查本地配置或数据目录。"}, status_code=500)
+
+    @app.get("/api/health")
+    async def health():
+        return {"app": "ai-compliance-workbench", "status": "ok", "version": "1.0.0"}
+
+    @app.get("/api/session")
+    async def session():
+        return {"token": token}
+
+    @app.post("/api/shutdown")
+    async def shutdown():
+        callback = getattr(app.state, "request_shutdown", None)
+        if callback is None:
+            raise HTTPException(409, "请在开发终端停止服务。")
+        await manager.cancel()
+        callback()
+        return {"ok": True}
+
+    @app.get("/api/config")
+    async def get_config():
+        return config.public()
+
+    @app.put("/api/config")
+    async def save_config(settings: Settings):
         try:
-            # 2. 把待审材料写进工作目录(固定文件名,agent 按名读取)
-            material_path = Path(work_dir) / "待审查材料.txt"
-            material_path.write_text(req.document_text, encoding="utf-8")
+            config.save(settings)
+        except (ValueError, OSError) as exc:
+            raise HTTPException(400, "配置未保存，请检查本机数据目录或重新填写密钥。") from exc
+        return config.public()
 
-            if not PLUGIN_DIR.exists():
-                raise RuntimeError(f"插件目录不存在: {PLUGIN_DIR}")
+    @app.post("/api/config/test")
+    async def test_config(settings: Settings):
+        resolved = config.resolve(settings)
+        if not resolved.secret and resolved.auth_mode != "claude_login":
+            raise HTTPException(400, "请填写模型密钥。")
+        from workbench.connection import test_connection
+        from workbench.connection_errors import ConnectionFailure
+        try:
+            await test_connection(resolved)
+        except ConnectionFailure as exc:
+            raise HTTPException(400, str(exc)) from exc
+        except Exception as exc:
+            raise HTTPException(400, "连接测试失败，请检查地址、模型名称、密钥、额度或本机 Claude 登录。") from exc
+        return {"ok": True, "message": "模型与审查引擎连接正常"}
 
-            # 3. 配置 Agent SDK
-            #    - cwd 指向工作目录,agent 就能在里面读写文件
-            #    - plugins 直接挂载仓库内已整理好的 Claude Code 插件
-            #    - permission_mode=bypassPermissions 给予 agent full access
-            option_kwargs = dict(
-                cwd=work_dir,
-                setting_sources=["user", "project"],
-                plugins=[{"type": "local", "path": str(PLUGIN_DIR)}],
-                skills=["ai-startup-compliance-review"],
-                permission_mode="bypassPermissions",
-            )
-            if DEFAULT_MODEL:
-                option_kwargs["model"] = DEFAULT_MODEL
-            if DEFAULT_FALLBACK_MODEL:
-                option_kwargs["fallback_model"] = DEFAULT_FALLBACK_MODEL
-            options = ClaudeAgentOptions(**option_kwargs)
-
-            prompt = (
-                "请审查工作目录中的《待审查材料.txt》,完成合规审查。"
-                "优先使用本地MCP工具检索真实法条,按技能规则输出Markdown报告,"
-                "包含:风险等级、审查结论、匹配法条、整改建议。"
-                "【硬性要求】在做任何检索或分析之前,你的第一个动作必须是把整个审查拆成若干步骤并建立任务清单"
-                "(每步用简洁正式的中文命名,如「检索个人信息保护相关法条」);之后每开始一步就把它标为进行中、"
-                "做完标为完成,全程始终恰好保持一个进行中的步骤。不要跳过这个规划步骤。"
-                "最后把完整的Markdown审查报告写入工作目录下的《合规审查报告.md》文件(只写报告正文,不要写别的)。"
-            )
-
-            # 4. 流式跑 agent,把每条消息转成前端约定的 SSE 格式
-            #    - 中间文本 -> "assistant"(归到左侧执行过程),不再当最终报告
-            #    - TodoWrite -> "todos"(右上 Task 面板)
-            #    - 循环结束后统一读报告文件,只发一个 "final"
-            report_texts = []  # 兜底:累积所有助手文本,取最长的一段当报告
-            task_list = {}     # Task面板状态: 顺序id(str) -> {content, status}
-            task_seq = 0       # TaskCreate 计数,约定第N个创建的任务 id 即为 str(N)
-            async for message in query(prompt=prompt, options=options):
-                if isinstance(message, AssistantMessage):
-                    for block in message.content:
-                        if isinstance(block, ThinkingBlock) and block.thinking:
-                            yield sse({"type": "thinking", "content": block.thinking})
-                        elif isinstance(block, TextBlock):
-                            report_texts.append(block.text)
-                            yield sse({"type": "assistant", "content": block.text})
-                        elif isinstance(block, (ToolUseBlock, ServerToolUseBlock)):
-                            name = block.name
-                            inp = block.input or {}
-                            if name == "TodoWrite":
-                                # 有的模型直接用 TodoWrite,格式已是 {content,status,activeForm}
-                                task_list = {
-                                    str(i): {
-                                        "content": td.get("content") or td.get("activeForm", ""),
-                                        "status": td.get("status", "pending"),
-                                        "activeForm": td.get("activeForm", ""),
-                                    }
-                                    for i, td in enumerate(inp.get("todos", []), 1)
-                                }
-                                yield sse({"type": "todos", "items": list(task_list.values())})
-                            elif name == "TaskCreate":
-                                task_seq += 1
-                                task_list[str(task_seq)] = {
-                                    "content": inp.get("subject", ""),
-                                    "status": "pending",
-                                    "activeForm": inp.get("activeForm", ""),
-                                }
-                                yield sse({"type": "todos", "items": list(task_list.values())})
-                            elif name == "TaskUpdate":
-                                tid = str(inp.get("taskId", ""))
-                                if tid in task_list:
-                                    status = inp.get("status")
-                                    if status == "deleted":
-                                        task_list.pop(tid, None)
-                                    elif status:
-                                        task_list[tid]["status"] = status
-                                    if inp.get("subject"):
-                                        task_list[tid]["content"] = inp["subject"]
-                                    if inp.get("activeForm"):
-                                        task_list[tid]["activeForm"] = inp["activeForm"]
-                                yield sse({"type": "todos", "items": list(task_list.values())})
-                            else:
-                                yield sse(
-                                    {
-                                        "type": "tool_start",
-                                        "tool_name": name,
-                                        "args": inp,
-                                    }
-                                )
-                        elif isinstance(block, (ToolResultBlock, ServerToolResultBlock)):
-                            yield sse(
-                                {
-                                    "type": "tool_end",
-                                    "tool_name": getattr(block, "tool_use_id", ""),
-                                    "result": stringify_result(block.content),
-                                }
-                            )
-                elif isinstance(message, StreamEvent):
-                    delta = message.event.get("delta", {})
-                    thinking = delta.get("thinking")
-                    if thinking:
-                        yield sse({"type": "thinking", "content": thinking})
-                elif isinstance(message, ResultMessage) and message.is_error:
-                    error_text = message.result or "; ".join(message.errors or []) or "Claude SDK 调用失败"
-                    yield sse({"type": "final", "content": f"\n\n审查出错:{error_text}"})
-
-            # 5. 审查结束:优先读 agent 写出的报告文件,读不到就用最长的一段助手文本兜底
-            report = load_report(work_dir, report_texts)
-            yield sse({"type": "final", "content": report})
-
-            # 6. 组装并持久化机器可读结果 risk_report.json:
-            #    材料快照 + 规则库预扫描命中 + Markdown 报告全文, 供复核页/评测/导出复用
-            report_json = build_report_json(req.document_text, report)
-            yield sse({"type": "report_json", "content": report_json, "saved_as": save_report_json(report_json)})
-
-        except Exception as e:
-            yield sse(
-                {
-                    "type": "final",
-                    "content": (
-                        f"审查出错:{str(e)}"
-                        "(请检查 Claude Code 登录状态或 ANTHROPIC_API_KEY、MCP配置、插件目录)"
-                    ),
-                }
-            )
+    @app.post("/api/documents/parse")
+    async def parse(file: UploadFile = File(...)):
+        content = await file.read(MAX_BYTES + 1)
+        try:
+            text = await asyncio.to_thread(parse_document, file.filename or "", content)
+        except ValueError as exc:
+            raise HTTPException(400, str(exc)) from exc
         finally:
-            shutil.rmtree(work_dir, ignore_errors=True)
+            await file.close()
+        return {"filename": Path((file.filename or "企业材料").replace("\\", "/")).name, "text": text, "chars": len(text), "bytes": len(content)}
 
-    return StreamingResponse(event_generator(), media_type="text/event-stream")
+    @app.get("/api/review/current")
+    async def current():
+        return manager.snapshot()
 
+    @app.post("/review/stream")
+    async def review(req: ReviewReq):
+        settings = config.load()
+        if not req.document_text.strip():
+            raise HTTPException(400, "材料内容不能为空。")
+        if not settings.secret and settings.auth_mode != "claude_login":
+            raise HTTPException(400, "请先在设置中配置模型连接。")
+        try:
+            review_id = await manager.start(req.document_text, Path(req.filename.replace("\\", "/")).name, settings)
+        except ValueError as exc:
+            raise HTTPException(409, str(exc)) from exc
+        return StreamingResponse(manager.stream(review_id), media_type="text/event-stream", headers={"X-Accel-Buffering": "no"})
 
-def sse(event: dict) -> str:
-    """打包成 SSE 一行。前端约定格式:{type, tool_name?, args?, result?, content?}"""
-    return f"data: {json.dumps(event, ensure_ascii=False)}\n\n"
+    @app.get("/api/review/{review_id}/events")
+    async def events(review_id: str):
+        if not manager.current or manager.current["id"] != review_id:
+            raise HTTPException(404, "当前审查不存在。")
+        return StreamingResponse(manager.stream(review_id), media_type="text/event-stream")
 
+    @app.post("/api/review/{review_id}/cancel")
+    async def cancel(review_id: str):
+        if not manager.current or manager.current["id"] != review_id:
+            raise HTTPException(404, "当前审查不存在。")
+        await manager.cancel()
+        return manager.snapshot()
 
-def stringify_result(value) -> str:
-    if value is None:
-        return ""
-    if isinstance(value, str):
-        return value
-    return json.dumps(value, ensure_ascii=False)
+    @app.post("/api/review/{review_id}/decisions")
+    async def decisions(review_id: str, req: Decisions):
+        async with manager.lock:
+            job = manager.current
+            if not job or job["id"] != review_id or job["status"] != "completed":
+                raise HTTPException(409, "请等待正式审查完成后提交复核。")
+            if job["reviewed"]:
+                raise HTTPException(409, "本次复核已经提交。")
+            rules = {r["id"]: r for r in job["report"]["risk_scan"].get("matched_rules", [])}
+            ids = [item.rule_id for item in req.items]
+            if len(ids) != len(set(ids)) or set(ids) != set(rules):
+                raise HTTPException(400, "请逐条完成所有风险的复核。")
+            rows = []
+            for item in req.items:
+                rule = rules[item.rule_id]
+                if item.action != "认可初评" and not item.evidence_note.strip():
+                    raise HTTPException(400, "调级、补证和退回需要填写复核依据。")
+                level = item.review_level if item.action == "调整等级" else rule["final_level"]
+                rows.append({**item.model_dump(), "review_level": level, "system_level": rule["final_level"], "adjusted": level != rule["final_level"], "category": rule.get("category"), "risk_type": rule.get("risk_type"), "matched_keywords": list(rule.get("matched_keywords", {})), "evidence_needed": rule.get("evidence_needed", []), "source_report": "risk_report_" + review_id + ".json", "review_id": review_id, "report_generated_at": job["report"]["generated_at"], "reviewed_at": now()})
+            try:
+                atomic_write(data_dir / "reviews" / ("review_" + review_id + ".jsonl"), "\n".join(json.dumps(row, ensure_ascii=False) for row in rows) + "\n")
+            except OSError as exc:
+                raise HTTPException(500, "复核记录保存失败，内容尚未提交，请重试。") from exc
+            job["reviewed"] = True
+            job["decisions"] = rows
+            return {"ok": True, "count": len(rows)}
 
+    @app.get("/api/example")
+    async def example():
+        return json.loads((ROOT / "assets" / "example-report.json").read_text(encoding="utf-8"))
 
-def load_report(work_dir: str, fallback_texts: list) -> str:
-    """取最终报告:1)约定文件名 -> 2)工作目录里最大的 .md -> 3)最长的一段助手文本。"""
-    work = Path(work_dir)
-    preferred = work / "合规审查报告.md"
-    if preferred.exists():
-        txt = preferred.read_text(encoding="utf-8", errors="ignore").strip()
-        if txt:
-            return txt
-    md_files = [p for p in work.glob("*.md") if p.is_file()]
-    if md_files:
-        biggest = max(md_files, key=lambda p: p.stat().st_size)
-        txt = biggest.read_text(encoding="utf-8", errors="ignore").strip()
-        if txt:
-            return txt
-    if fallback_texts:
-        return max(fallback_texts, key=len)
-    return "(agent 未生成报告,请查看左侧执行过程)"
-
-
-def run_detection(material_path: str) -> dict:
-    """对材料跑 risk_rules.yaml 确定性预扫描;失败不影响主流程,返回降级结果。"""
-    if not DETECT_SCRIPT.exists():
-        return {"error": f"预扫描脚本不存在: {DETECT_SCRIPT}", "matched_rules": [], "summary": {}}
-    try:
-        proc = subprocess.run(
-            [sys.executable, str(DETECT_SCRIPT), material_path],
-            capture_output=True, text=True, encoding="utf-8", timeout=60,
-        )
-        data = json.loads(proc.stdout) if proc.stdout.strip() else {}
-        return {k: data.get(k) for k in ("profile_hints", "matched_rules", "summary")} if data else \
-            {"error": proc.stderr[-500:] or "预扫描无输出", "matched_rules": [], "summary": {}}
-    except Exception as e:  # noqa: BLE001 预扫描失败只降级不中断
-        return {"error": f"预扫描失败: {e}", "matched_rules": [], "summary": {}}
-
-
-def build_report_json(document_text: str, report_markdown: str) -> str:
-    """组装 risk_report.json:画像提示/规则命中/等级汇总 + 报告全文。"""
-    material_path = None  # 材料文本在临时目录,直接走内存临时文件复用脚本
-    with tempfile.NamedTemporaryFile("w", suffix=".txt", delete=False, encoding="utf-8") as fp:
-        fp.write(document_text)
-        material_path = fp.name
-    try:
-        detection = run_detection(material_path)
-    finally:
-        os.unlink(material_path)
-    payload = {
-        "generated_at": datetime.now().isoformat(timespec="seconds"),
-        "model": DEFAULT_MODEL or "",
-        "material": {"chars": len(document_text), "preview": document_text[:200]},
-        "risk_scan": detection,
-        "report_markdown": report_markdown,
-        "schema_version": "1.0",
-    }
-    return json.dumps(payload, ensure_ascii=False, indent=2)
+    dist = ROOT / "frontend" / "dist"
+    if dist.exists():
+        app.mount("/", StaticFiles(directory=dist, html=True), name="frontend")
+    return app
 
 
-def save_report_json(report_json: str) -> str:
-    """落盘到 reports/ 目录(文件名带时间戳), 返回文件名; 失败返回空串。"""
-    try:
-        REPORTS_DIR.mkdir(exist_ok=True)
-        ts = datetime.now().strftime("%Y%m%d_%H%M%S")
-        name = f"risk_report_{ts}.json"
-        (REPORTS_DIR / name).write_text(report_json, encoding="utf-8")
-        return name
-    except Exception:  # noqa: BLE001 持久化失败不影响前端拿到 JSON
-        return ""
-
-
-@app.get("/")
-def root():
-    return {"status": "后端运行中,POST /review/stream 开始审查"}
-
+app = create_app()
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    import uvicorn
+    uvicorn.run(app, host="127.0.0.1", port=int(os.getenv("COMPLIANCE_PORT", "8000")), access_log=False)

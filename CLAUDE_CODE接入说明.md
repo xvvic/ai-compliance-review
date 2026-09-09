@@ -11,19 +11,19 @@
 
 本次适配后的 Claude Code 接入入口不在旧的 `plugin/` 目录，而在新的：
 
-- [claude-code-plugin](/home/witt/harness/ai-compliance-review/claude-code-plugin)
+- [claude-code-plugin](claude-code-plugin)
 
 这个目录本身是一个本地插件市场，里面当前包含一个可安装插件：
 
-- [ai-startup-compliance-review](/home/witt/harness/ai-compliance-review/claude-code-plugin/ai-startup-compliance-review)
+- [ai-startup-compliance-review](claude-code-plugin/ai-startup-compliance-review)
 
 关键文件如下：
 
-- 市场清单：[claude-code-plugin/.claude-plugin/marketplace.json](/home/witt/harness/ai-compliance-review/claude-code-plugin/.claude-plugin/marketplace.json)
-- 插件清单：[claude-code-plugin/ai-startup-compliance-review/.claude-plugin/plugin.json](/home/witt/harness/ai-compliance-review/claude-code-plugin/ai-startup-compliance-review/.claude-plugin/plugin.json)
-- MCP 配置：[claude-code-plugin/ai-startup-compliance-review/.mcp.json](/home/witt/harness/ai-compliance-review/claude-code-plugin/ai-startup-compliance-review/.mcp.json)
-- Skill 目录：[claude-code-plugin/ai-startup-compliance-review/skills/ai-startup-compliance-review](/home/witt/harness/ai-compliance-review/claude-code-plugin/ai-startup-compliance-review/skills/ai-startup-compliance-review)
-- 本地语料目录：[claude-code-plugin/ai-startup-compliance-review/legal_preference_txt](/home/witt/harness/ai-compliance-review/claude-code-plugin/ai-startup-compliance-review/legal_preference_txt)
+- 市场清单：[claude-code-plugin/.claude-plugin/marketplace.json](claude-code-plugin/.claude-plugin/marketplace.json)
+- 插件清单：[claude-code-plugin/ai-startup-compliance-review/.claude-plugin/plugin.json](claude-code-plugin/ai-startup-compliance-review/.claude-plugin/plugin.json)
+- MCP 配置：[claude-code-plugin/ai-startup-compliance-review/.mcp.json](claude-code-plugin/ai-startup-compliance-review/.mcp.json)
+- Skill 目录：[claude-code-plugin/ai-startup-compliance-review/skills/ai-startup-compliance-review](claude-code-plugin/ai-startup-compliance-review/skills/ai-startup-compliance-review)
+- 本地语料目录：[claude-code-plugin/ai-startup-compliance-review/legal_preference_txt](claude-code-plugin/ai-startup-compliance-review/legal_preference_txt)
 
 ## 二、Claude Code 插件结构说明
 
@@ -70,7 +70,7 @@ export PKULAW_LAW_ITEM_URL="https://apim-gateway.pkulaw.com/..."
 export PKULAW_CITATION_VALIDATOR_URL="https://apim-gateway.pkulaw.com/..."
 ```
 
-这些变量会被插件中的 [.mcp.json](/home/witt/harness/ai-compliance-review/claude-code-plugin/ai-startup-compliance-review/.mcp.json) 自动展开，用于填充：
+这些变量会被插件中的 [.mcp.json](claude-code-plugin/ai-startup-compliance-review/.mcp.json) 自动展开，用于填充：
 
 - `url`
 - `Authorization: Bearer ...`
@@ -163,7 +163,7 @@ echo "$PKULAW_CASE_SEMANTIC_URL"
 在 Claude Code 中执行：
 
 ```text
-/plugin marketplace add /home/witt/harness/ai-compliance-review/claude-code-plugin
+/plugin marketplace add /path/to/ai-compliance-review/claude-code-plugin
 ```
 
 这一步的作用是把仓库里的 `claude-code-plugin/` 注册成一个本地插件市场。
@@ -273,7 +273,7 @@ echo "$PKULAW_CASE_SEMANTIC_URL"
 
 ## 七、当前插件中 MCP 的声明内容
 
-当前插件在 [.mcp.json](/home/witt/harness/ai-compliance-review/claude-code-plugin/ai-startup-compliance-review/.mcp.json) 中声明了 5 个 HTTP MCP 服务：
+当前插件在 [.mcp.json](claude-code-plugin/ai-startup-compliance-review/.mcp.json) 中声明了 5 个 HTTP MCP 服务：
 
 1. `pkulaw-law-search`
    用于法规语义检索
@@ -323,13 +323,13 @@ skill 的约束已经改成：
 先检查目录是否存在：
 
 ```bash
-ls /home/witt/harness/ai-compliance-review/claude-code-plugin
+ls /path/to/ai-compliance-review/claude-code-plugin
 ```
 
 以及市场文件是否存在：
 
 ```bash
-ls /home/witt/harness/ai-compliance-review/claude-code-plugin/.claude-plugin/marketplace.json
+ls /path/to/ai-compliance-review/claude-code-plugin/.claude-plugin/marketplace.json
 ```
 
 ### 2. 插件安装后看不到效果
@@ -386,7 +386,7 @@ echo "$PKULAW_CITATION_VALIDATOR_URL"
 3. 执行：
 
 ```text
-/plugin marketplace add /home/witt/harness/ai-compliance-review/claude-code-plugin
+/plugin marketplace add /path/to/ai-compliance-review/claude-code-plugin
 ```
 
 4. 执行：
@@ -417,8 +417,8 @@ echo "$PKULAW_CITATION_VALIDATOR_URL"
 
 当前仓库里已经有插件内 README：
 
-- [claude-code-plugin/README.md](/home/witt/harness/ai-compliance-review/claude-code-plugin/README.md)
-- [claude-code-plugin/ai-startup-compliance-review/README.md](/home/witt/harness/ai-compliance-review/claude-code-plugin/ai-startup-compliance-review/README.md)
+- [claude-code-plugin/README.md](claude-code-plugin/README.md)
+- [claude-code-plugin/ai-startup-compliance-review/README.md](claude-code-plugin/ai-startup-compliance-review/README.md)
 
 但它们主要是插件包内部说明。
 
