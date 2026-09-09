@@ -25,7 +25,7 @@ ai-startup-compliance-review/
 1. Add the local marketplace root:
 
 ```text
-/plugin marketplace add /home/witt/harness/ai-compliance-review/claude-code-plugin
+/plugin marketplace add /path/to/ai-compliance-review/claude-code-plugin
 ```
 
 2. Install the plugin from that marketplace:

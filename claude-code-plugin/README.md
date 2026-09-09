@@ -9,7 +9,7 @@ Available plugin:
 Install flow:
 
 ```text
-/plugin marketplace add /home/witt/harness/ai-compliance-review/claude-code-plugin
+/plugin marketplace add /path/to/ai-compliance-review/claude-code-plugin
 /plugin install ai-startup-compliance-review@ai-compliance-review-local
 ```
 

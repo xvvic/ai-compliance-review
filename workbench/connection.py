@@ -5,6 +5,7 @@ import sys
 import tempfile
 from workbench.config import ROOT
 from workbench.jobs import terminate_tree
+from workbench.connection_errors import ConnectionFailure
 
 
 async def test_connection(settings):
@@ -21,11 +22,19 @@ async def test_connection(settings):
                 process = await spawning
                 raise
             payload = json.dumps({"work_dir": work, "settings": settings.model_dump(), "connection_test": True}).encode()
-            async with asyncio.timeout(60):
-                stdout, _ = await process.communicate(payload)
+            try:
+                async with asyncio.timeout(60):
+                    stdout, _ = await process.communicate(payload)
+            except TimeoutError as exc:
+                raise ConnectionFailure("timeout") from exc
             events = [json.loads(line) for line in stdout.decode("utf-8").splitlines() if line.strip()]
-            if process.returncode or not any(e.get("type") == "connected" for e in events) or any(e.get("type") == "error" for e in events):
-                raise ValueError("模型连接测试失败。")
+            errors = [e for e in events if e.get("type") == "error"]
+            if errors:
+                raise ConnectionFailure(errors[0].get("code", "unknown"))
+            if process.returncode:
+                raise ConnectionFailure("runtime")
+            if not any(e.get("type") == "connected" for e in events):
+                raise ConnectionFailure()
         finally:
             if process and process.returncode is None:
                 await asyncio.to_thread(terminate_tree, process.pid)

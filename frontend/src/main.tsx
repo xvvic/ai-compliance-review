@@ -4,13 +4,11 @@ import {
   Alert,
   App as AntApp,
   Button,
-  Checkbox,
   Collapse,
   ConfigProvider,
   Drawer,
   Dropdown,
   Empty,
-  Form,
   Input,
   Modal,
   Select,
@@ -27,16 +25,16 @@ import {
   ArrowRight,
   Check,
   CheckCheck,
+  ChevronDown,
   ChevronRight,
+  ChevronUp,
   CircleHelp,
   Clock3,
   FileCheck2,
   FileText,
   FolderOpen,
-  Layers3,
   ListChecks,
   LoaderCircle,
-  PanelLeftClose,
   Plus,
   Search,
   Settings2,
@@ -48,6 +46,7 @@ import {
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { api, initialize, readEvents, request } from "./api";
+import { SettingsDrawer } from "./SettingsDrawer";
 import "./styles.css";
 
 type Rule = {
@@ -139,14 +138,7 @@ function Workbench() {
     [decisions, setDecisions] = useState<Record<string, Decision>>({}),
     [submitting, setSubmitting] = useState(false);
   const [processOpen, setProcessOpen] = useState(true),
-    [tick, setTick] = useState(Date.now()),
-    [settingsForm] = Form.useForm();
-  const [saving, setSaving] = useState(false),
-    [testing, setTesting] = useState(false),
-    [testResult, setTestResult] = useState<{
-      ok: boolean;
-      text: string;
-    } | null>(null);
+    [tick, setTick] = useState(Date.now());
   const consuming = useRef(false);
   const report = example || job?.report;
   const running = starting || job?.status === "running";
@@ -275,37 +267,7 @@ function Workbench() {
     }
   };
   const openSettings = () => {
-    settingsForm.setFieldsValue({
-      ...config,
-      secret: "",
-      mcp_token: "",
-      clear_secret: false,
-      clear_mcp_token: false,
-    });
-    setTestResult(null);
     setSettingsOpen(true);
-  };
-  const saveSettings = async (test: boolean) => {
-    try {
-      const data = await settingsForm.validateFields();
-      test ? setTesting(true) : setSaving(true);
-      const result = await api(
-        test ? "/api/config/test" : "/api/config",
-        test ? "POST" : "PUT",
-        data,
-      );
-      if (test) setTestResult({ ok: true, text: result.message });
-      else {
-        setConfig(result);
-        setSettingsOpen(false);
-        message.success("设置已保存");
-      }
-    } catch (e) {
-      if (e instanceof Error) setTestResult({ ok: false, text: e.message });
-    } finally {
-      setSaving(false);
-      setTesting(false);
-    }
   };
   const choose = (rule: Rule, patch: Partial<Decision>) =>
     setDecisions((old) => ({
@@ -400,29 +362,6 @@ function Workbench() {
 
   return (
     <div className="shell">
-      <aside className="rail">
-        <div className="brand-symbol">
-          <ShieldCheck size={24} />
-        </div>
-        <div className="rail-links">
-          <Tooltip title="审查工作台" placement="right">
-            <button className="rail-button active" aria-label="审查工作台">
-              <Layers3 size={22} />
-            </button>
-          </Tooltip>
-        </div>
-        <Tooltip title="连接设置" placement="right">
-          <button
-            className="rail-button"
-            aria-label="连接设置"
-            onClick={openSettings}
-            disabled={!ready}
-          >
-            <Settings2 size={21} />
-          </button>
-        </Tooltip>
-        <span className="rail-version">1.0</span>
-      </aside>
       <div className="workspace">
         <header className="topbar">
           <div className="brand-name">
@@ -435,13 +374,16 @@ function Workbench() {
               <i />
               {config?.configured ? "模型已配置" : "模型未配置"}
             </span>
-            <Button
-              icon={<Settings2 size={16} />}
-              onClick={openSettings}
-              disabled={!ready}
-            >
-              设置
-            </Button>
+            <Tooltip title="设置">
+              <Button
+                aria-label="设置"
+                icon={<Settings2 size={16} />}
+                onClick={openSettings}
+                disabled={!ready}
+              >
+                <span className="settings-label">设置</span>
+              </Button>
+            </Tooltip>
           </div>
         </header>
         <main>
@@ -453,7 +395,6 @@ function Workbench() {
               <h1>
                 合规审查<span className="heading-mark">工作台</span>
               </h1>
-              <p>企业材料评估与风险复核</p>
             </div>
             <Button
               icon={<Plus size={16} />}
@@ -481,7 +422,7 @@ function Workbench() {
           {ready && !report && !running && !job && (
             <>
               <div className="workflow-strip">
-                <span className="selected">
+                <span className="selected" aria-current="step">
                   <b>01</b> 材料准备
                 </span>
                 <ChevronRight size={15} />
@@ -505,6 +446,7 @@ function Workbench() {
                     <span className="section-number">01 / 03</span>
                   </div>
                   <Upload.Dragger
+                    aria-label="选择审查材料"
                     accept=".txt,.docx,.pdf"
                     multiple={false}
                     showUploadList={false}
@@ -583,12 +525,13 @@ function Workbench() {
                 <aside className="sample-panel">
                   <div className="section-title">
                     <h2>审查示例</h2>
-                    <Tag bordered={false}>合成案例</Tag>
                   </div>
                   <div className="sample-preview">
                     <img
                       src="/report-preview.png"
                       alt="星云智算合成案例的审查报告预览"
+                      width={640}
+                      height={420}
                     />
                   </div>
                   <div className="sample-caption">
@@ -607,24 +550,6 @@ function Workbench() {
                     查看示例报告
                   </Button>
                 </aside>
-              </div>
-              <div className="scope-band">
-                <div>
-                  <span className="small-title">审查领域</span>
-                  <h3>企业业务与合规风险</h3>
-                </div>
-                <div className="scope-labels">
-                  {[
-                    "数据与隐私",
-                    "AI 治理",
-                    "知识产权",
-                    "网络安全",
-                    "跨境业务",
-                    "消费者权益",
-                  ].map((x) => (
-                    <span key={x}>{x}</span>
-                  ))}
-                </div>
               </div>
             </>
           )}
@@ -660,8 +585,13 @@ function Workbench() {
                   <div className="run-center">
                     <div className="scan-symbol">
                       <ShieldCheck size={36} />
+                      <LoaderCircle
+                        className="scan-loader spin"
+                        size={16}
+                        aria-hidden="true"
+                      />
                     </div>
-                    <h3>
+                    <h3 aria-live="polite">
                       {job?.tasks.find((t) => t.status === "in_progress")
                         ?.content || "正在规划审查步骤"}
                     </h3>
@@ -680,16 +610,29 @@ function Workbench() {
                   </div>
                   <div className="process-toolbar">
                     <span>审查过程</span>
-                    <Button
-                      type="text"
-                      icon={<PanelLeftClose size={15} />}
-                      onClick={() => setProcessOpen(!processOpen)}
+                    <Tooltip
+                      title={processOpen ? "收起审查过程" : "展开审查过程"}
                     >
-                      {processOpen ? "收起" : "展开"}
-                    </Button>
+                      <Button
+                        type="text"
+                        aria-label={
+                          processOpen ? "收起审查过程" : "展开审查过程"
+                        }
+                        aria-expanded={processOpen}
+                        aria-controls="review-process"
+                        icon={
+                          processOpen ? (
+                            <ChevronUp size={18} />
+                          ) : (
+                            <ChevronDown size={18} />
+                          )
+                        }
+                        onClick={() => setProcessOpen(!processOpen)}
+                      />
+                    </Tooltip>
                   </div>
                   {processOpen && (
-                    <div className="process-grid">
+                    <div className="process-grid" id="review-process">
                       <div>
                         {job?.tasks.map((t, i) => (
                           <div className={`task-row ${t.status}`} key={i}>
@@ -750,8 +693,8 @@ function Workbench() {
                     {example ? "星云智算 · 产品上线方案" : job?.filename}
                   </span>
                 </div>
-              <Dropdown
-                trigger={["click"]}
+                <Dropdown
+                  trigger={["click"]}
                   menu={{
                     items: [
                       {
@@ -812,6 +755,7 @@ function Workbench() {
                 {levels.map((l) => (
                   <button
                     key={l}
+                    aria-pressed={tab === "risks" && filter === l}
                     onClick={() => {
                       setFilter(l);
                       setTab("risks");
@@ -837,6 +781,7 @@ function Workbench() {
               <Tabs
                 activeKey={tab}
                 onChange={setTab}
+                animated={false}
                 items={[
                   {
                     key: "report",
@@ -863,6 +808,7 @@ function Workbench() {
                           <h2>规则预扫描结果</h2>
                           <div>
                             <Input
+                              aria-label="搜索风险或规则编号"
                               placeholder="搜索风险或规则编号"
                               prefix={<Search size={15} />}
                               value={search}
@@ -926,12 +872,14 @@ function Workbench() {
                               title: "",
                               width: 60,
                               render: (_, r: Rule) => (
-                                <Button
-                                  aria-label={`查看 ${r.id}`}
-                                  type="text"
-                                  icon={<ChevronRight size={16} />}
-                                  onClick={() => setDetail(r)}
-                                />
+                                <Tooltip title="查看风险依据">
+                                  <Button
+                                    aria-label={`查看 ${r.id}`}
+                                    type="text"
+                                    icon={<ChevronRight size={16} />}
+                                    onClick={() => setDetail(r)}
+                                  />
+                                </Tooltip>
                               ),
                             },
                           ]}
@@ -1073,130 +1021,16 @@ function Workbench() {
           </footer>
         </main>
       </div>
-      <Drawer
-        title="模型与连接设置"
+      <SettingsDrawer
         open={settingsOpen}
+        config={config}
         onClose={() => setSettingsOpen(false)}
-        width={480}
-        extra={<Settings2 size={19} />}
-        footer={
-          <div className="drawer-footer">
-            <Button
-              loading={testing}
-              disabled={saving}
-              onClick={() => saveSettings(true)}
-            >
-              测试连接
-            </Button>
-            <Button
-              type="primary"
-              loading={saving}
-              disabled={testing}
-              onClick={() => saveSettings(false)}
-            >
-              保存设置
-            </Button>
-          </div>
-        }
-      >
-        <Form
-          layout="vertical"
-          form={settingsForm}
-          initialValues={{
-            auth_mode: "api_key",
-            base_url: "https://api.anthropic.com",
-            model: "sonnet",
-          }}
-        >
-          <div className="settings-section">
-            <span className="small-title">模型服务</span>
-            <Form.Item name="auth_mode" label="鉴权方式">
-              <Select
-                options={[
-                  { value: "api_key", label: "Anthropic API Key" },
-                  { value: "auth_token", label: "Anthropic 兼容服务 Token" },
-                  { value: "claude_login", label: "使用本机 Claude 登录" },
-                ]}
-              />
-            </Form.Item>
-            <Form.Item
-              name="base_url"
-              label="服务地址"
-              rules={[{ required: true }]}
-            >
-              <Input placeholder="https://api.anthropic.com" />
-            </Form.Item>
-            <Form.Item
-              name="model"
-              label="模型名称"
-              rules={[{ required: true }]}
-            >
-              <Input placeholder="sonnet" />
-            </Form.Item>
-            <Form.Item name="secret" label="模型密钥">
-              <Input.Password
-                autoComplete="new-password"
-                placeholder={
-                  config?.has_secret ? "已保存，留空保留当前密钥" : "输入密钥"
-                }
-              />
-            </Form.Item>
-            {config?.has_secret && (
-              <Form.Item name="clear_secret" valuePropName="checked">
-                <Checkbox>清除已保存的模型密钥</Checkbox>
-              </Form.Item>
-            )}
-          </div>
-          <Collapse
-            ghost
-            items={[
-              {
-                key: "mcp",
-                label: "高级设置 · 北大法宝 MCP",
-                children: (
-                  <>
-                    <Form.Item name="mcp_token" label="MCP 访问令牌">
-                      <Input.Password
-                        placeholder={
-                          config?.has_mcp_token ? "已保存，留空保留" : "可选"
-                        }
-                        autoComplete="new-password"
-                      />
-                    </Form.Item>
-                    {config?.has_mcp_token && (
-                      <Form.Item name="clear_mcp_token" valuePropName="checked">
-                        <Checkbox>清除 MCP 令牌</Checkbox>
-                      </Form.Item>
-                    )}
-                    {[
-                      ["LAW_SEARCH_URL", "法规语义检索"],
-                      ["LAW_KEYWORD_URL", "法规关键词检索"],
-                      ["CASE_SEMANTIC_URL", "案例语义检索"],
-                      ["LAW_ITEM_URL", "法条检索"],
-                      ["CITATION_VALIDATOR_URL", "引文核验"],
-                    ].map(([key, label]) => (
-                      <Form.Item
-                        key={key}
-                        name={["mcp_urls", key]}
-                        label={label}
-                      >
-                        <Input placeholder="https://" />
-                      </Form.Item>
-                    ))}
-                  </>
-                ),
-              },
-            ]}
-          />
-          {testResult && (
-            <Alert
-              type={testResult.ok ? "success" : "error"}
-              showIcon
-              message={testResult.text}
-            />
-          )}
-        </Form>
-      </Drawer>
+        onSaved={(updated) => {
+          setConfig(updated);
+          setSettingsOpen(false);
+          message.success("设置已保存");
+        }}
+      />
       <Drawer
         title="风险依据"
         open={!!detail}
@@ -1231,27 +1065,75 @@ function Workbench() {
   );
 }
 
-createRoot(document.getElementById("root")!).render(
-  <ConfigProvider
-    locale={zhCN}
-    theme={{
-      token: {
-          colorPrimary: "#117b69",
-          motion: !window.matchMedia("(prefers-reduced-motion: reduce)").matches,
-        colorInfo: "#117b69",
-        colorText: "#263431",
-        colorTextSecondary: "#78827e",
-        colorBorder: "#dce3df",
-        borderRadius: 6,
-        controlHeight: 36,
-        fontFamily:
-          '"Workbench Sans", "Segoe UI", "Microsoft YaHei", sans-serif',
-        fontSize: 14,
-      },
-    }}
-  >
-    <AntApp>
-      <Workbench />
-    </AntApp>
-  </ConfigProvider>,
-);
+function WorkbenchApp() {
+  // Start disabled so Ant Design installs its motion provider before the
+  // preference changes; adding that provider later would reset form state.
+  const [reducedMotion, setReducedMotion] = useState(true);
+  useEffect(() => {
+    const preference = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const update = () => setReducedMotion(preference.matches);
+    preference.addEventListener("change", update);
+    update();
+    return () => preference.removeEventListener("change", update);
+  }, []);
+  const styles = getComputedStyle(document.documentElement);
+  const token = (name: string) => styles.getPropertyValue(name).trim();
+
+  return (
+    <ConfigProvider
+      locale={zhCN}
+      wave={{ disabled: true }}
+      theme={{
+        token: {
+          colorPrimary: token("--primary"),
+          colorInfo: "#354e5e",
+          colorSuccess: token("--primary"),
+          colorWarning: token("--risk-high"),
+          colorError: token("--risk-critical"),
+          colorText: token("--text"),
+          colorTextSecondary: token("--secondary"),
+          colorTextDescription: token("--secondary"),
+          colorTextPlaceholder: token("--secondary"),
+          colorTextDisabled: "#6c7479",
+          colorBgContainerDisabled: "#eceff0",
+          colorBorder: token("--line"),
+          colorBorderSecondary: token("--line-soft"),
+          colorBgLayout: token("--canvas"),
+          colorBgContainer: token("--paper"),
+          borderRadius: 4,
+          controlHeight: 36,
+          fontFamily: token("--sans"),
+          fontSize: 14,
+          fontSizeSM: 12,
+          lineHeight: 1.65,
+          boxShadowSecondary: token("--shadow-overlay"),
+          motion: !reducedMotion,
+          motionDurationFast: reducedMotion ? "0s" : token("--motion-fast"),
+          motionDurationMid: reducedMotion ? "0s" : token("--motion-view"),
+          motionDurationSlow: reducedMotion ? "0s" : token("--motion-panel"),
+          motionEaseInOut: token("--ease"),
+          motionEaseOut: token("--ease"),
+        },
+        components: {
+          Button: {
+            primaryShadow: "0 1px 2px #24272912",
+            defaultShadow: "none",
+          },
+          Table: {
+            headerBg: "#eceff0",
+            rowHoverBg: "#f3f6f4",
+            borderColor: token("--line-soft"),
+          },
+          Tabs: { itemColor: token("--secondary"), titleFontSize: 14 },
+          Drawer: { footerPaddingInline: 24 },
+        },
+      }}
+    >
+      <AntApp>
+        <Workbench />
+      </AntApp>
+    </ConfigProvider>
+  );
+}
+
+createRoot(document.getElementById("root")!).render(<WorkbenchApp />);

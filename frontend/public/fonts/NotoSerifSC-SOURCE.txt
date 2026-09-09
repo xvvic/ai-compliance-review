@@ -1,0 +1,6 @@
+Noto Serif SC variable font, weights 200-900.
+Bundled without modification from the Google Fonts repository:
+https://github.com/google/fonts/tree/main/ofl/notoserifsc
+Font: NotoSerifSC[wght].ttf
+License: NotoSerifSC-OFL.txt (SIL Open Font License 1.1)
+Retrieved: 2026-09-09

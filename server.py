@@ -111,11 +111,14 @@ def create_app(data_dir: Path = DATA_DIR):
         if not resolved.secret and resolved.auth_mode != "claude_login":
             raise HTTPException(400, "请填写模型密钥。")
         from workbench.connection import test_connection
+        from workbench.connection_errors import ConnectionFailure
         try:
             await test_connection(resolved)
+        except ConnectionFailure as exc:
+            raise HTTPException(400, str(exc)) from exc
         except Exception as exc:
             raise HTTPException(400, "连接测试失败，请检查地址、模型名称、密钥、额度或本机 Claude 登录。") from exc
-        return {"ok": True, "message": "模型连接正常"}
+        return {"ok": True, "message": "模型与审查引擎连接正常"}
 
     @app.post("/api/documents/parse")
     async def parse(file: UploadFile = File(...)):

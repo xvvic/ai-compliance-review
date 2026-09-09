@@ -1,0 +1,6 @@
+IBM Plex Sans variable font, weights 100-700.
+Bundled without modification from the Google Fonts repository:
+https://github.com/google/fonts/tree/main/ofl/ibmplexsans
+Font: IBMPlexSans[wdth,wght].ttf
+License: IBMPlexSans-OFL.txt (SIL Open Font License 1.1)
+Retrieved: 2026-09-09

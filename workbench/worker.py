@@ -1,11 +1,13 @@
 """Isolated agent worker: JSON lines on stdout, configuration through stdin."""
 import asyncio
 import json
+import os
 import sys
 from pathlib import Path
 
 from claude_agent_sdk import AssistantMessage, ClaudeAgentOptions, ResultMessage, ToolUseBlock, query
 from workbench.config import ROOT, MCP_KEYS, Settings, agent_environment
+from workbench.connection_errors import MESSAGES, failure_code
 
 
 def emit(event):
@@ -15,15 +17,23 @@ def emit(event):
 async def run(payload):
     work = Path(payload["work_dir"])
     settings = Settings(**payload["settings"])
+    if settings.network_mode == "system" and any(
+        os.getenv(key, "").lower().startswith("socks")
+        for key in ("HTTP_PROXY", "HTTPS_PROXY", "ALL_PROXY", "http_proxy", "https_proxy", "all_proxy")
+    ):
+        emit({"type": "error", "code": "proxy", "content": MESSAGES["proxy"]})
+        return
     plugin = ROOT / "claude-code-plugin" / "ai-startup-compliance-review"
     names = ["law-search", "law-keyword", "case-semantic-search", "law-item-keyword", "citation-validator"]
-    mcp = {"pkulaw-" + name: {"type": "http", "url": settings.mcp_urls[key], "headers": {"Authorization": "Bearer " + settings.mcp_token}}
-           for name, key in zip(names, MCP_KEYS) if settings.mcp_token and settings.mcp_urls.get(key)}
+    mcp = {"pkulaw-" + name: {"type": "http", "url": settings.mcp_urls[key],
+                            "headers": {"Authorization": "Bearer " + settings.mcp_token} if settings.mcp_token else {}}
+           for name, key in zip(names, MCP_KEYS) if settings.mcp_enabled and settings.mcp_urls.get(key)}
     options = ClaudeAgentOptions(
         cwd=str(work), setting_sources=[], plugins=[{"type": "local", "path": str(plugin)}],
         skills=["ai-startup-compliance-review"], permission_mode="bypassPermissions",
         model=settings.model, mcp_servers=mcp, strict_mcp_config=True,
         env=agent_environment(settings, work), max_turns=80,
+        stderr=lambda line: None,
     )
     connection_test = payload.get("connection_test", False)
     if connection_test:
@@ -44,8 +54,9 @@ async def run(payload):
     if connection_test:
         prompt = "Reply OK."
     async for message in query(prompt=prompt, options=options):
-        if isinstance(message, ResultMessage) and message.is_error:
-            emit({"type": "error", "content": "模型审查失败，请检查模型连接、额度或登录状态后重试。"})
+        if (isinstance(message, AssistantMessage) and message.error) or (isinstance(message, ResultMessage) and message.is_error):
+            code = failure_code(message)
+            emit({"type": "error", "code": code, "content": MESSAGES[code]})
             return
         if isinstance(message, ResultMessage):
             successful_result = True
@@ -86,4 +97,4 @@ if __name__ == "__main__":
     try:
         asyncio.run(run(json.load(sys.stdin)))
     except Exception:
-        emit({"type": "error", "content": "审查服务未能完成请求，请检查模型连接与运行环境。"})
+        emit({"type": "error", "code": "runtime", "content": MESSAGES["runtime"]})

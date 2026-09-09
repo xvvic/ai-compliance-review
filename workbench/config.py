@@ -53,6 +53,7 @@ def dpapi(value: bytes, decrypt: bool = False) -> bytes:
 
 class Settings(BaseModel):
     auth_mode: Literal["api_key", "auth_token", "claude_login"] = "api_key"
+    network_mode: Literal["direct", "system"] = "direct"
     base_url: str = "https://api.anthropic.com"
     model: str = "sonnet"
     secret: str = Field(default="", max_length=4096)
@@ -60,10 +61,30 @@ class Settings(BaseModel):
     mcp_token: str = Field(default="", max_length=4096)
     clear_mcp_token: bool = False
     mcp_urls: dict[str, str] = Field(default_factory=dict)
+    mcp_enabled: bool = False
+
+    @model_validator(mode="before")
+    @classmethod
+    def migrate_retrieval(cls, values):
+        if isinstance(values, dict) and "mcp_enabled" not in values:
+            values = {**values, "mcp_enabled": any(values.get("mcp_urls", {}).values())}
+        return values
 
     @model_validator(mode="after")
     def validate_urls(self):
         from urllib.parse import urlsplit
+        self.base_url = self.base_url.strip().rstrip("/")
+        self.model = self.model.strip()
+        self.secret = self.secret.strip()
+        self.mcp_token = self.mcp_token.strip()
+        self.mcp_urls = {k: v.strip() for k, v in self.mcp_urls.items()}
+        # The agent appends /v1/messages itself; accept pasted full endpoints.
+        for suffix in ("/v1/messages", "/v1"):
+            if self.base_url.endswith(suffix):
+                self.base_url = self.base_url[:-len(suffix)]
+                break
+        if not self.base_url:
+            raise ValueError("请填写模型服务地址。")
         for value in [self.base_url, *self.mcp_urls.values()]:
             if not value:
                 continue
@@ -137,6 +158,9 @@ class ConfigStore:
 def agent_environment(settings: Settings, work_dir: Path) -> dict[str, str]:
     env = {k: "" for k in ("ANTHROPIC_API_KEY", "ANTHROPIC_AUTH_TOKEN", "ANTHROPIC_BASE_URL", "ANTHROPIC_MODEL", "CLAUDE_CODE_MODEL", "CLAUDE_CODE_FALLBACK_MODEL", "CLAUDE_CODE_OAUTH_TOKEN")}
     env.update({"ANTHROPIC_BASE_URL": settings.base_url, "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC": "1", "CLAUDE_CODE_DISABLE_AUTO_UPDATE": "1"})
+    if settings.network_mode == "direct":
+        env.update({key: "" for key in ("HTTP_PROXY", "HTTPS_PROXY", "ALL_PROXY", "http_proxy", "https_proxy", "all_proxy")})
+        env.update({"NO_PROXY": "*", "no_proxy": "*"})
     if settings.auth_mode != "claude_login":
         env["ANTHROPIC_API_KEY" if settings.auth_mode == "api_key" else "ANTHROPIC_AUTH_TOKEN"] = settings.secret
         env["CLAUDE_CONFIG_DIR"] = str(work_dir / ".agent-config")

@@ -41,8 +41,8 @@ test("desktop and mobile layouts, offline example and report inspection", async 
     ),
   ).toBeTruthy();
   const bounds = await page.locator(".intake-footer").boundingBox();
-  const scope = await page.locator(".scope-band").boundingBox();
-  expect(bounds!.y + bounds!.height).toBeLessThan(scope!.y);
+  const footer = await page.locator(".page-footer").boundingBox();
+  expect(bounds!.y + bounds!.height).toBeLessThan(footer!.y);
   await page.route("**/*", (route) =>
     route.request().url().startsWith("http://127.0.0.1:8011")
       ? route.continue()
@@ -73,13 +73,11 @@ test("upload, stream, refresh recovery, export and human review", async ({
   page,
 }) => {
   await newPage(page);
-  await page
-    .locator("input[type=file]")
-    .setInputFiles({
-      name: "企业材料.txt",
-      mimeType: "text/plain",
-      buffer: Buffer.from("企业将个人信息跨境传输至境外。涉及未成年人信息。"),
-    });
+  await page.locator("input[type=file]").setInputFiles({
+    name: "企业材料.txt",
+    mimeType: "text/plain",
+    buffer: Buffer.from("企业将个人信息跨境传输至境外。涉及未成年人信息。"),
+  });
   await expect(page.getByText("企业材料.txt", { exact: true })).toBeVisible();
   await page.getByRole("button", { name: "开始审查", exact: true }).click();
   await expect(page.getByRole("heading", { name: "审查进行中" })).toBeVisible();
@@ -111,26 +109,22 @@ test("model failure remains failed and a running review can be cancelled", async
   page,
 }) => {
   await newPage(page);
-  await page
-    .locator("input[type=file]")
-    .setInputFiles({
-      name: "失败测试.txt",
-      mimeType: "text/plain",
-      buffer: Buffer.from("FAIL 企业材料"),
-    });
+  await page.locator("input[type=file]").setInputFiles({
+    name: "失败测试.txt",
+    mimeType: "text/plain",
+    buffer: Buffer.from("FAIL 企业材料"),
+  });
   await page.getByRole("button", { name: "开始审查", exact: true }).click();
   await expect(page.getByRole("heading", { name: "审查失败" })).toBeVisible({
     timeout: 20000,
   });
   await expect(page.getByText("审查完成", { exact: true })).toHaveCount(0);
   await newPage(page);
-  await page
-    .locator("input[type=file]")
-    .setInputFiles({
-      name: "取消测试.txt",
-      mimeType: "text/plain",
-      buffer: Buffer.from("SLOW 企业材料"),
-    });
+  await page.locator("input[type=file]").setInputFiles({
+    name: "取消测试.txt",
+    mimeType: "text/plain",
+    buffer: Buffer.from("SLOW 企业材料"),
+  });
   await page.getByRole("button", { name: "开始审查", exact: true }).click();
   await page.getByRole("button", { name: "取消审查" }).click();
   await expect(page.getByRole("heading", { name: "已取消" })).toBeVisible();
@@ -140,13 +134,11 @@ test("settings and invalid document show actionable states without secret echo",
   page,
 }) => {
   await newPage(page);
-  await page
-    .locator("input[type=file]")
-    .setInputFiles({
-      name: "损坏.pdf",
-      mimeType: "application/pdf",
-      buffer: Buffer.from("broken"),
-    });
+  await page.locator("input[type=file]").setInputFiles({
+    name: "损坏.pdf",
+    mimeType: "application/pdf",
+    buffer: Buffer.from("broken"),
+  });
   await expect(page.getByRole("alert")).toContainText("文件解析失败");
   await page.setViewportSize({ width: 390, height: 844 });
   await page.getByRole("button", { name: "设置", exact: true }).click();
