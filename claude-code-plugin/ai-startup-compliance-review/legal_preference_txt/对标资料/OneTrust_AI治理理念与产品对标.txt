@@ -1,0 +1,100 @@
+AI Governance
+Ship AI Faster With Risk Control Where AI Runs
+Turn AI policy into controls that work across homegrown and third-party AI. Detect shadow AI, prevent sensitive data leaks, and give security and governance teams proof that controls are working in production.
+Watch Demo
+Contact Sales
+Accelerate AI delivery 
+Ship AI faster with automated intake, risk scoring, approvals, and policy-driven controls that remove governance friction.
+Govern AI with confidence
+Expand AI adoption confidently with continuous discovery, inventory, monitoring, and policy evaluation across models, data, agents, and vendors.
+Operate AI at scale
+Detect issues in real time, apply guardrails consistently, and generate audit-ready evidence with runtime enforcement, attestations, and ongoing validation.
+OneTrust Named a Visionary in the 2026 Gartner® Magic Quadrant™ for AI Governance Platforms
+
+See why Gartner recognized OneTrust as a Visionary in the inaugural Magic Quadrant for AI Governance Platforms.
+Download the Report
+Manage AI riskObserve AI at runtimeControl AI actions and useProve governance in production
+Manage AI Risk
+Discover AI across changing environments, assess risk consistently, and establish ownership before AI reaches production.
+Discover and centralize the AI estate
+Bring AI systems, agents, models, datasets, vendors, and projects into one governance program center to streamline intake, assign ownership, and right-size oversight from the start. OneTrust continuously discovers AI across changing environments so you know what is running, who owns it, and whether it was ever formally reviewed.
+
+Key capabilities
+Discover and inventory AI systems, models, agents, datasets, vendors, projects, and use cases
+Assess data sources, operational footprint, model context, and decision logic
+Assign ownership, lifecycle status, and accountability
+Map relationships and dependencies across the AI estate
+Assess and standardize AI risk
+Apply consistent risk evaluation across homegrown and third-party AI with built-in frameworks and automated workflows.
+
+Key capabilities
+Apply EU AI Act, NIST AI Risk Management Framework, and ISO 42001 templates
+Automate risk tiering by use case, system, component, deployment context, or data sensitivity
+Map policies and controls for risk evaluation and ongoing compliance
+Revalidate risk when a model, agent, dataset, or usage pattern materially changes
+Automate governance workflows
+Move AI use cases through clear, repeatable checkpoints without slowing delivery.
+
+Key capabilities
+Configure intake, approval, attestation, and signoff workflows
+Route reviews to the right owners based on risk and context
+Track lifecycle status, exceptions, and required controls
+Generate audit-ready evidence and documentation
+Discover how to inventory AI use cases, assess risk, operationalize policy, and enforce governance across the AI lifecycle.
+Take a Product Tour
+Proven Results
+“With OneTrust, our AI governance council has a technology-driven process to review projects, assess data needs, and uphold compliance. The customizable workflows, integrations with other platforms we utilize, and alignment with NIST’s AI Risk Management Framework have accelerated our approvals and helped embed oversight at every phase of the AI lifecycle."
+Ren Nunes
+Senior Manager, Data & AI Governance, Blackbaud
+Partnering With the Best
+OneTrust connects natively with the AI platforms already running in your environment. Amazon Bedrock, Microsoft AI Foundry, Google Vertex, and Databricks Unity Catalog are supported out of the box, so governance controls apply where AI operates, not only where it is documented. For teams managing security and engineering workflows, OneTrust also integrates with Jira and Palo Alto Networks.
+View More Service Partners
+View More Technology Partners
+Setting the Standard for Responsible AI and Trust
+We apply the same governance standards to our own AI that we help customers implement.
+Learn More
+Discover how OneTrust and AGNTCY's partnership is helping organizations address their critical governance needs.
+Learn More
+You may also like
+FAQ
+What is AI governance and why does it matter for enterprise organizations?
+What is AI governance software?
+What should an enterprise AI governance framework include?
+How can we comply with the EU AI Act and other global AI regulations?
+How does OneTrust govern AI at runtime?
+What is the difference between AI Policy Manager and Runtime Controls?
+Ship AI faster with risk control where AI runs
+See how OneTrust helps you discover AI in use, translate policy intent into machine-ready controls, and prove continuous governance across AI — so governance keeps pace with delivery.
+Watch Demo
+Contact Sales
+Top Searches
+Trust Center
+Consent & Preferences
+Third-Party Management
+AI Governance
+News
+OneTrust Newsroom
+OneTrust appoints John Heyman as CEO
+Resources
+Glossary of AI Governance, Privacy & Data Risk Terms
+Resources
+Demo Videos
+Company
+About Us
+OneTrust Global Offices
+Careers
+Newsroom
+Legal and Compliance Information
+Glossary
+AI DPIA
+AI Risk Management
+Data privacy
+DORA
+EU General Data Protection Regulation (GDPR)
+Contact Us
+Contact Us
+Request Demo
+Platform
+Platform
+Pricing and Packaging
+OneTrust Integratio
