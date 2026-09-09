@@ -17,7 +17,12 @@ venv/
 .streamlit/
 
 AGENTS.md
-/docs
+/docs/*
+!/docs/开发指南.md
+!/docs/images/
+/docs/images/*
+!/docs/images/workbench.png
+!/docs/images/model-settings.png
 /.agents
 /.codex
 /.deps

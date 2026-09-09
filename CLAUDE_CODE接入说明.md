@@ -5,7 +5,7 @@
 适用范围：
 
 - 仅针对 `claude-code-plugin/` 目录下的 Claude Code 插件接入
-- 不涉及本仓库中的 Streamlit 前端、LLM 调用封装、`pkulaw_mcp.py` 原型代码
+- 本文面向单独接入 Claude Code 插件的用户；使用 Windows 工作台请阅读 [README](README.md)，无需按本文安装插件或设置环境变量
 
 ## 一、当前仓库中的插件目录
 
@@ -368,14 +368,9 @@ echo "$PKULAW_CITATION_VALIDATOR_URL"
 
 所以只要本地语料已经足够回答问题，Claude 可能不会主动打 MCP。
 
-### 5. `pkulaw_mcp.py` 为什么没被用到
+### 5. 插件如何连接在线检索
 
-因为这次接入 Claude Code 走的是插件 `.mcp.json` 方案，不是应用内自己用 `requests` 手工调用远端接口的方案。
-
-所以：
-
-- `pkulaw_mcp.py` 是仓库原型代码
-- Claude Code 接入实际使用的是插件目录里的 `.mcp.json`
+Claude Code 插件使用插件目录中的 `.mcp.json` 声明在线检索服务。Windows 工作台则通过“设置”中的“法规检索”填写连接信息，具体操作见 [使用说明](README.md)。
 
 ## 十、建议的实际接入顺序
 
