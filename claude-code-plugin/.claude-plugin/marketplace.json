@@ -3,7 +3,7 @@
   "name": "ai-compliance-review-local",
   "description": "Local Claude Code plugin marketplace for AI startup compliance review workflows with PKULAW MCP connectors.",
   "owner": {
-    "name": "witt"
+    "name": "Anonymous Contributor"
   },
   "plugins": [
     {
@@ -12,7 +12,7 @@
       "source": "./ai-startup-compliance-review",
       "description": "Reviews AI startup business scenarios for compliance risk, evidence gaps, remediation paths, and source-tagged legal support using local corpus material first and PKULAW MCP as an optional retrieval layer.",
       "author": {
-        "name": "witt"
+        "name": "Anonymous Contributor"
       }
     }
   ]
