@@ -57,8 +57,12 @@ def main():
         run("npm.cmd", "ci", cwd=ROOT / "frontend")
         run("npm.cmd", "run", "build", cwd=ROOT / "frontend")
     run(sys.executable, ROOT / "scripts" / "prepare_assets.py")
-    for name in ("server.py", "launcher.py", "requirements.lock", "README.md", "VALIDATION.md"):
+    for name in ("server.py", "launcher.py", "requirements.lock", "README.md"):
         shutil.copy2(ROOT / name, bundle / name)
+    images = bundle / "docs" / "images"
+    images.mkdir(parents=True)
+    for name in ("workbench.png", "model-settings.png"):
+        shutil.copy2(ROOT / "docs" / "images" / name, images / name)
     for name in ("workbench", "assets", "frontend/dist"):
         shutil.copytree(ROOT / name, bundle / name, ignore=shutil.ignore_patterns("__pycache__", "*.pyc"))
     plugin = Path("claude-code-plugin/ai-startup-compliance-review")

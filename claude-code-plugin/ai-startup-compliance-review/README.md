@@ -6,7 +6,7 @@ This directory is an installable Claude Code plugin package. It exposes:
 - five optional PKULAW MCP connectors
 - a plugin-packaged local corpus under `legal_preference_txt/`
 
-This package does not use the repository's Streamlit UI, local LLM wrappers, or `pkulaw_mcp.py`.
+This document covers standalone Claude Code plugin setup. For the Windows workbench, follow the [user guide](https://github.com/xvvic/ai-compliance-review/blob/HEAD/README.md); its portable package includes the plugin.
 
 ## Directory Shape
 
