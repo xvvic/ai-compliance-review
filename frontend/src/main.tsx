@@ -633,32 +633,38 @@ function Workbench() {
                   </div>
                   {processOpen && (
                     <div className="process-grid" id="review-process">
-                      <div>
-                        {job?.tasks.map((t, i) => (
-                          <div className={`task-row ${t.status}`} key={i}>
-                            <span>
-                              {t.status === "completed" ? (
-                                <Check size={14} />
-                              ) : (
-                                i + 1
-                              )}
-                            </span>
-                            {t.content}
-                          </div>
-                        ))}
-                      </div>
-                      <div className="activity-list">
-                        {job?.activities
-                          .slice(-8)
-                          .reverse()
-                          .map((a, i) => (
-                            <div key={i}>
-                              <span>{a.label}</span>
-                              <time>
-                                {new Date(a.at).toLocaleTimeString("zh-CN")}
-                              </time>
+                      <div className="process-col">
+                        <div className="process-caption">审查步骤</div>
+                        <div>
+                          {job?.tasks.map((t, i) => (
+                            <div className={`task-row ${t.status}`} key={i}>
+                              <span>
+                                {t.status === "completed" ? (
+                                  <Check size={14} />
+                                ) : (
+                                  i + 1
+                                )}
+                              </span>
+                              {t.content}
                             </div>
                           ))}
+                        </div>
+                      </div>
+                      <div className="process-col process-col-ops">
+                        <div className="process-caption">具体操作</div>
+                        <div className="activity-list">
+                          {job?.activities
+                            .slice(-8)
+                            .reverse()
+                            .map((a, i) => (
+                              <div key={i}>
+                                <span>{a.label}</span>
+                                <time>
+                                  {new Date(a.at).toLocaleTimeString("zh-CN")}
+                                </time>
+                              </div>
+                            ))}
+                        </div>
                       </div>
                     </div>
                   )}
