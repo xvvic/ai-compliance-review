@@ -14,6 +14,7 @@ import psutil
 import yaml
 
 from workbench.config import DATA_DIR, ROOT, Settings, atomic_write
+from workbench.rag import retrieve, report_citations
 
 PLUGIN = ROOT / "claude-code-plugin" / "ai-startup-compliance-review"
 
@@ -82,6 +83,8 @@ class ReviewManager:
             job["tasks"] = event["items"]
         elif event["type"] == "tool_start":
             job["activities"] = (job["activities"] + [{"label": event["tool_name"], "at": now()}])[-100:]
+        elif event["type"] == "rag":
+            job["rag"] = event["rag"]
         return event
 
     async def start(self, text, name, settings: Settings):
@@ -103,8 +106,13 @@ class ReviewManager:
         try:
             (work / "待审查材料.txt").write_text(text, encoding="utf-8")
             detection = await asyncio.to_thread(scan, text)
+            rag = await retrieve(text, detection, settings)
+            rag = redact_event(rag, (settings.secret, settings.mcp_token))
+            self.event({"type": "rag", "rag": rag})
+            from workbench.config import worker_environment
             spawning = asyncio.create_task(asyncio.create_subprocess_exec(
                 sys.executable, "-m", "workbench.worker", cwd=ROOT,
+                env=worker_environment(),
                 stdin=asyncio.subprocess.PIPE, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.DEVNULL,
                 creationflags=0x08000000 if os.name == "nt" else 0, limit=8 * 1024 * 1024,
             ))
@@ -113,7 +121,8 @@ class ReviewManager:
             except asyncio.CancelledError:
                 self.process = await spawning
                 raise
-            payload = json.dumps({"work_dir": str(work), "settings": settings.model_dump()}, ensure_ascii=False)
+            worker_settings = settings.model_dump()
+            payload = json.dumps({"work_dir": str(work), "settings": worker_settings, "rag": rag}, ensure_ascii=False)
             self.process.stdin.write(payload.encode("utf-8"))
             await self.process.stdin.drain()
             self.process.stdin.close()
@@ -126,13 +135,18 @@ class ReviewManager:
                         raise RuntimeError(event["content"])
                     if event["type"] == "final":
                         report = event["content"]
+                    elif event["type"] == "rag_injected" and rag["fragments"]:
+                        rag = {**rag, "injected": True}
+                        self.event({"type": "rag", "rag": rag})
                     elif event["type"] in ("todos", "tool_start"):
                         self.event(event)
                 code = await self.process.wait()
             if code or not report.strip():
                 raise RuntimeError("模型未生成完整报告，请检查连接或额度后重试。")
+            rag = {**rag, "cited_ids": report_citations(report, rag)}
+            self.event({"type": "rag", "rag": rag})
             result = {"generated_at": now(), "model": settings.model, "material": {"chars": len(text), "preview": text[:200]},
-                      "risk_scan": detection, "report_markdown": report, "schema_version": "1.1", "review_id": job["id"]}
+                      "risk_scan": detection, "report_markdown": report, "schema_version": "1.2", "review_id": job["id"], "rag": rag}
             job["report"] = result
             saved_as = "risk_report_" + job["id"] + ".json"
             try:

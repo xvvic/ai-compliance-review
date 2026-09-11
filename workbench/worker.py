@@ -8,6 +8,7 @@ from pathlib import Path
 from claude_agent_sdk import AssistantMessage, ClaudeAgentOptions, ResultMessage, ToolUseBlock, query
 from workbench.config import ROOT, MCP_KEYS, Settings, agent_environment
 from workbench.connection_errors import MESSAGES, failure_code
+from workbench.rag import context_prompt
 
 
 def emit(event):
@@ -53,7 +54,13 @@ async def run(payload):
     successful_result = False
     if connection_test:
         prompt = "Reply OK."
+    context = "" if connection_test else context_prompt(payload.get("rag"))
+    prompt += context
+    context_acknowledged = False
     async for message in query(prompt=prompt, options=options):
+        if context and not context_acknowledged:
+            emit({"type": "rag_injected"})
+            context_acknowledged = True
         if (isinstance(message, AssistantMessage) and message.error) or (isinstance(message, ResultMessage) and message.is_error):
             code = failure_code(message)
             emit({"type": "error", "code": code, "content": MESSAGES[code]})

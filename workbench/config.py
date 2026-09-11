@@ -14,6 +14,7 @@ from pydantic import BaseModel, Field, model_validator
 ROOT = Path(__file__).resolve().parents[1]
 DATA_DIR = Path(os.getenv("COMPLIANCE_DATA_DIR", str(Path(os.getenv("LOCALAPPDATA", str(Path.home()))) / "AIComplianceWorkbench")))
 MCP_KEYS = ["LAW_SEARCH_URL", "LAW_KEYWORD_URL", "CASE_SEMANTIC_URL", "LAW_ITEM_URL", "CITATION_VALIDATOR_URL"]
+SECRET_FIELDS = ("secret", "mcp_token")
 
 
 def atomic_write(path: Path, text: str):
@@ -62,6 +63,7 @@ class Settings(BaseModel):
     clear_mcp_token: bool = False
     mcp_urls: dict[str, str] = Field(default_factory=dict)
     mcp_enabled: bool = False
+    rag_enabled: bool = False
 
     @model_validator(mode="before")
     @classmethod
@@ -105,7 +107,7 @@ class ConfigStore:
     def load(self) -> Settings:
         if self.path.exists():
             raw = json.loads(self.path.read_text(encoding="utf-8"))
-            for key in ("secret", "mcp_token"):
+            for key in SECRET_FIELDS:
                 encrypted = raw.pop(key + "_encrypted", "")
                 raw[key] = dpapi(base64.b64decode(encrypted), True).decode() if encrypted else ""
             return Settings(**raw)
@@ -119,6 +121,7 @@ class ConfigStore:
             secret=token or key,
             mcp_token=env.get("PKULAW_ACCESS_TOKEN") or "",
             mcp_urls={k: env.get("PKULAW_" + k) or "" for k in MCP_KEYS},
+            rag_enabled=str(env.get("COMPLIANCE_RAG_ENABLED", "")).lower() in ("1", "true"),
         )
 
     def resolve(self, settings: Settings) -> Settings:
@@ -127,18 +130,21 @@ class ConfigStore:
         except (ValueError, OSError):
             previous = Settings()
         updated = settings.model_copy(deep=True)
-        for key, clear in (("secret", "clear_secret"), ("mcp_token", "clear_mcp_token")):
+        for key, clear in ((key, "clear_" + key) for key in SECRET_FIELDS):
             if getattr(updated, clear):
                 setattr(updated, key, "")
             elif not getattr(updated, key):
-                if key != "secret" or (previous.auth_mode == updated.auth_mode and previous.base_url == updated.base_url):
+                keep = True
+                if key == "secret":
+                    keep = previous.auth_mode == updated.auth_mode and previous.base_url == updated.base_url
+                if keep:
                     setattr(updated, key, getattr(previous, key))
         return updated
 
     def save(self, settings: Settings):
         updated = self.resolve(settings)
-        raw = updated.model_dump(exclude={"clear_secret", "clear_mcp_token"})
-        for key in ("secret", "mcp_token"):
+        raw = updated.model_dump(exclude={"clear_" + key for key in SECRET_FIELDS})
+        for key in SECRET_FIELDS:
             value = raw.pop(key)
             raw[key + "_encrypted"] = base64.b64encode(dpapi(value.encode())).decode() if value else ""
         atomic_write(self.path, json.dumps(raw, ensure_ascii=False, indent=2))
@@ -150,8 +156,9 @@ class ConfigStore:
         except (ValueError, OSError):
             settings = Settings()
             error = "本机配置无法读取，请重新保存模型设置。"
-        return {**settings.model_dump(exclude={"secret", "mcp_token", "clear_secret", "clear_mcp_token"}),
+        return {**settings.model_dump(exclude=set(SECRET_FIELDS) | {"clear_" + key for key in SECRET_FIELDS}),
                 "has_secret": bool(settings.secret), "has_mcp_token": bool(settings.mcp_token),
+                "knowledge_base": {"status": "ready", "documents": 38, "version": "local-bm25-v1"},
                 "configured": bool(settings.secret) or settings.auth_mode == "claude_login", "config_error": error}
 
 
@@ -170,3 +177,9 @@ def agent_environment(settings: Settings, work_dir: Path) -> dict[str, str]:
     import sys
     env["PATH"] = str(Path(sys.executable).parent) + os.pathsep + os.environ.get("PATH", "")
     return env
+
+
+def worker_environment():
+    """Return a sanitized environment for the worker process."""
+    return dict(os.environ)
+

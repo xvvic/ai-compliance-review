@@ -3,7 +3,7 @@ import json
 import os
 import sys
 import tempfile
-from workbench.config import ROOT
+from workbench.config import ROOT, worker_environment
 from workbench.jobs import terminate_tree
 from workbench.connection_errors import ConnectionFailure
 
@@ -14,6 +14,7 @@ async def test_connection(settings):
         try:
             spawning = asyncio.create_task(asyncio.create_subprocess_exec(
                 sys.executable, "-m", "workbench.worker", cwd=ROOT,
+                env=worker_environment(),
                 stdin=asyncio.subprocess.PIPE, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.DEVNULL,
                 creationflags=0x08000000 if os.name == "nt" else 0))
             try:

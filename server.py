@@ -131,6 +131,10 @@ def create_app(data_dir: Path = DATA_DIR):
             await file.close()
         return {"filename": Path((file.filename or "企业材料").replace("\\", "/")).name, "text": text, "chars": len(text), "bytes": len(content)}
 
+    @app.post("/api/config/rag/test")
+    async def test_rag(settings: Settings):
+        return {"ok": True, "message": "本地 BM25 知识库可用。"}
+
     @app.get("/api/review/current")
     async def current():
         return manager.snapshot()

@@ -1,0 +1,269 @@
+{
+  "calibration": [
+    {
+      "query": "面向公众的图片换脸功能没有给合成内容加上显著标识。",
+      "expected": [
+        "案例/国家网信办网络安全、数据安全、个人信息保护执法典型案例.txt"
+      ]
+    },
+    {
+      "query": "FTP服务允许匿名访问，防火墙安全组未生效导致泄露。",
+      "expected": [
+        "案例/国家网信办网络安全、数据安全、个人信息保护执法典型案例.txt"
+      ]
+    },
+    {
+      "query": "腾讯收购中国音乐集团后独家音乐版权如何影响竞争？",
+      "expected": [
+        "案例/腾讯收购中国音乐集团股权违法实施经营者集中案行政处罚决定书.txt"
+      ]
+    },
+    {
+      "query": "AI risk management governance should be integrated into organizational policies.",
+      "expected": [
+        "官方文件/NIST.AI.100-1.txt"
+      ]
+    },
+    {
+      "query": "人工智能合规中监管、标准和认证的五层治理框架。",
+      "expected": [
+        "论文/A five-layer framework for AI governance- integrating regulation, standards, and certification.txt"
+      ]
+    },
+    {
+      "query": "企业合规文化如何通过培训和沟通落地？",
+      "expected": [
+        "书籍/15248646_企业合规管理全流程++政策讲解+热点解析+操作实务.txt",
+        "书籍/15231227+合规管理体系标准解读及建设指南（修订扩展版）.txt"
+      ]
+    },
+    {
+      "query": "数据出境安全评估以及个人信息跨境提供的法律要求。",
+      "expected": [
+        "书籍/网络安全法、数据安全法、个人信息保护法一本通 (法规应用研究中心).txt",
+        "书籍/中华人民共和国个人信息保护法理解适用与案例解读 (张平).txt"
+      ]
+    },
+    {
+      "query": "What privacy limits apply to police searches under the Fourth Amendment?",
+      "expected": [
+        "书籍/Information privacy law (Solove, Daniel J., 1972- author).txt"
+      ]
+    },
+    {
+      "query": "番茄炒鸡蛋需要多少盐？",
+      "expected": []
+    },
+    {
+      "query": "月球的潮汐锁定是如何形成的？",
+      "expected": []
+    },
+    {
+      "query": "怎样给小提琴更换琴弦？",
+      "expected": []
+    },
+    {
+      "query": "如何求二次方程的实数根？",
+      "expected": []
+    },
+    {
+      "query": "Which soil is best for growing roses?",
+      "expected": []
+    },
+    {
+      "query": "冰岛冬季有哪些极光观测地点？",
+      "expected": []
+    },
+    {
+      "query": "家用空调压缩机的制冷循环原理。",
+      "expected": []
+    },
+    {
+      "query": "讲解国际象棋西西里防御的开局。",
+      "expected": []
+    }
+  ],
+  "acceptance": [
+    {
+      "query": "购物程序在用户未操作时搜集手机上安装卸载的应用列表，还索要无关权限。",
+      "expected": [
+        "案例/国家网信办网络安全、数据安全、个人信息保护执法典型案例.txt"
+      ]
+    },
+    {
+      "query": "自助售卖机器在支付时没有征得同意就采集面部生物信息。",
+      "expected": [
+        "案例/国家网信办网络安全、数据安全、个人信息保护执法典型案例.txt"
+      ]
+    },
+    {
+      "query": "换脸应用没有完成上线前的安全评估，生成内容也缺少醒目标记。",
+      "expected": [
+        "案例/国家网信办网络安全、数据安全、个人信息保护执法典型案例.txt"
+      ]
+    },
+    {
+      "query": "租车企业的数据库端口开放，没有设置密码，发生反复盗取数据。",
+      "expected": [
+        "案例/国家网信办网络安全、数据安全、个人信息保护执法典型案例.txt"
+      ]
+    },
+    {
+      "query": "滴滴因收集司机人脸、乘客精确位置等信息受到处罚的具体问题。",
+      "expected": [
+        "案例/国家互联网信息办公室有关负责人就对滴滴全球股份有限公司依法作出网络安全审查相关行政处罚的决定答记者问_中央网络安全和信息化委员会办公室.txt"
+      ]
+    },
+    {
+      "query": "Rite Aid facial recognition surveillance produced false matches and harmed customers.",
+      "expected": [
+        "案例/US-04_FTC_Rite_Aid人脸识别监控案.txt"
+      ]
+    },
+    {
+      "query": "Clearview scraped publicly accessible face images to build its recognition database.",
+      "expected": [
+        "案例/EU-06_Clearview_AI人脸识别抓取公开图像案.txt"
+      ]
+    },
+    {
+      "query": "投资顾问 Delphia 宣传使用客户数据训练 AI，但实际并未做到。",
+      "expected": [
+        "案例/US-01_SEC_Delphia_AI_washing_执法案.txt"
+      ]
+    },
+    {
+      "query": "儿童默认公开账户、年龄验证及 TikTok 数据保护罚款。",
+      "expected": [
+        "案例/EU-03_TikTok儿童个人数据处理罚款案.txt"
+      ]
+    },
+    {
+      "query": "直播平台虎牙斗鱼合并为什么被禁止，市场竞争受到什么影响？",
+      "expected": [
+        "案例/虎牙公司与斗鱼国际控股有限公司合并案反垄断审查决定公告.txt"
+      ]
+    },
+    {
+      "query": "What are the GOVERN, MAP, MEASURE and MANAGE functions in AI RMF?",
+      "expected": [
+        "官方文件/NIST.AI.100-1.txt"
+      ]
+    },
+    {
+      "query": "NIST 如何描述人工智能系统的有效可靠性和安全韧性？",
+      "expected": [
+        "官方文件/NIST.AI.100-1.txt"
+      ]
+    },
+    {
+      "query": "NIST AI RMF 如何理解可解释性、可解释结果与透明问责？",
+      "expected": [
+        "官方文件/NIST.AI.100-1.txt"
+      ]
+    },
+    {
+      "query": "How does AI RMF distinguish risk tolerance and risk prioritization?",
+      "expected": [
+        "官方文件/NIST.AI.100-1.txt"
+      ]
+    },
+    {
+      "query": "T/TAF 309 如何根据应用领域与潜在危害划分生成式人工智能风险？",
+      "expected": [
+        "论文/TTAF 309—2025 生成式人工智能产品和服务风险分类分级指南.txt"
+      ]
+    },
+    {
+      "query": "如何将人工智能合规证据转换为机器可读的结构化记录？",
+      "expected": [
+        "论文/Making AI Compliance Evidence Machine-Readable.txt"
+      ]
+    },
+    {
+      "query": "Cross-Assessment Verification 的 Cross-Compliance Index 如何度量合规？",
+      "expected": [
+        "论文/Cross-Assessment & Verification for Evaluation (CAVe) Framework for AI Risk and Compliance Assessment Using a Cross-Compliance Index (CCI).txt"
+      ]
+    },
+    {
+      "query": "欧盟 AI Act 下如何使用场景与比例原则进行风险评估？",
+      "expected": [
+        "论文/AI Risk Assessment A Scenario-Based, Proportional Methodology for the AI Act.txt"
+      ]
+    },
+    {
+      "query": "企业收到内部举报后如何组织调查并保护举报人？",
+      "expected": [
+        "书籍/15248646_企业合规管理全流程++政策讲解+热点解析+操作实务.txt",
+        "书籍/15231227+合规管理体系标准解读及建设指南（修订扩展版）.txt"
+      ]
+    },
+    {
+      "query": "企业如何为商业合作伙伴开展合规尽职调查？",
+      "expected": [
+        "书籍/15248646_企业合规管理全流程++政策讲解+热点解析+操作实务.txt",
+        "书籍/15231227+合规管理体系标准解读及建设指南（修订扩展版）.txt"
+      ]
+    },
+    {
+      "query": "合规管理体系中的管理评审、内部审核和持续改进如何衔接？",
+      "expected": [
+        "书籍/15231227+合规管理体系标准解读及建设指南（修订扩展版）.txt",
+        "书籍/15248646_企业合规管理全流程++政策讲解+热点解析+操作实务.txt"
+      ]
+    },
+    {
+      "query": "美国第四修正案如何判断合理隐私期待与新技术监控？",
+      "expected": [
+        "书籍/Information privacy law (Solove, Daniel J., 1972- author).txt"
+      ]
+    },
+    {
+      "query": "个人信息处理者向其他处理者提供个人信息是否需要单独同意？",
+      "expected": [
+        "书籍/网络安全法、数据安全法、个人信息保护法一本通 (法规应用研究中心).txt",
+        "书籍/中华人民共和国个人信息保护法理解适用与案例解读 (张平).txt"
+      ]
+    },
+    {
+      "query": "未满十四周岁未成年人的个人信息处理与监护人同意要求是什么？",
+      "expected": [
+        "书籍/网络安全法、数据安全法、个人信息保护法一本通 (法规应用研究中心).txt",
+        "书籍/中华人民共和国个人信息保护法理解适用与案例解读 (张平).txt"
+      ]
+    },
+    {
+      "query": "如何制作蓬松的戚风蛋糕？",
+      "expected": []
+    },
+    {
+      "query": "木星卫星木卫二的冰层有多厚？",
+      "expected": []
+    },
+    {
+      "query": "请计算三角形三条边为三四五时的面积。",
+      "expected": []
+    },
+    {
+      "query": "牡丹花春季扦插的浇水技巧。",
+      "expected": []
+    },
+    {
+      "query": "巴赫十二平均律钢琴曲集的指法练习。",
+      "expected": []
+    },
+    {
+      "query": "How do I replace a bicycle inner tube?",
+      "expected": []
+    },
+    {
+      "query": "长跑训练如何安排间歇跑配速？",
+      "expected": []
+    },
+    {
+      "query": "解释黑洞霍金辐射的量子过程。",
+      "expected": []
+    }
+  ]
+}

@@ -41,6 +41,11 @@ def main():
     os.environ["PYTHONDONTWRITEBYTECODE"] = "1"
     if os.name != "nt":
         raise SystemExit("Build this distribution on Windows x64 with Python 3.13.")
+    # Fail before touching the previous distribution. Packaging never builds an index.
+    sys.path.insert(0, str(ROOT))
+    from workbench.rag import _index
+    if _index()[2] == 0:
+        raise ValueError("内置法规语料为空，无法构建发布包。")
     if args.proxy:
         urllib.request.install_opener(urllib.request.build_opener(urllib.request.ProxyHandler({"http": args.proxy, "https": args.proxy})))
         os.environ["HTTP_PROXY"] = args.proxy
@@ -99,7 +104,7 @@ def main():
             source = package.parent / filename
             if source.is_file():
                 shutil.copy2(source, licenses / (name + "-" + filename.replace("/", "_")))
-    run(runtime / "python.exe", "-c", "import server, claude_agent_sdk, yaml, docx, pypdf, psutil; print('Portable imports OK')", cwd=bundle)
+    run(runtime / "python.exe", "-c", "import server, claude_agent_sdk, yaml, docx, pypdf, psutil; from workbench.rag import _index; assert _index()[2] > 0; print('Portable imports and knowledge OK')", cwd=bundle)
     run(bundle / "runtime/git/bin/bash.exe", "--version", cwd=bundle)
     # The embedded interpreter ignores PYTHONDONTWRITEBYTECODE; remove verification caches.
     for cache_dir in bundle.rglob("__pycache__"):

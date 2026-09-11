@@ -12,3 +12,5 @@ pypdf>=5,<7
 PyYAML>=6,<7
 httpx>=0.27,<1
 psutil>=6,<8
+
+# Embedded retrieval engine and tokenizer (no model weights)

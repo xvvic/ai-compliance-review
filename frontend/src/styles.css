@@ -43,6 +43,22 @@
   --motion-panel: 220ms;
   --ease: cubic-bezier(0.2, 0, 0, 1);
 }
+.rag-summary { display: flex; align-items: center; gap: 16px; padding: 20px 24px; margin: 16px 0; background: var(--primary-tint); border: 1px solid #cdded7; border-radius: 6px; color: var(--primary); }
+.rag-summary-copy { flex: 1; min-width: 0; }
+.rag-summary-copy strong, .rag-summary-copy span { display: block; }
+.rag-summary-copy span { color: var(--secondary); font-size: 13px; margin-top: 3px; }
+.rag-open, .rag-citation { background: transparent; color: var(--primary); border: 0; padding: 4px; }
+.rag-open { white-space: nowrap; }
+.rag-citation { font: inherit; text-decoration: underline; text-underline-offset: 3px; }
+.rag-evidence { overflow-wrap: anywhere; }
+.rag-note, .rag-source { color: var(--secondary); font-size: 13px; }
+.rag-queries { padding-left: 20px; margin-bottom: 24px; }
+.rag-fragment { border: 1px solid var(--line); border-radius: 6px; padding: 18px; margin-bottom: 16px; scroll-margin-top: 16px; }
+.rag-fragment.selected { border-color: var(--primary); background: var(--primary-tint); }
+.rag-fragment h3 { font-size: 15px; margin: 10px 0 6px; }
+.rag-fragment blockquote { margin: 12px 0 0; border-left: 3px solid #cdded7; padding-left: 14px; white-space: pre-wrap; line-height: 1.85; }
+.rag-fragment-labels { display: flex; flex-wrap: wrap; gap: 4px; }
+@media (max-width: 600px) { .rag-summary { flex-wrap: wrap; gap: 10px; padding: 16px; } .rag-summary-copy { flex-basis: calc(100% - 40px); } .rag-open { margin-left: 30px; } }
 * {
   box-sizing: border-box;
   letter-spacing: 0;

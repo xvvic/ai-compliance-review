@@ -76,11 +76,12 @@ export function SettingsDrawer({
   const [tab, setTab] = useState("model");
   const [advanced, setAdvanced] = useState<string[]>([]);
   const [selected, setSelected] = useState<string[]>([]);
-  const [busy, setBusy] = useState<"test" | "save" | null>(null);
+  const [busy, setBusy] = useState<"test" | "rag-test" | "save" | null>(null);
   const [result, setResult] = useState<{ ok: boolean; text: string } | null>(
     null,
   );
   const enabled = Form.useWatch("mcp_enabled", form);
+  const embeddingUrl = Form.useWatch("embedding_url", form);
   const auth = Form.useWatch("auth_mode", form);
   const baseUrl = Form.useWatch("base_url", form);
   const canKeepSecret =
@@ -94,9 +95,13 @@ export function SettingsDrawer({
     form.setFieldsValue({
       network_mode: "direct",
       mcp_enabled: false,
+      rag_enabled: false,
+      embedding_url: "https://router.tumuer.me/v1/embeddings",
       ...config,
       secret: "",
       mcp_token: "",
+      embedding_api_key: "",
+      clear_embedding_api_key: false,
       clear_secret: false,
       clear_mcp_token: false,
     });
@@ -161,13 +166,32 @@ export function SettingsDrawer({
       else if ((error as any)?.errorFields?.length) {
         const field = (error as any).errorFields[0].name[0];
         setTab(
-          ["mcp_urls", "mcp_token"].includes(field) ? "retrieval" : "model",
+          ["embedding_url", "embedding_api_key"].includes(field) ? "knowledge" : ["mcp_urls", "mcp_token"].includes(field) ? "retrieval" : "model",
         );
         if (field === "base_url") setAdvanced(["advanced"]);
       }
     } finally {
       setBusy(null);
     }
+  };
+
+  const testRag = async () => {
+    try {
+      await form.validateFields(["embedding_url"]);
+      setBusy("rag-test");
+      setResult(null);
+      const values = form.getFieldsValue(true);
+      const response = await api("/api/config/rag/test", "POST", {
+        embedding_url: values.embedding_url,
+        embedding_model: config?.embedding_model || "cf/qwen-embedding-0.6b",
+        embedding_api_key: values.embedding_api_key,
+        clear_embedding_api_key: values.clear_embedding_api_key,
+        network_mode: values.network_mode,
+      });
+      setResult({ ok: true, text: response.message });
+    } catch (error) {
+      if (error instanceof Error) setResult({ ok: false, text: error.message });
+    } finally { setBusy(null); }
   };
 
   return (
@@ -196,7 +220,7 @@ export function SettingsDrawer({
               type="primary"
               icon={<Save size={16} />}
               loading={busy === "save"}
-              disabled={busy === "test"}
+              disabled={!!busy && busy !== "save"}
               onClick={() => submit(false)}
             >
               保存设置
@@ -337,11 +361,24 @@ export function SettingsDrawer({
                     className="model-test-button"
                     icon={<PlugZap size={16} />}
                     loading={busy === "test"}
-                    disabled={busy === "save"}
+                    disabled={!!busy && busy !== "test"}
                     onClick={() => submit(true)}
                   >
                     测试模型连接
                   </Button>
+                </div>
+              ),
+            },
+            {
+              key: "knowledge",
+              label: "知识库与本地检索",
+              forceRender: true,
+              children: (
+                <div className="settings-section">
+                  <div className="retrieval-source"><div><strong>内置参考知识库</strong><span>{config?.knowledge_base?.documents || 38} 份资料 · 本地 BM25 检索</span></div><Tag color="success">已就绪</Tag></div>
+                  <p className="rag-note">知识库版本：{config?.knowledge_base?.version || "local-bm25-v1"}</p>
+                  <div className="retrieval-heading"><div><strong>启用检索增强</strong><span>上传材料仅用于审查，不加入知识库</span></div><Form.Item name="rag_enabled" valuePropName="checked" noStyle><Switch aria-label="启用检索增强" /></Form.Item></div>
+                  <p className="rag-note">检索完全在本机执行，无需 Embedding API、模型下载或额外服务。</p>
                 </div>
               ),
             },

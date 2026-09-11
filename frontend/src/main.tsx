@@ -47,6 +47,7 @@ import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { api, initialize, readEvents, request } from "./api";
 import { SettingsDrawer } from "./SettingsDrawer";
+import { RagEvidence, RagSummary, hasRag, ragCitationPlugin, type RagRecord } from "./RagEvidence";
 import "./styles.css";
 
 type Rule = {
@@ -61,6 +62,7 @@ type Rule = {
   semantic_cues: string;
 };
 type Report = {
+  rag?: RagRecord;
   generated_at: string;
   model: string;
   report_markdown: string;
@@ -69,6 +71,7 @@ type Report = {
   review_id: string;
 };
 type Job = {
+  rag?: RagRecord;
   id: string;
   status: string;
   filename: string;
@@ -137,10 +140,14 @@ function Workbench() {
   const [detail, setDetail] = useState<Rule | null>(null),
     [decisions, setDecisions] = useState<Record<string, Decision>>({}),
     [submitting, setSubmitting] = useState(false);
+  const [ragOpen, setRagOpen] = useState(false);
+  const [ragSelected, setRagSelected] = useState<string | null>(null);
   const [processOpen, setProcessOpen] = useState(true),
     [tick, setTick] = useState(Date.now());
   const consuming = useRef(false);
   const report = example || job?.report;
+  const rag = report ? report.rag : job?.rag;
+  const openRag = (id: string | null = null) => { setRagSelected(id); setRagOpen(true); };
   const running = starting || job?.status === "running";
   const rules = report?.risk_scan.matched_rules || [];
   const must = rules.filter(
@@ -156,7 +163,9 @@ function Workbench() {
   const consume = async (response: Response) => {
     consuming.current = true;
     try {
-      await readEvents(response, () => {});
+      await readEvents(response, (event) => {
+        if (event.type === "rag") setJob(current => current && current.id === event.review_id ? { ...current, rag: event.rag } : current);
+      });
       await refresh();
     } finally {
       consuming.current = false;
@@ -220,6 +229,8 @@ function Workbench() {
       setTab("report");
       setFilter("all");
       setSearch("");
+      setRagOpen(false);
+      setRagSelected(null);
     };
     if (report && !example)
       modal.confirm({
@@ -320,13 +331,15 @@ function Workbench() {
           </span>
         </div>
         <Markdown
-          remarkPlugins={[remarkGfm]}
+          remarkPlugins={[remarkGfm, ragCitationPlugin(hasRag(rag) ? rag.fragments.map(f => f.id) : [])]}
           skipHtml
           components={{
             h1: ({ children }) => <h1 id={String(children)}>{children}</h1>,
             h2: ({ children }) => <h2 id={String(children)}>{children}</h2>,
             h3: ({ children }) => <h3 id={String(children)}>{children}</h3>,
-            a: ({ href, children }) => (
+            a: ({ href, children }) => hasRag(rag) && rag.fragments.some(f => href === `#rag-${f.id}`) ? (
+              <button className="rag-citation" onClick={() => openRag(href!.slice(5))}>{children}</button>
+            ) : (
               <a href={href} target="_blank" rel="noreferrer">
                 {children}
               </a>
@@ -580,6 +593,7 @@ function Workbench() {
                   </Button>
                 )}
               </div>
+              <RagSummary rag={job?.rag} onOpen={() => openRag()} />
               {running ? (
                 <>
                   <div className="run-center">
@@ -730,6 +744,7 @@ function Workbench() {
                   message="当前为合成案例示例，未调用模型，不提交正式复核记录。"
                 />
               )}
+              <RagSummary rag={report.rag} onOpen={() => openRag()} example={!!example} />
               {job?.save_error && !example && (
                 <Alert
                   className="page-alert"
@@ -1061,6 +1076,7 @@ function Workbench() {
           </div>
         )}
       </Drawer>
+      <RagEvidence rag={rag} open={ragOpen} selectedId={ragSelected} onClose={() => setRagOpen(false)} example={!!example} />
     </div>
   );
 }
