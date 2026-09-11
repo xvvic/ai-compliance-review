@@ -92,19 +92,38 @@ async def run(payload):
     if connection_test:
         emit({"type": "connected"} if successful_result else {"type": "error", "content": "模型未返回有效响应。"})
         return
-    report = work / "合规审查报告.md"
-    if not report.exists() or not report.read_text(encoding="utf-8").strip():
+    # 报告文件定位:模型偶发使用非标准文件名,先找约定名,再按"最大的非空 .md"兜底
+    def find_report(directory: Path):
+        preferred = directory / "合规审查报告.md"
+        if preferred.exists() and preferred.read_text(encoding="utf-8", errors="ignore").strip():
+            return preferred
+        candidates = [p for p in directory.glob("*.md") if p.is_file() and p.stat().st_size > 0]
+        return max(candidates, key=lambda p: p.stat().st_size) if candidates else None
+
+    report = find_report(work)
+    if report is None:
         emit({"type": "error", "content": "模型未生成完整报告，请重试。"})
         return
-    # 机器可读风险条目(技能模板要求的《风险条目.json》);缺失/损坏时降级为空列表
+    # 机器可读风险条目:先找约定的《风险条目.json》,再兜底找含 risks 键的任意 json
     report_risks = []
     items_file = work / "风险条目.json"
+    data = None
     if items_file.exists():
         try:
             data = json.loads(items_file.read_text(encoding="utf-8"))
-            report_risks = data.get("risks") if isinstance(data, dict) else []
         except (ValueError, OSError):
-            report_risks = []
+            data = None
+    if not isinstance(data, dict) or "risks" not in data:
+        for p in work.glob("*.json"):
+            try:
+                cand = json.loads(p.read_text(encoding="utf-8"))
+            except (ValueError, OSError):
+                continue
+            if isinstance(cand, dict) and isinstance(cand.get("risks"), list):
+                data = cand
+                break
+    if isinstance(data, dict):
+        report_risks = data.get("risks") or []
     emit({"type": "risk_items", "items": report_risks or []})
     emit({"type": "final", "content": report.read_text(encoding="utf-8")})
 
