@@ -60,6 +60,13 @@ type Rule = {
   evidence_needed: string[];
   remediation_hint: string;
   semantic_cues: string;
+  source?: string; // rule | rule+report | semantic(schema 1.2)
+  rule_level?: string | null;
+  report_level?: string | null;
+  in_report?: boolean;
+  trigger_fact?: string;
+  report_evidence?: string;
+  recommendation?: string;
 };
 type Report = {
   rag?: RagRecord;
@@ -67,6 +74,7 @@ type Report = {
   model: string;
   report_markdown: string;
   risk_scan: { matched_rules: Rule[]; error?: string };
+  risk_items?: Rule[]; // 规则命中∪报告风险条目的合并复核清单(schema 1.2)
   material: { chars: number };
   review_id: string;
 };
@@ -149,7 +157,10 @@ function Workbench() {
   const rag = report ? report.rag : job?.rag;
   const openRag = (id: string | null = null) => { setRagSelected(id); setRagOpen(true); };
   const running = starting || job?.status === "running";
-  const rules = report?.risk_scan.matched_rules || [];
+  // 复核清单:优先用合并清单(规则命中∪报告风险,语义行 SEM-xxx);旧报告回退规则命中
+  const rules = report?.risk_items?.length
+    ? report.risk_items
+    : report?.risk_scan.matched_rules || [];
   const must = rules.filter(
     (r) => r.human_review_required || ["L3", "L4"].includes(r.final_level),
   ).length;

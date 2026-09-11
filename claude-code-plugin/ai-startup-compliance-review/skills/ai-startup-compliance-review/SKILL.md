@@ -34,7 +34,7 @@ Keep this folder self-contained. When installed as a Claude Code plugin, treat `
 5. Load only domain references triggered by the facts.
 6. Before risk classification, read `${CLAUDE_PLUGIN_ROOT}/risk_rules.yaml` (when the skill is used standalone, the copy next to the skill root) and run `${CLAUDE_PLUGIN_ROOT}/skills/ai-startup-compliance-review/scripts/detect_risks.py <material-file>` on the user's material. Treat the matched rules as the deterministic risk-trigger checklist: every identified risk should map to a rule `id` where applicable, one-vote escalation rules in the YAML must be honored, and `evidence_needed` feeds the missing-evidence list. Use `semantic` cues for judgment the keyword scan cannot make.
 7. Search local sources first when legal authority, enforcement examples, or risk-framework support is needed. If configured, use 北大法宝 MCP as the next retrieval layer for regulations, cases, exact article lookup, and citation checking.
-8. Produce the report using `references/03-output-template.md`.
+8. Produce the report using `references/03-output-template.md`. The markdown report and the machine-readable `风险条目.json` (risk items mirroring the risk matrix rows) must be written together, with identical row counts and levels.
 9. Run `${CLAUDE_PLUGIN_ROOT}/skills/ai-startup-compliance-review/scripts/check_report_structure.py` on saved report drafts when the plugin is installed, or `scripts/check_report_structure.py` when the skill is used standalone.
 
 ## Retrieval Order

@@ -15,6 +15,7 @@ import yaml
 
 from workbench.config import DATA_DIR, ROOT, Settings, atomic_write
 from workbench.rag import retrieve, report_citations
+from workbench.risk_merge import merge_risk_items
 
 PLUGIN = ROOT / "claude-code-plugin" / "ai-startup-compliance-review"
 
@@ -127,6 +128,7 @@ class ReviewManager:
             await self.process.stdin.drain()
             self.process.stdin.close()
             report = ""
+            report_risks = []
             async with asyncio.timeout(1800):
                 while line := await self.process.stdout.readline():
                     event = json.loads(line.decode("utf-8"))
@@ -138,6 +140,8 @@ class ReviewManager:
                     elif event["type"] == "rag_injected" and rag["fragments"]:
                         rag = {**rag, "injected": True}
                         self.event({"type": "rag", "rag": rag})
+                    elif event["type"] == "risk_items":
+                        report_risks = event.get("items") or []
                     elif event["type"] in ("todos", "tool_start"):
                         self.event(event)
                 code = await self.process.wait()
@@ -146,7 +150,8 @@ class ReviewManager:
             rag = {**rag, "cited_ids": report_citations(report, rag)}
             self.event({"type": "rag", "rag": rag})
             result = {"generated_at": now(), "model": settings.model, "material": {"chars": len(text), "preview": text[:200]},
-                      "risk_scan": detection, "report_markdown": report, "schema_version": "1.2", "review_id": job["id"], "rag": rag}
+                      "risk_scan": detection, "risk_items": merge_risk_items(detection.get("matched_rules"), report_risks),
+                      "report_markdown": report, "schema_version": "1.2", "review_id": job["id"], "rag": rag}
             job["report"] = result
             saved_as = "risk_report_" + job["id"] + ".json"
             try:

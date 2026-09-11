@@ -173,7 +173,9 @@ def create_app(data_dir: Path = DATA_DIR):
                 raise HTTPException(409, "请等待正式审查完成后提交复核。")
             if job["reviewed"]:
                 raise HTTPException(409, "本次复核已经提交。")
-            rules = {r["id"]: r for r in job["report"]["risk_scan"].get("matched_rules", [])}
+            # 复核对象:合并清单(规则命中∪报告风险条目, schema 1.2);旧报告回退到规则命中
+            review_pool = job["report"].get("risk_items") or job["report"]["risk_scan"].get("matched_rules", [])
+            rules = {r["id"]: r for r in review_pool}
             ids = [item.rule_id for item in req.items]
             if len(ids) != len(set(ids)) or set(ids) != set(rules):
                 raise HTTPException(400, "请逐条完成所有风险的复核。")
@@ -183,7 +185,7 @@ def create_app(data_dir: Path = DATA_DIR):
                 if item.action != "认可初评" and not item.evidence_note.strip():
                     raise HTTPException(400, "调级、补证和退回需要填写复核依据。")
                 level = item.review_level if item.action == "调整等级" else rule["final_level"]
-                rows.append({**item.model_dump(), "review_level": level, "system_level": rule["final_level"], "adjusted": level != rule["final_level"], "category": rule.get("category"), "risk_type": rule.get("risk_type"), "matched_keywords": list(rule.get("matched_keywords", {})), "evidence_needed": rule.get("evidence_needed", []), "source_report": "risk_report_" + review_id + ".json", "review_id": review_id, "report_generated_at": job["report"]["generated_at"], "reviewed_at": now()})
+                rows.append({**item.model_dump(), "review_level": level, "system_level": rule["final_level"], "adjusted": level != rule["final_level"], "source": rule.get("source", ""), "rule_level": rule.get("rule_level"), "report_level": rule.get("report_level"), "category": rule.get("category"), "risk_type": rule.get("risk_type"), "matched_keywords": list(rule.get("matched_keywords", {})), "evidence_needed": rule.get("evidence_needed", []), "trigger_fact": rule.get("trigger_fact", ""), "report_evidence": rule.get("report_evidence", ""), "recommendation": rule.get("recommendation", ""), "source_report": "risk_report_" + review_id + ".json", "review_id": review_id, "report_generated_at": job["report"]["generated_at"], "reviewed_at": now()})
             try:
                 atomic_write(data_dir / "reviews" / ("review_" + review_id + ".jsonl"), "\n".join(json.dumps(row, ensure_ascii=False) for row in rows) + "\n")
             except OSError as exc:
