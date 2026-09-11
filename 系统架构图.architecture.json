@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "AI 初创企业合规审查系统",
+    "subtitle": "四层架构 X 光：展示 · 服务引擎 · 知识 · 存储 —— 规则/语义/人工三层风险判定",
+    "output": "C:/Users/23691/Desktop/vscode/AI驱动企业合规检查/系统架构图.html"
+  },
+  "components": [
+    { "id": "user", "type": "external", "label": "企业用户", "sublabel": "上传材料", "pos": [40, 80], "size": [110, 56] },
+    { "id": "reviewer", "type": "external", "label": "人工复核", "sublabel": "认可·调级·补证·退回", "pos": [40, 240], "size": [110, 64] },
+
+    { "id": "browser", "type": "frontend", "label": "React 工作台", "sublabel": "步骤·报告·风险清单·复核", "pos": [200, 60], "size": [160, 64], "tag": "127.0.0.1:8000" },
+    { "id": "server", "type": "backend", "label": "FastAPI 服务", "sublabel": "launcher.py · SSE · /decisions", "pos": [200, 200], "size": [160, 64] },
+
+    { "id": "jobs", "type": "backend", "label": "ReviewManager", "sublabel": "任务编排 · 单实例锁", "pos": [430, 120], "size": [160, 64] },
+    { "id": "prescan", "type": "security", "label": "规则预扫描", "sublabel": "detect_risks.py", "pos": [430, 280], "size": [160, 60], "tag": "秒级·确定性" },
+    { "id": "rag", "type": "backend", "label": "BM25 RAG", "sublabel": "本地语料检索注入", "pos": [430, 430], "size": [160, 60] },
+    { "id": "merge", "type": "backend", "label": "合并器", "sublabel": "规则∪报告 → risk_items", "pos": [430, 560], "size": [160, 60], "tag": "SEM-xxx 语义行" },
+
+    { "id": "worker", "type": "backend", "label": "worker 子进程", "sublabel": "隔离 · 1800s 超时", "pos": [660, 120], "size": [160, 64] },
+    { "id": "sdk", "type": "messagebus", "label": "claude-agent-sdk", "sublabel": "stdio JSON 驱动", "pos": [870, 120], "size": [150, 56] },
+    { "id": "claude", "type": "messagebus", "label": "claude.exe", "sublabel": "工具循环·技能·MCP", "pos": [870, 230], "size": [150, 64], "tag": "Agent Harness" },
+    { "id": "model", "type": "external", "label": "模型 API", "sublabel": "qwen / glm / deepseek", "pos": [1070, 120], "size": [150, 60], "tag": "兼容端点·可切换" },
+    { "id": "mcp", "type": "cloud", "label": "北大法宝 MCP", "sublabel": "在线法条核验", "pos": [1070, 260], "size": [150, 56], "tag": "可选" },
+
+    { "id": "rules", "type": "security", "label": "risk_rules.yaml", "sublabel": "8类18条 · 一票升级", "pos": [660, 430], "size": [150, 56] },
+    { "id": "scripts", "type": "backend", "label": "校验脚本", "sublabel": "score / check_report", "pos": [660, 540], "size": [150, 56] },
+    { "id": "skill", "type": "backend", "label": "SKILL.md", "sublabel": "工作流·来源政策", "pos": [870, 390], "size": [150, 56] },
+    { "id": "corpus", "type": "backend", "label": "本地语料库 45 份", "sublabel": "法规·案例·论文·对标", "pos": [870, 500], "size": [150, 56] },
+
+    { "id": "reports", "type": "cloud", "label": "reports/", "sublabel": "risk_report.json · schema 1.2", "pos": [200, 560], "size": [160, 56] },
+    { "id": "reviews", "type": "cloud", "label": "reviews/", "sublabel": "复核记录 · 调级统计", "pos": [20, 680], "size": [140, 56] }
+  ],
+  "boundaries": [
+    { "kind": "region", "label": "服务与引擎 workbench/", "wraps": ["server", "jobs", "prescan", "rag", "merge", "worker", "sdk"] },
+    { "kind": "region", "label": "知识层 claude-code-plugin/", "wraps": ["rules", "scripts", "skill", "corpus"] },
+    { "kind": "region", "label": "展示层 frontend/", "wraps": ["browser"] }
+  ],
+  "connections": [
+    { "from": "user", "to": "browser" },
+    { "from": "reviewer", "to": "browser", "variant": "emphasis" },
+    { "from": "browser", "to": "server" },
+    { "from": "server", "to": "jobs" },
+    { "from": "jobs", "to": "prescan" },
+    { "from": "prescan", "to": "rag" },
+    { "from": "rag", "to": "merge" },
+    { "from": "jobs", "to": "worker" },
+    { "from": "worker", "to": "sdk" },
+    { "from": "sdk", "to": "claude" },
+    { "from": "claude", "to": "model" },
+    { "from": "claude", "to": "mcp" },
+    { "from": "prescan", "to": "rules", "variant": "emphasis" },
+    { "from": "claude", "to": "skill" },
+    { "from": "merge", "to": "reports" },
+    { "from": "server", "to": "reviews", "variant": "emphasis" }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "三层风险判定",
+      "items": [
+        "规则层：risk_rules.yaml 关键词 + 一票升级，秒级确定性初评",
+        "语义层：Agent 开卷审查（BM25 检索语料并引用法条），输出风险条目.json",
+        "人工层：合并清单(规则∪报告)逐条复核，调级率自动统计"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "可验证性",
+      "items": [
+        "GitHub 开源 + Windows 便携版，评委可下载复跑",
+        "评测：规则层 11/11 零误报，高风险召回 3/3",
+        "risk_report.json schema 1.2 留存规则层/报告层双等级"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "部署与模型",
+      "items": [
+        "start.vbs → python.exe 隐藏控制台（规避 claude.exe 0x142）",
+        "模型经 Anthropic 兼容端点接入，设置界面随时切换",
+        "北大法宝 MCP 可选，缺省走本地语料兜底"
+      ]
+    }
+  ]
+}
