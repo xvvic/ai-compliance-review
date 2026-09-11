@@ -1112,11 +1112,23 @@ main {
 .process-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 40px;
+  gap: 24px;
   margin-top: 20px;
 }
 .process-grid > div {
   min-width: 0;
+}
+.process-caption {
+  font-size: 12px;
+  color: var(--secondary);
+  letter-spacing: 0.04em;
+  padding: 0 12px 8px 12px;
+  border-bottom: 1px solid var(--line-soft);
+  margin-bottom: 4px;
+}
+.process-col-ops {
+  border-left: 1px solid var(--line);
+  padding-left: 24px;
 }
 .task-row {
   display: flex;
@@ -1512,6 +1524,12 @@ main {
   .process-grid {
     grid-template-columns: minmax(0, 1fr);
     gap: 20px;
+  }
+  .process-col-ops {
+    border-left: none;
+    padding-left: 0;
+    border-top: 1px solid var(--line-soft);
+    padding-top: 12px;
   }
   .run-title h2 {
     font-size: 18px;

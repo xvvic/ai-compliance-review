@@ -1,0 +1,218 @@
+
+ HYPERLINK "https://www.canada.ca/en.html" / Gouvernement du Canada
+Search
+窗体顶端
+Search Canada.ca
+窗体底端
+
+Menu
+MainMenu 
+You are here:
+ HYPERLINK "https://www.canada.ca/en.html" Canada.ca
+ 
+ HYPERLINK "https://www.canada.ca/en/government/system.html" About government
+ 
+ HYPERLINK "https://www.canada.ca/en/government/system/digital-government.html" Government in a digital age
+ 
+ HYPERLINK "https://www.canada.ca/en/government/system/digital-government/digital-government-innovations.html" Digital government innovation
+ 
+ HYPERLINK "https://www.canada.ca/en/government/system/digital-government/digital-government-innovations/responsible-use-ai.html" Responsible use of artificial intelligence in government
+Algorithmic Impact Assessment tool
+On this page
+ HYPERLINK "https://www.canada.ca/en/government/system/digital-government/digital-government-innovations/responsible-use-ai/algorithmic-impact-assessment.html" \l "toc1" 1. Introduction
+ HYPERLINK "https://www.canada.ca/en/government/system/digital-government/digital-government-innovations/responsible-use-ai/algorithmic-impact-assessment.html" \l "toc2" 2. Using and scoring the assessment
+ HYPERLINK "https://www.canada.ca/en/government/system/digital-government/digital-government-innovations/responsible-use-ai/algorithmic-impact-assessment.html" \l "toc2-1" 2.1 Scoring
+ HYPERLINK "https://www.canada.ca/en/government/system/digital-government/digital-government-innovations/responsible-use-ai/algorithmic-impact-assessment.html" \l "toc2-2" 2.2 Impact levels
+ HYPERLINK "https://www.canada.ca/en/government/system/digital-government/digital-government-innovations/responsible-use-ai/algorithmic-impact-assessment.html" \l "toc3" 3. Instructions
+ HYPERLINK "https://www.canada.ca/en/government/system/digital-government/digital-government-innovations/responsible-use-ai/algorithmic-impact-assessment.html" \l "toc3-1" 3.1 When to complete the AIA
+ HYPERLINK "https://www.canada.ca/en/government/system/digital-government/digital-government-innovations/responsible-use-ai/algorithmic-impact-assessment.html" \l "toc3-2" 3.2 What to consider when completing an AIA
+ HYPERLINK "https://www.canada.ca/en/government/system/digital-government/digital-government-innovations/responsible-use-ai/algorithmic-impact-assessment.html" \l "toc3-3" 3.3 Publishing the AIA
+1. Introduction
+The Algorithmic Impact Assessment (AIA) is a mandatory risk assessment tool intended to support the Treasury Board’s Directive on Automated Decision-Making. The tool is a questionnaire that determines the impact level of an automated decision system. It is composed of 65 risk questions and 41 mitigation questions. Assessment scores are based on many factors, including the system’s design, algorithm, decision type, impact and data.
+The AIA was developed based on best practices in consultation with both internal and external stakeholders. It was developed in the open and is available to the public for sharing and reuse under an open licence.
+ 
+2. Using and scoring the assessment
+This assessment is organized according to Government of Canada policy, ethical and administrative law considerations applied to the context of automated decision-making. It draws on the Treasury Board of Canada Secretariat’s (TBS’s) consultations with public institutions, academia and civil society. The AIA is designed to help departments better understand and manage the risks associated with automated decision systems. The AIA is composed of questions to assess the areas of risk defined in Tables 1.1 to 1.6.
+Tables 1.1 to 1.6: risk areas
+Table 1.1: project (sections 1 to 4)
+ | Risk area
+ | Description
+ | Project details
+ | Project-related information, such as the name of the Assistant Deputy Minister responsible for the program, the project stage (design or implementation), and a project description.
+ | Reasons for automation
+ | Rationale for introducing automation into the decision-making process, and related information such as positive impacts to clients and the department, and expected performance against performance targets.
+ | Risk profile
+ | High-level risk indicators for the project, such as serving equity-denied groups, impacts to persons with disabilities, and risk of system exploitation.
+ | Project authority
+ | Whether new policy or legal authority is required for the project and why.
+ | 
+Table 1.2: system (section 5)
+ | Risk area
+ | Description
+ | About the system
+ | Information about the system, such as its capabilities, who developed and configured it, and accountabilities for the system within the department.
+ | 
+Table 1.3: algorithm (section 6)
+ | Risk area
+ | Description
+ | About the algorithm
+ | Information about the algorithm, such as its ability to explain how it arrives at outputs, if the algorithm will learn and evolve as it is used, and information on how it uses protected characteristics.
+ | 
+Table 1.4: decision (section 7)
+ | Risk area
+ | Description
+ | About the decision
+ | Description of the administrative decision made or supported by the algorithm, and in which business line it is being used.
+ | 
+Table 1.5: impact (section 8)
+ | Risk area
+ | Description
+ | Impact assessment
+ | Detailed assessment of potential impacts the system may have to rights and freedoms, equality, dignity, privacy and autonomy, health and well-being, economic interests, ongoing sustainability of an environmental ecosystem, reversibility and duration of the decision, and system performance for clients that have a range of personal and intersectional identity factors.
+ | 
+Table 1.6: data (section 9)
+ | Risk area
+ | Description
+ | About the data
+ | Information about the data used by the system, such as whether the system uses personal information, security classification, and measures in place to reduce bias and ensure accuracy.
+ | The AIA also assesses the mitigation measures in place to manage the risks identified. These mitigation questions are organized into the categories defined in Tables 2.1 and 2.2.
+Tables 2.1 and 2.2: mitigation areas
+Table 2.1: consultations (section 10)
+ | Mitigation area
+ | Description
+ | About the consultations
+ | Indication of who was consulted and details about the consultation, such as which stage in the project lifecycle consultations occurred, whether the consultations revealed concerns about the system, and how feedback will be documented and addressed.
+ | 
+Table 2.2: de-risking and mitigation measures (sections 11 to 13)
+ | Mitigation area
+ | Description
+ | Data quality
+ | Information about the processes to ensure that data is representative, unbiased and of sufficient quality.
+ | Procedural fairness
+ | Details about procedural fairness, such as audit trails, system-produced reasons for decisions, and the recourse process.
+ | Privacy
+ | Information about safeguarding personal information used or generated by the system, such as completion of a Privacy Impact Assessment, building privacy and security into the design of the system, and de-identification methods used.
+ | 2.1 Scoring
+Each area contains one or more questions, and the responses to the questions contribute to a maximum score for the area. The value of each question is weighted based on the level of risk it introduces or mitigates in the automation project. The raw impact score measures the risks of the automation, while the mitigation score measures how the risks of automation are managed. The questions in risk areas 1 to 6 increase the raw impact score (see Table 3), and the questions in mitigation areas 7 and 8 increase the mitigation score (see Table 4).
+Table 3: Raw impact score from the risk areas
+ | Risk area
+ | No. of questions
+ | Maximum score
+ | 1. Project
+ | 10
+ | 22
+ | 2. System
+ | 9
+ | 17
+ | 3. Algorithm
+ | 9
+ | 15
+ | 4. Decision
+ | 1
+ | 8
+ | 5. Impact
+ | 20
+ | 52
+ | 6. Data
+ | 16
+ | 55
+ | Raw impact score
+ | 65
+ | 169
+ | 
+Table 4: Mitigation score from the mitigation areas
+ | Mitigation area
+ | No. of questions
+ | Maximum score
+ | 7. Consultations
+ | 4
+ | 10
+ | 8. De-risking and mitigation measures
+ | 37
+ | 67
+ | Mitigation score
+ | 41
+ | 77
+ | The current score is determined as follows:
+if the mitigation score is less than 80% of the maximum attainable mitigation score, the current score is equal to the raw impact score
+if the mitigation score is 80% or more than the maximum attainable mitigation score, 15% is deducted from the raw impact score to yield the current score
+2.2 Impact levels
+The impacts of automating an administrative decision are classified into four levels, ranging from Level I (little impact) to Level IV (very high impact). The AIA is intended to identify risks and assess impacts in a broad range of areas, including:
+the rights of individuals or communities
+the health or well-being of individuals or communities
+the economic interests of individuals, entities or communities
+the ongoing sustainability of an ecosystem
+Impact levels also vary based on the duration and reversibility of the decision, the context in which the system is operating, and the risk associated with the data used by the system.
+Each impact level corresponds to a score percentage range. The level of impact assigned to an automation project depends on the range bracket in which the project’s score percentage falls (see Table 5). Impact levels determine the mitigations required under the Directive on Automated Decision-Making. Appendix C of the directive lists mitigation measures required for each of the four impact levels. The requirements are designed to be proportionate to the impact level. While the measures are intended to reduce the identified risks, their implementation does not alter the impact level assigned to a project. A project’s impact level can be changed only through the completion of a new AIA with updated information about the project. Under the directive (subsection 6.1.3), departments are required to review, approve and update their published AIAs on a scheduled basis, including following changes to system functionality or scope of use.
+Table 5: Impact level definitions
+ | Impact level
+ | Definition
+ | Score percentage range
+ | Level I
+ | Little to no impact
+ | 0% to 25%
+ | Level II
+ | Moderate impact
+ | 26% to 50%
+ | Level III
+ | High impact
+ | 51% to 75%
+ | Level IV
+ | Very high impact
+ | 76% to 100%
+ | 3. Instructions
+The AIA is available as an  HYPERLINK "https://open.canada.ca/aia" online questionnaire on the Open Government Portal. When the questionnaire is completed, the results provide an impact level and a link to the requirements under the directive. The detailed results page will also explain why the system was rated at a certain level. The results and the explanation can be printed or saved as a PDF.
+The AIA assesses automated decisions on a broad range of topics, including service recipients, business processes, data, and system design decisions. It is best to complete the AIA with a multi-disciplinary team that brings expertise in all of these areas.
+Each question in the AIA should be answered so that the impact score can be accurate. If the answer to a question is unknown, select the lowest score option for the question. Where applicable, be prepared to provide the documentary evidence upon request.
+ HYPERLINK "https://www.tbs-sct.gc.ca/pol/doc-eng.aspx?id=32592" \l "cha6" Section 6 of the directive provides a comprehensive list of the requirements that departments are responsible for. Some of the requirements increase for higher-impact levels, including the type of peer review and the extent of human involvement in the decisions. For a complete list of requirements that vary with the impact level, refer to the appendix  HYPERLINK "https://www.tbs-sct.gc.ca/pol/doc-eng.aspx?id=32592" \l "appC" Impact Level Requirements in the directive. Other requirements are baseline requirements that do not vary according to the impact level, such as consulting with the institution’s legal services unit prior to the development of the system, testing and monitoring outcomes, and providing applicable recourse options to challenge the decisions.
+3.1 When to complete the AIA
+The AIA should be completed at the beginning of the design phase of a project. The results of the AIA will guide the mitigation and consultation requirements to be met during the implementation of the automated decision system as set out in the directive.
+The AIA should be completed a second time, prior to the production of the system, to validate that the results accurately reflect the system that was built. The revised AIA should be published on the Open Government Portal as the final results.
+Reviewing and updating the AIA
+The AIA should be reviewed, approved and updated on a scheduled basis, and when the functionality or scope of the system changes (subsection 6.1.3). The schedule of review can be aligned with and informed by the monitoring requirements (subsection 6.3.2) and the reporting requirements (subsections 6.5.1 and 6.5.2).
+Risks in automated decision-making are difficult to fully anticipate during the development of a system. Regular reviews throughout the system’s lifecycle will ensure that the AIA remains up to date and the system remains effective.
+The chosen frequency of review can depend on a variety of factors, including the nature of the system, the context of its deployment and the decision for which it is used.
+For example, the AIA may be reviewed and updated more often when:
+the service volumes are high
+the system affects a large number of clients
+the environment the system operates in evolves or changes rapidly
+the impact level of the system is a Level 3 or 4
+3.2 What to consider when completing an AIA
+Collect information about your project
+A broad range of information about an automation project is required to fully answer the questions in the risk and mitigation areas of the AIA. Prior to starting the AIA, it is useful to have information about:
+the administrative decision that the automated decision system will inform, contribute to or make, the context in which the system will be used, and the way the system will assist or replace the judgment of a human decision maker
+the clients who are subject to the decision, including their demographics, needs or barriers they may encounter
+the potential impacts of the decision on clients, including their duration and reversibility, and how the potential impacts are identified, assessed and mitigated
+the algorithm, including data processing parameters and techniques, and the output
+the input data used by the system, including details on type, source, method of collection and security classification
+planned or existing quality assurance measures
+planned transparency measures to communicate information about the initiative to clients and the public
+consultation approach with federal colleagues, clients or interest groups that represent clients or other partners
+record of recommendations or decisions made by the system, and any log or explanation generated by the system for such a record
+information about how your institution manages and delivers information technology services and solutions
+Consult your ATIP office
+The institutional Access to Information and Privacy (ATIP) office or other delegated authority for privacy should be consulted to ensure that the privacy impacts of automated decision systems using or processing personal information, or that otherwise have an impact on individuals’ privacy rights, are identified, assessed and mitigated. Engagements can enable project leads to:
+determine whether the automated decision system will make use of personal information as defined in section 3 of the  HYPERLINK "https://laws-lois.justice.gc.ca/ENG/ACTS/P-21/page-1.html" \l "h-397182" Privacy Act
+verify whether the proposed system’s use of personal information is accounted for in relevant Privacy Impact Assessments (PIAs) and Personal Information Banks (PIBs), and identify actions and approvals required under privacy legislation and policy
+determine applicable requirements in the  HYPERLINK "https://www.tbs-sct.gc.ca/pol/doc-eng.aspx?id=12510" Policy on Privacy Protection and supporting policy instruments, with the goal of ensuring that the appropriate safeguards are in place for the creation, collection and handling of personal information throughout the life cycle of the system, including plans for responsive action in the event of a privacy breach
+inform approaches to notifying the  HYPERLINK "https://www.priv.gc.ca/en/" Office of the Privacy Commissioner of Canada of the proposed system and any foreseeable impacts on the privacy of Canadians, as required in the Policy on Privacy Protection
+ensure that any personal information collected or created by or for the automation project is demonstrably necessary for the program or activity, as required by the  HYPERLINK "https://www.tbs-sct.gc.ca/pol/doc-eng.aspx?id=18309" Directive on Privacy Practices
+ensure that appropriate privacy protection clauses are included in contracts, agreements or arrangements with vendors or partners providing automation services, solutions or products
+ensure that the AIA is reviewed by privacy officials prior to its publication on the Open Government Portal, in accordance with the  HYPERLINK "https://www.tbs-sct.gc.ca/pol/doc-eng.aspx?id=28108" Directive on Open Government
+Engage with legal services
+The legal services unit must be consulted to identify and address legal risks arising from the development, procurement or use of an automated decision system. Consultations should begin at the concept stage of an automation project, prior to the development or procurement of a system. The nature of legal risks significantly depends on the design of the system (for example, the training data and model), the context of deployment, and the type of administrative decision being automated. Seeking legal advice on an automated decision system can enable project leads to:
+comply with the directive’s requirement to consult with the legal services unit from the concept stage of a project (see subsection 6.3.12)
+identify potential impacts on individual rights and freedoms and develop plans to manage risks
+assess risks to procedural fairness based on factors, including but not limited to the explainability of system outputs, relevance of system rules and input data to an administrative decision, and availability of recourse options
+confirm whether the program has the requisite authorities to proceed with the proposed automation project, including any associated collection or creation of personal information (in coordination with the relevant ATIP office or other delegated authority for privacy)
+consider licensing issues, including with respect to trade secrets, and any constraints they may impose on a department’s ability to access and test proprietary systems (see subsection 6.2.6 of the directive)
+Engage Gender-based Analysis Plus experts
+Engage with the institution’s diversity and inclusion specialists while completing the AIA. They can assist with impacts and mitigation measures related to diversity, inclusion, bias and intersectionality. They can also assist in completing the Gender-based Analysis Plus analysis as required under subsection 6.3.8.
+Contact TBS’s Office of the Chief Information Officer
+The Office of the Chief Information Officer (OCIO) of TBS is responsible for maintaining the AIA tool and overseeing departmental compliance with the Directive on Automated Decision-Making. The team can support departments with interpreting and answering questions in the AIA and guide them through the publication process.
+Departments are encouraged to contact TBS OCIO at  HYPERLINK "mailto:ai-ia@tbs-sct.gc.ca" ai-ia@tbs-sct.gc.ca for any questions regarding the directive or AIA.
+3.3 Publishing the AIA
+Departments are responsible for publishing the final results of the AIA in an accessible format and in both official languages on the Open Government Portal (subsection 6.1.1). The results page of the AIA provides the option to provide translations for the text entered in the AIA. The results page also provides the option to download the results as an accessible PDF to meet this requirement. Contact your department’s Open Government team for assistance in publishing to the Open Government Portal.
+Page details
+Date modified:
+ 2026-05-28
